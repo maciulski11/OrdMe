@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1082324314197",
+    "project_id": "ordme-d99cc",
+    "storage_bucket": "ordme-d99cc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1082324314197:android:8fb240c42c979ab8c3ccdc",
+        "android_client_info": {
+          "package_name": "com.example.ordme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1082324314197-k3ja912ho670rkclqo36a4fkqdvrmfem.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCShU-1WeaALSlkcZPaZZAqnguJpQfNYhM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1082324314197-k3ja912ho670rkclqo36a4fkqdvrmfem.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
