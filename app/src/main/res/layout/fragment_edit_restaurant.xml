@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:gravity="center_horizontal"
-        android:text="Create Restaurant:"
+        android:text="Restaurant Data:"
         android:textColor="@color/black"
         android:textSize="40sp"
         app:layout_constraintBottom_toTopOf="@+id/wpiszEmalET"

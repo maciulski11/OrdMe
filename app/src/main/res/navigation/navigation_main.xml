@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/loginUserFragment"
-        android:name="com.example.ordme.screen.user.LoginUserFragment"
+        android:name="com.example.ordme.ui.user.screen.LoginUserFragment"
         android:label="LoginUserFragment" >
         <action
             android:id="@+id/action_loginUserFragment_to_mainFragment"
@@ -20,11 +20,11 @@
     </fragment>
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.example.ordme.screen.user.MainUserFragment"
+        android:name="com.example.ordme.ui.user.screen.MainUserFragment"
         android:label="MainFragment" />
     <fragment
         android:id="@+id/loginRestaurantFragment"
-        android:name="com.example.ordme.screen.restaurant.LoginRestaurantFragment"
+        android:name="com.example.ordme.ui.restaurant.screen.LoginRestaurantFragment"
         android:label="LoginRestaurantFragment" >
         <action
             android:id="@+id/action_loginRestaurantFragment_to_mainRestaurantFragment"
@@ -38,7 +38,7 @@
     </fragment>
     <fragment
         android:id="@+id/mainRestaurantFragment"
-        android:name="com.example.ordme.screen.restaurant.MainRestaurantFragment"
+        android:name="com.example.ordme.ui.restaurant.screen.MainRestaurantFragment"
         android:label="MainRestaurantFragment" >
         <action
             android:id="@+id/action_mainRestaurantFragment_to_fragmentEditRestaurant"
@@ -46,14 +46,18 @@
     </fragment>
     <fragment
         android:id="@+id/registerUserFragment"
-        android:name="com.example.ordme.screen.user.RegisterUserFragment"
+        android:name="com.example.ordme.ui.user.screen.RegisterUserFragment"
         android:label="RegisterUserFragment" />
     <fragment
         android:id="@+id/fragmentEditRestaurant"
-        android:name="com.example.ordme.screen.restaurant.EditRestaurantFragment"
+        android:name="com.example.ordme.ui.restaurant.screen.EditRestaurantFragment"
         android:label="FragmentEditRestaurant" />
     <fragment
         android:id="@+id/registerRestaurantFragment"
-        android:name="com.example.ordme.screen.restaurant.RegisterRestaurantFragment"
-        android:label="RegisterRestaurantFragment" />
+        android:name="com.example.ordme.ui.restaurant.screen.RegisterRestaurantFragment"
+        android:label="RegisterRestaurantFragment" >
+        <action
+            android:id="@+id/action_registerRestaurantFragment_to_fragmentEditRestaurant"
+            app:destination="@id/fragmentEditRestaurant" />
+    </fragment>
 </navigation>
