@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation_main"
+    app:startDestination="@id/loginUserFragment">
+
+    <fragment
+        android:id="@+id/loginUserFragment"
+        android:name="com.example.ordme.screen.user.LoginUserFragment"
+        android:label="LoginUserFragment" >
+        <action
+            android:id="@+id/action_loginUserFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_loginUserFragment_to_loginRestaurantFragment"
+            app:destination="@id/loginRestaurantFragment" />
+        <action
+            android:id="@+id/action_loginUserFragment_to_registerUserFragment"
+            app:destination="@id/registerUserFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.example.ordme.screen.user.MainUserFragment"
+        android:label="MainFragment" />
+    <fragment
+        android:id="@+id/loginRestaurantFragment"
+        android:name="com.example.ordme.screen.restaurant.LoginRestaurantFragment"
+        android:label="LoginRestaurantFragment" >
+        <action
+            android:id="@+id/action_loginRestaurantFragment_to_mainRestaurantFragment"
+            app:destination="@id/mainRestaurantFragment" />
+        <action
+            android:id="@+id/action_loginRestaurantFragment_to_loginUserFragment"
+            app:destination="@id/loginUserFragment" />
+        <action
+            android:id="@+id/action_loginRestaurantFragment_to_registerRestaurantFragment"
+            app:destination="@id/registerRestaurantFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainRestaurantFragment"
+        android:name="com.example.ordme.screen.restaurant.MainRestaurantFragment"
+        android:label="MainRestaurantFragment" >
+        <action
+            android:id="@+id/action_mainRestaurantFragment_to_fragmentEditRestaurant"
+            app:destination="@id/fragmentEditRestaurant" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerUserFragment"
+        android:name="com.example.ordme.screen.user.RegisterUserFragment"
+        android:label="RegisterUserFragment" />
+    <fragment
+        android:id="@+id/fragmentEditRestaurant"
+        android:name="com.example.ordme.screen.restaurant.EditRestaurantFragment"
+        android:label="FragmentEditRestaurant" />
+    <fragment
+        android:id="@+id/registerRestaurantFragment"
+        android:name="com.example.ordme.screen.restaurant.RegisterRestaurantFragment"
+        android:label="RegisterRestaurantFragment" />
+</navigation>

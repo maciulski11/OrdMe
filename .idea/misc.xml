@@ -4,7 +4,23 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.22395833333333334" />
-        <entry key="app/src/main/res/layout/fragment_main.xml" value="0.23802083333333332" />
+        <entry key="app/src/main/res/layout/fragment_add_company.xml" value="0.23802083333333332" />
+        <entry key="app/src/main/res/layout/fragment_add_restaurant.xml" value="0.2234375" />
+        <entry key="app/src/main/res/layout/fragment_create_restaurant.xml" value="0.2234375" />
+        <entry key="app/src/main/res/layout/fragment_edit_restaurant.xml" value="0.2234375" />
+        <entry key="app/src/main/res/layout/fragment_first_login_restaurant.xml" value="0.2234375" />
+        <entry key="app/src/main/res/layout/fragment_how_add_restaurant.xml" value="0.2234375" />
+        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.23802083333333332" />
+        <entry key="app/src/main/res/layout/fragment_login_company.xml" value="1.296875" />
+        <entry key="app/src/main/res/layout/fragment_login_restaurant.xml" value="0.23802083333333332" />
+        <entry key="app/src/main/res/layout/fragment_login_user.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/fragment_main.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_main_restaurant.xml" value="0.2234375" />
+        <entry key="app/src/main/res/layout/fragment_main_user.xml" value="0.2234375" />
+        <entry key="app/src/main/res/layout/fragment_register_restaurant.xml" value="0.2234375" />
+        <entry key="app/src/main/res/layout/fragment_register_user.xml" value="0.23802083333333332" />
+        <entry key="app/src/main/res/menu/login_restaurant_menu.xml" value="0.2234375" />
+        <entry key="app/src/main/res/menu/login_user_menu.xml" value="0.25" />
       </map>
     </option>
   </component>
