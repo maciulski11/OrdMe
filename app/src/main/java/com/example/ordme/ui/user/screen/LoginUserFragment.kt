@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.ordme.R
 import com.example.ordme.base.BaseFragment
@@ -13,9 +14,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_login_user.*
 
 class LoginUserFragment: BaseFragment() {
@@ -26,22 +29,63 @@ class LoginUserFragment: BaseFragment() {
         private const val RESULT_CANCELD = 1
     }
 
+    private lateinit var googleSignInClient: GoogleSignInClient
     private val fbAuth = FirebaseAuth.getInstance()
-    private var googleSignInClient: GoogleSignInClient? = null
+    private val fbUser = fbAuth.currentUser
+    private val cloud = FirebaseFirestore.getInstance()
 
     override fun subscribeUi() {
+
+        //we check that your account isn't null and your email verified
+        if (fbUser != null && fbUser.isEmailVerified){
+            findNavController().navigate(R.id.action_loginUserFragment_to_mainUserFragment)
+        }
 
         registerButtton.setOnClickListener {
             findNavController().navigate(R.id.action_loginUserFragment_to_registerUserFragment)
         }
 
+        loginClick()
         googleSignIN()
 
     }
 
-    private fun googleSignIN() {
+    private fun loginClick(){
+        loginBT.setOnClickListener {
+            val email = emailET.text.toString()
+            val password = passwordET.text.toString()
 
-        googleSignIn.setOnClickListener {
+            if (email == "" || password == "") {
+                return@setOnClickListener
+            } else {
+
+                //we check that this data is in our datebase
+                fbAuth.signInWithEmailAndPassword(
+                    email,
+                    password
+                )
+                    .addOnSuccessListener { authRes ->
+                        if (authRes != null) {
+
+                            //before your login we check that you verified your email
+                            if (fbAuth.currentUser!!.isEmailVerified) {
+                                findNavController().navigate(R.id.action_loginUserFragment_to_mainUserFragment)
+                            } else{
+                                Toast.makeText(context, "Please verify your email.", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        Snackbar.make(requireView(), "Your account is not exist.", Snackbar.LENGTH_SHORT)
+                            .show()
+                        Log.d("DEBUG", exception.message.toString())
+                    }
+            }
+        }
+
+    }
+
+    private fun googleSignIN() {
 
             // Configure Google Sign In
             val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -51,7 +95,9 @@ class LoginUserFragment: BaseFragment() {
 
             googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
 
-            val signInIntent = googleSignInClient?.signInIntent
+        //sign in google account
+        googleSignIn.setOnClickListener {
+            val signInIntent = googleSignInClient.signInIntent
             startActivityForResult(signInIntent, GOOGLE_SIGN_IN)
         }
 
@@ -69,7 +115,7 @@ class LoginUserFragment: BaseFragment() {
             Log.w("lipa", "Google sign in failed")
             return
         } else {
-            findNavController().navigate(R.id.action_loginUserFragment_to_mainFragment)
+            findNavController().navigate(R.id.action_loginUserFragment_to_mainUserFragment)
 
         }
     }
@@ -80,14 +126,20 @@ class LoginUserFragment: BaseFragment() {
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == GOOGLE_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            try {
-                // Google Sign In was successful, authenticate with Firebase
-                val account = task.getResult(ApiException::class.java)!!
-                Log.d("Great!!!", "firebaseAuthWithGoogle:" + account.id)
-                firebaseAuthWithGoogle(account.idToken!!)
-            } catch (e: ApiException) {
-                // Google Sign In failed, update UI appropriately
-                Log.w("There is something bad", "Google sign in failed", e)
+            val excepction = task.exception
+
+            if (task.isSuccessful) {
+                try {
+                    // Google Sign In was successful, authenticate with Firebase
+                    val account = task.getResult(ApiException::class.java)!!
+                    Log.d("SigInGoogle", "firebaseAuthWithGoogle:" + account.id)
+                    firebaseAuthWithGoogle(account.idToken!!)
+                } catch (e: ApiException) {
+                    // Google Sign In failed, update UI appropriately
+                    Log.w("SigInGoogle", "Google sign in failed", e)
+                }
+            } else{
+                Log.w("SigInGoogle", excepction.toString())
             }
         }
     }
@@ -99,16 +151,36 @@ class LoginUserFragment: BaseFragment() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("Great!!!", "signInWithCredential:success")
-                    val user = fbAuth.currentUser
-                    updateUI(user)
+                    findNavController().navigate(R.id.action_loginUserFragment_to_mainUserFragment)
+                    addUserToFirebase()
+                    //val user = fbAuth.currentUser
+                    //updateUI(user)
 
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w("There is something bad", "signInWithCredential:failure", task.exception)
-                    updateUI(null)
+                    //updateUI(null)
 
                 }
             }
+    }
+
+    private fun addUserToFirebase(){
+        val currentUser = fbAuth.currentUser
+
+        val dataUser = hashMapOf(
+            "email" to currentUser?.email,
+            "uid" to currentUser?.uid,
+            "full_name" to currentUser?.displayName,
+            "number" to currentUser?.phoneNumber,
+            "photo" to currentUser?.photoUrl
+        )
+
+        cloud.collection("users")
+            .document(currentUser!!.uid)
+            .set(dataUser)
+
+        Log.d("sssssss", currentUser.uid)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -31,8 +31,6 @@ class RegisterRestaurantFragment : BaseFragment() {
             val password = enterPasswordRes.text.toString()
             val repeatPassword = enterRepeatPasswordRes.text.toString()
 
-
-
             if (password == repeatPassword) {
                 fbAuth.createUserWithEmailAndPassword(email, password)
                     .addOnSuccessListener { authResults ->

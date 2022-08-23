@@ -22,6 +22,7 @@
         <entry key="app/src/main/res/layout/fragment_register_user.xml" value="0.23802083333333332" />
         <entry key="app/src/main/res/menu/login_restaurant_menu.xml" value="0.2234375" />
         <entry key="app/src/main/res/menu/login_user_menu.xml" value="0.25" />
+        <entry key="app/src/main/res/menu/logout_user.xml" value="0.2234375" />
       </map>
     </option>
   </component>

@@ -9,19 +9,15 @@
         android:name="com.example.ordme.ui.user.screen.LoginUserFragment"
         android:label="LoginUserFragment" >
         <action
-            android:id="@+id/action_loginUserFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
-        <action
             android:id="@+id/action_loginUserFragment_to_loginRestaurantFragment"
             app:destination="@id/loginRestaurantFragment" />
         <action
             android:id="@+id/action_loginUserFragment_to_registerUserFragment"
             app:destination="@id/registerUserFragment" />
+        <action
+            android:id="@+id/action_loginUserFragment_to_mainUserFragment"
+            app:destination="@id/mainUserFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/mainFragment"
-        android:name="com.example.ordme.ui.user.screen.MainUserFragment"
-        android:label="MainFragment" />
     <fragment
         android:id="@+id/loginRestaurantFragment"
         android:name="com.example.ordme.ui.restaurant.screen.LoginRestaurantFragment"
@@ -47,7 +43,14 @@
     <fragment
         android:id="@+id/registerUserFragment"
         android:name="com.example.ordme.ui.user.screen.RegisterUserFragment"
-        android:label="RegisterUserFragment" />
+        android:label="RegisterUserFragment" >
+        <action
+            android:id="@+id/action_registerUserFragment_to_mainUserFragment"
+            app:destination="@id/mainUserFragment" />
+        <action
+            android:id="@+id/action_registerUserFragment_to_loginUserFragment"
+            app:destination="@id/loginUserFragment" />
+    </fragment>
     <fragment
         android:id="@+id/fragmentEditRestaurant"
         android:name="com.example.ordme.ui.restaurant.screen.EditRestaurantFragment"
@@ -59,5 +62,13 @@
         <action
             android:id="@+id/action_registerRestaurantFragment_to_fragmentEditRestaurant"
             app:destination="@id/fragmentEditRestaurant" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainUserFragment"
+        android:name="com.example.ordme.ui.user.screen.MainUserFragment"
+        android:label="MainUserFragment" >
+        <action
+            android:id="@+id/action_mainUserFragment_to_loginUserFragment"
+            app:destination="@id/loginUserFragment" />
     </fragment>
 </navigation>
