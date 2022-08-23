@@ -12,4 +12,5 @@ data class Restaurants (
     val address: String? = null,
     val post_code: String? = null,
     val nip: String? = null,
+    val value: String? = null
     )
