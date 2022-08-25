@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.example.ordme.R
 import com.example.ordme.ui.restaurant.screen.LoginRestaurantFragment
 import com.example.ordme.ui.restaurant.screen.RegisterRestaurantFragment
+import com.example.ordme.ui.user.screen.MainUserFragment
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 
@@ -39,17 +40,17 @@ class MainActivity : AppCompatActivity() {
 
             it.isChecked = true
 
-            when(it.itemId){
+            when (it.itemId) {
 
                 R.id.nav_home -> replaceFragment(LoginRestaurantFragment(), it.title.toString())
-                R.id.nav_message -> replaceFragment(RegisterRestaurantFragment(), it.title.toString())
-
+                R.id.nav_message -> replaceFragment(RegisterRestaurantFragment(), it.title.toString()
+                )
             }
             true
         }
     }
 
-    private fun replaceFragment(fragment: Fragment, title: String){
+    private fun replaceFragment(fragment: Fragment, title: String) {
 
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
