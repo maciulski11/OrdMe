@@ -1,10 +1,10 @@
-package com.example.ordme.ui.user.screen
+package com.example.ordme.ui.screen
 
 import com.example.ordme.R
 import com.example.ordme.base.BaseFragment
 
-class RestaurantFragment: BaseFragment() {
-    override val layout: Int = R.layout.fragment_restaurant
+class BasketFragment: BaseFragment() {
+    override val layout: Int = R.layout.fragment_basket
 
     override fun subscribeUi() {
 

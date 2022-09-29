@@ -1,4 +1,4 @@
-package com.example.ordme.ui.user.screen
+package com.example.ordme.ui.screen
 
 import android.content.Intent
 import android.os.Bundle
@@ -19,10 +19,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.fragment_login_user.*
+import kotlinx.android.synthetic.main.fragment_login.*
 
-class LoginUserFragment: BaseFragment() {
-    override val layout: Int = R.layout.fragment_login_user
+class LoginFragment: BaseFragment() {
+    override val layout: Int = R.layout.fragment_login
 
     private companion object {
         private const val GOOGLE_SIGN_IN = 9001
@@ -47,7 +47,6 @@ class LoginUserFragment: BaseFragment() {
 
         loginClick()
         googleSignIN()
-
     }
 
     private fun loginClick(){
@@ -82,7 +81,6 @@ class LoginUserFragment: BaseFragment() {
                     }
             }
         }
-
     }
 
     private fun googleSignIN() {
@@ -100,7 +98,6 @@ class LoginUserFragment: BaseFragment() {
             val signInIntent = googleSignInClient.signInIntent
             startActivityForResult(signInIntent, GOOGLE_SIGN_IN)
         }
-
     }
 
 //    override fun onStart() {
@@ -197,7 +194,6 @@ class LoginUserFragment: BaseFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.loginRestaurantAction -> {
-                findNavController().navigate(R.id.action_loginUserFragment_to_loginRestaurantFragment)
             }
         }
         return false

@@ -1,4 +1,4 @@
-package com.example.ordme.ui.user.screen
+package com.example.ordme.ui.screen
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -10,18 +10,18 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ordme.R
 import com.example.ordme.base.BaseFragment
-import com.example.ordme.ui.restaurant.data.Restaurants
-import com.example.ordme.ui.user.adapter.MainUserAdapter
+import com.example.ordme.ui.adapter.ChooseRestaurantAdapter
+import com.example.ordme.ui.data.Restaurant
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
-import kotlinx.android.synthetic.main.fragment_main_user.*
+import kotlinx.android.synthetic.main.fragment_choose_restaurant.*
 
-class MainUserFragment: BaseFragment() {
-    override val layout: Int = R.layout.fragment_main_user
+class ChooseRestaurantFragment: BaseFragment() {
+    override val layout: Int = R.layout.fragment_choose_restaurant
 
     private val fbAuth = FirebaseAuth.getInstance()
-    private lateinit var adapter: MainUserAdapter
-    private lateinit var restaurantsList: ArrayList<Restaurants>
+    private lateinit var adapter: ChooseRestaurantAdapter
+    private lateinit var restaurantsList: ArrayList<Restaurant>
     private lateinit var db: FirebaseFirestore
 
     override fun subscribeUi() {
@@ -32,10 +32,12 @@ class MainUserFragment: BaseFragment() {
         //inicjujemy nasza liste:
         restaurantsList = arrayListOf()
 
-        adapter = MainUserAdapter(restaurantsList)
+        adapter = ChooseRestaurantAdapter(requireContext(), restaurantsList, requireView())
         recyclerViewChooseRestaurant.adapter = adapter
 
         downloadDataFromFirebase()
+
+
     }
 
     private fun downloadDataFromFirebase(){
@@ -59,12 +61,11 @@ class MainUserFragment: BaseFragment() {
                         //sprawdxzamy czy dokument zostal poprawnie dodany:
                         if (dc.type == DocumentChange.Type.ADDED) {
 
-                            restaurantsList.add(dc.document.toObject(Restaurants::class.java))
+                            restaurantsList.add(dc.document.toObject(Restaurant::class.java))
                         }
                     }
                     adapter.notifyDataSetChanged()
                 }
-
             })
     }
 
@@ -74,15 +75,14 @@ class MainUserFragment: BaseFragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.logout_user_menu, menu)
+        inflater.inflate(R.menu.basket_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.logoutUserAction -> {
-                fbAuth.signOut()
-                findNavController().navigate(R.id.action_mainUserFragment_to_loginUserFragment)
+            R.id.basket -> {
+                findNavController().navigate(R.id.action_mainUserFragment_to_basketFragment)
             }
         }
         return false
@@ -91,4 +91,8 @@ class MainUserFragment: BaseFragment() {
     override fun unsubscribeUi() {
 
     }
+
+//    override fun onItemClick(restaurant: Restaurants) {
+//        findNavController().navigate(R.id.action_mainUserFragment_to_restaurantFragment)
+//    }
 }

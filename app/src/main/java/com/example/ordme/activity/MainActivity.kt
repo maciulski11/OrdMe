@@ -7,9 +7,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.example.ordme.R
-import com.example.ordme.ui.restaurant.screen.LoginRestaurantFragment
-import com.example.ordme.ui.restaurant.screen.RegisterRestaurantFragment
-import com.example.ordme.ui.user.screen.MainUserFragment
+import com.example.ordme.ui.screen.BasketFragment
+import com.example.ordme.ui.screen.ChooseRestaurantFragment
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 
@@ -17,6 +16,7 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var toggle: ActionBarDrawerToggle
     lateinit var drawerLayout: DrawerLayout
+    private val fbAuth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,8 +25,8 @@ class MainActivity : AppCompatActivity() {
         drawer()
     }
 
-    private fun drawer() {
 
+    private fun drawer() {
         drawerLayout = findViewById(R.id.drawerLayout)
         val drawView: NavigationView = findViewById(R.id.draw_view)
 
@@ -36,19 +36,28 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+
         drawView.setNavigationItemSelectedListener {
 
             it.isChecked = true
 
             when (it.itemId) {
 
-                R.id.nav_home -> replaceFragment(LoginRestaurantFragment(), it.title.toString())
-                R.id.nav_message -> replaceFragment(RegisterRestaurantFragment(), it.title.toString()
+                R.id.nav_home -> replaceFragment(ChooseRestaurantFragment(), it.title.toString())
+                R.id.nav_message -> replaceFragment(
+                    BasketFragment(),
+                    it.title.toString()
                 )
+                R.id.nav_logout -> {
+                    fbAuth.signOut()
+                    finish()
+                }
             }
             true
+
         }
     }
+
 
     private fun replaceFragment(fragment: Fragment, title: String) {
 
@@ -63,7 +72,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        if (toggle.onOptionsItemSelected(item)){
+        if (toggle.onOptionsItemSelected(item)) {
 
             return true
         }

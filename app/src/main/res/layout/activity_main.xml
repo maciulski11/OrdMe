@@ -19,7 +19,7 @@
         android:layout_height="match_parent"
         app:defaultNavHost="true"
         app:navGraph="@navigation/navigation_main"
-        tools:layout="@layout/fragment_main_user" />
+        tools:layout="@layout/fragment_choose_restaurant" />
 
 </RelativeLayout>
 

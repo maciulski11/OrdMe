@@ -4,11 +4,18 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../../layout/custom_preview.xml" value="0.18803418803418803" />
+        <entry key="app/src/main/res/drawable/ic_baseline_add_0.xml" value="0.175" />
+        <entry key="app/src/main/res/drawable/ic_baseline_add_circle_24.xml" value="0.175" />
+        <entry key="app/src/main/res/drawable/ic_baseline_arrow_back_0.xml" value="0.175" />
+        <entry key="app/src/main/res/drawable/ic_baseline_clear.xml" value="0.175" />
+        <entry key="app/src/main/res/drawable/ic_baseline_minus.xml" value="0.175" />
         <entry key="app/src/main/res/drawable/ic_baseline_theater.xml" value="0.16" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.22395833333333334" />
         <entry key="app/src/main/res/layout/drawer_header.xml" value="0.2234375" />
         <entry key="app/src/main/res/layout/fragment_add_company.xml" value="0.23802083333333332" />
         <entry key="app/src/main/res/layout/fragment_add_restaurant.xml" value="0.2234375" />
+        <entry key="app/src/main/res/layout/fragment_basket.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_choose_restaurant.xml" value="0.2953125" />
         <entry key="app/src/main/res/layout/fragment_create_restaurant.xml" value="0.2234375" />
         <entry key="app/src/main/res/layout/fragment_edit_restaurant.xml" value="0.2234375" />
         <entry key="app/src/main/res/layout/fragment_first_login_restaurant.xml" value="0.2234375" />
@@ -22,12 +29,15 @@
         <entry key="app/src/main/res/layout/fragment_main_user.xml" value="0.2234375" />
         <entry key="app/src/main/res/layout/fragment_register_restaurant.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_register_user.xml" value="0.23802083333333332" />
-        <entry key="app/src/main/res/layout/fragment_restaurant.xml" value="0.2234375" />
+        <entry key="app/src/main/res/layout/fragment_restaurant.xml" value="0.335" />
         <entry key="app/src/main/res/layout/item_choose_restaurants.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/item_meal.xml" value="0.55" />
+        <entry key="app/src/main/res/menu/basket_menu.xml" value="0.2234375" />
         <entry key="app/src/main/res/menu/drawer_menu.xml" value="0.2234375" />
         <entry key="app/src/main/res/menu/login_restaurant_menu.xml" value="0.2234375" />
         <entry key="app/src/main/res/menu/login_user_menu.xml" value="0.25" />
         <entry key="app/src/main/res/menu/logout_user.xml" value="0.2234375" />
+        <entry key="app/src/main/res/menu/logout_user_menu.xml" value="0.2234375" />
       </map>
     </option>
   </component>

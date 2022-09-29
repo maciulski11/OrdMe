@@ -1,4 +1,4 @@
-package com.example.ordme.ui.user.data
+package com.example.ordme.ui.data
 
 data class Users (
     val email: String? = null,
@@ -6,5 +6,5 @@ data class Users (
     val name: String? = null,
     val surname: String? = null,
     val number: String,
-   // val photo: String? = null
+//    val photo: String? = null
     )

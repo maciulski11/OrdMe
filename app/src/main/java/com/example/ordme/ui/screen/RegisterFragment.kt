@@ -1,4 +1,4 @@
-package com.example.ordme.ui.user.screen
+package com.example.ordme.ui.screen
 
 import android.util.Log
 import android.widget.Toast
@@ -8,10 +8,10 @@ import com.example.ordme.base.BaseFragment
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.fragment_register_user.*
+import kotlinx.android.synthetic.main.fragment_register.*
 
-class RegisterUserFragment: BaseFragment() {
-    override val layout: Int = R.layout.fragment_register_user
+class RegisterFragment: BaseFragment() {
+    override val layout: Int = R.layout.fragment_register
 
     private val fbAuth = FirebaseAuth.getInstance()
     private val cloud = FirebaseFirestore.getInstance()
@@ -35,7 +35,7 @@ class RegisterUserFragment: BaseFragment() {
                 fbAuth.createUserWithEmailAndPassword(email, password)
                     .addOnSuccessListener { authResults ->
                         if (authResults.user != null) {
-                            val user = com.example.ordme.ui.user.data.Users(
+                            val user = com.example.ordme.ui.data.Users(
                                 authResults.user!!.email,
                                 authResults.user!!.uid,
                                 name,

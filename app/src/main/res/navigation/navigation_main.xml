@@ -6,11 +6,8 @@
 
     <fragment
         android:id="@+id/loginUserFragment"
-        android:name="com.example.ordme.ui.user.screen.LoginUserFragment"
+        android:name="com.example.ordme.ui.screen.LoginFragment"
         android:label="LoginUserFragment" >
-        <action
-            android:id="@+id/action_loginUserFragment_to_loginRestaurantFragment"
-            app:destination="@id/loginRestaurantFragment" />
         <action
             android:id="@+id/action_loginUserFragment_to_registerUserFragment"
             app:destination="@id/registerUserFragment" />
@@ -19,30 +16,8 @@
             app:destination="@id/mainUserFragment" />
     </fragment>
     <fragment
-        android:id="@+id/loginRestaurantFragment"
-        android:name="com.example.ordme.ui.restaurant.screen.LoginRestaurantFragment"
-        android:label="LoginRestaurantFragment" >
-        <action
-            android:id="@+id/action_loginRestaurantFragment_to_mainRestaurantFragment"
-            app:destination="@id/mainRestaurantFragment" />
-        <action
-            android:id="@+id/action_loginRestaurantFragment_to_loginUserFragment"
-            app:destination="@id/loginUserFragment" />
-        <action
-            android:id="@+id/action_loginRestaurantFragment_to_registerRestaurantFragment"
-            app:destination="@id/registerRestaurantFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/mainRestaurantFragment"
-        android:name="com.example.ordme.ui.restaurant.screen.MainRestaurantFragment"
-        android:label="MainRestaurantFragment" >
-        <action
-            android:id="@+id/action_mainRestaurantFragment_to_fragmentEditRestaurant"
-            app:destination="@id/fragmentEditRestaurant" />
-    </fragment>
-    <fragment
         android:id="@+id/registerUserFragment"
-        android:name="com.example.ordme.ui.user.screen.RegisterUserFragment"
+        android:name="com.example.ordme.ui.screen.RegisterFragment"
         android:label="RegisterUserFragment" >
         <action
             android:id="@+id/action_registerUserFragment_to_mainUserFragment"
@@ -52,23 +27,32 @@
             app:destination="@id/loginUserFragment" />
     </fragment>
     <fragment
-        android:id="@+id/fragmentEditRestaurant"
-        android:name="com.example.ordme.ui.restaurant.screen.EditRestaurantFragment"
-        android:label="FragmentEditRestaurant" />
-    <fragment
-        android:id="@+id/registerRestaurantFragment"
-        android:name="com.example.ordme.ui.restaurant.screen.RegisterRestaurantFragment"
-        android:label="RegisterRestaurantFragment" >
-        <action
-            android:id="@+id/action_registerRestaurantFragment_to_fragmentEditRestaurant"
-            app:destination="@id/fragmentEditRestaurant" />
-    </fragment>
-    <fragment
         android:id="@+id/mainUserFragment"
-        android:name="com.example.ordme.ui.user.screen.MainUserFragment"
-        android:label="MainUserFragment" >
+        android:name="com.example.ordme.ui.screen.ChooseRestaurantFragment"
+        android:label="MainUserFragment">
         <action
             android:id="@+id/action_mainUserFragment_to_loginUserFragment"
             app:destination="@id/loginUserFragment" />
+        <action
+            android:id="@+id/action_mainUserFragment_to_restaurantFragment"
+            app:destination="@id/restaurantFragment">
+
+        </action>
+        <action
+            android:id="@+id/action_mainUserFragment_to_basketFragment"
+            app:destination="@id/basketFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/restaurantFragment"
+        android:name="com.example.ordme.ui.screen.RestaurantFragment"
+        android:label="RestaurantFragment" >
+        <action
+            android:id="@+id/action_restaurantFragment_to_basketFragment"
+            app:destination="@id/basketFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/basketFragment"
+        android:name="com.example.ordme.ui.screen.BasketFragment"
+        android:label="BasketFragment" >
     </fragment>
 </navigation>

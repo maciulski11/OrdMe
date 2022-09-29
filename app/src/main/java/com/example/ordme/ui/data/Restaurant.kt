@@ -1,6 +1,6 @@
-package com.example.ordme.ui.restaurant.data
+package com.example.ordme.ui.data
 
-data class Restaurants (
+data class Restaurant (
     val email: String? = null,
     val nameRestaurant: String? = null,
     val description: String? = null,
@@ -13,4 +13,4 @@ data class Restaurants (
     val post_code: String? = null,
     val nip: String? = null,
     val value: String? = null
-    )
+        )
