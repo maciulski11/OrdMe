@@ -6,8 +6,6 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
-import android.widget.TextView
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ordme.R
@@ -18,7 +16,6 @@ import com.example.ordme.ui.data.Restaurant
 import com.example.ordme.ui.repository.FirebaseRepository
 import com.google.firebase.firestore.*
 import kotlinx.android.synthetic.main.fragment_restaurant.*
-import kotlinx.android.synthetic.main.item_meal.view.*
 
 class RestaurantFragment: BaseFragment() {
     override val layout: Int = R.layout.fragment_restaurant
@@ -31,7 +28,7 @@ class RestaurantFragment: BaseFragment() {
 
     override fun subscribeUi() {
 
-        val uid = requireArguments().getString("uidRestaurant")
+        val uid = requireArguments().getString("uidRestaurant").toString()
 
         recyclerViewChooseDish.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -39,10 +36,10 @@ class RestaurantFragment: BaseFragment() {
 
         mealsList = arrayListOf()
 
-        adapter = RestaurantAdapter(mealsList)
+        adapter = RestaurantAdapter(mealsList, requireView())
         recyclerViewChooseDish.adapter = adapter
 
-        db.collection(FirebaseRepository.RESTAURANTS).document(uid.toString())
+        db.collection(FirebaseRepository.RESTAURANTS).document(uid)
             .get().addOnSuccessListener { snapshot ->
 
                 Log.d("RestarantFragment", "${snapshot.data} ")

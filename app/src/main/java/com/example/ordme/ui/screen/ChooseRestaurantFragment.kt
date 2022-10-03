@@ -91,8 +91,4 @@ class ChooseRestaurantFragment: BaseFragment() {
     override fun unsubscribeUi() {
 
     }
-
-//    override fun onItemClick(restaurant: Restaurants) {
-//        findNavController().navigate(R.id.action_mainUserFragment_to_restaurantFragment)
-//    }
 }

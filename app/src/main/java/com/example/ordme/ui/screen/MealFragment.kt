@@ -1,7 +1,9 @@
 package com.example.ordme.ui.screen
 
+import android.app.Application
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
@@ -9,6 +11,7 @@ import com.example.ordme.R
 import com.example.ordme.base.BaseFragment
 import com.example.ordme.ui.data.Meal
 import com.example.ordme.ui.repository.FirebaseRepository
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_meal.*
 import kotlinx.android.synthetic.main.fragment_meal.nameMealTV
@@ -17,6 +20,8 @@ class MealFragment : BaseFragment() {
     override val layout: Int = R.layout.fragment_meal
 
     private var db = FirebaseFirestore.getInstance()
+    private val fbAuth = FirebaseAuth.getInstance()
+
     private var meal = Meal()
 
     override fun subscribeUi() {
@@ -42,6 +47,10 @@ class MealFragment : BaseFragment() {
                 } ?: run {
                     nameMealTV.text = "Null"
                 }
+
+                addMealToBasketBT.setOnClickListener {
+                    Toast.makeText(requireContext(), "${meal.price}", Toast.LENGTH_SHORT).show()
+                }
             }
 
 
@@ -53,6 +62,10 @@ class MealFragment : BaseFragment() {
 
             val w = x * i
             amountTV.text = i.toString()
+
+            addMealToBasketBT.setOnClickListener {
+                Toast.makeText(requireContext(), "$w", Toast.LENGTH_SHORT).show()
+            }
 
             Log.d("REPO_DEBUG", "$w")
 
@@ -88,8 +101,10 @@ class MealFragment : BaseFragment() {
                 amountTV.text = i.toString()
 
                 Log.d("REPO_DEBUG", "$w")
-                Log.d("REPO", "$x")
 
+                addMealToBasketBT.setOnClickListener {
+                    Toast.makeText(requireContext(), "$w", Toast.LENGTH_SHORT).show()
+                }
 
                 db.collection(FirebaseRepository.RESTAURANTS).document(uidRestaurant)
                     .collection(FirebaseRepository.MEALS).document(uidMeal)
@@ -110,7 +125,7 @@ class MealFragment : BaseFragment() {
         //if you click, return all the data in that meal back as it was
         returnBT.setOnClickListener {
             val x = meal.price.toString().toDouble()
-            val i = 1
+            i=1
 
                 val bundle = Bundle()
                 bundle.putString(
