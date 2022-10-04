@@ -4,5 +4,7 @@ class FirebaseRepository {
     companion object{
         val RESTAURANTS = "restaurants"
         val MEALS = "meals"
+        val USERS = "users"
+        val BASKET = "basket"
     }
 }

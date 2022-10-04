@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ordme.R
 import com.example.ordme.base.BaseFragment
@@ -15,7 +16,9 @@ import com.example.ordme.ui.data.Meal
 import com.example.ordme.ui.data.Restaurant
 import com.example.ordme.ui.repository.FirebaseRepository
 import com.google.firebase.firestore.*
+import kotlinx.android.synthetic.main.fragment_meal.*
 import kotlinx.android.synthetic.main.fragment_restaurant.*
+import kotlinx.android.synthetic.main.fragment_restaurant.returnBT
 
 class RestaurantFragment: BaseFragment() {
     override val layout: Int = R.layout.fragment_restaurant
@@ -87,6 +90,16 @@ class RestaurantFragment: BaseFragment() {
                     adapter.notifyDataSetChanged()
                 }
             })
+
+        //if you click, return all the data in that meal back as it was
+        returnBT.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putString(
+                "uidRestaurant",
+                uid
+            )
+            findNavController().navigate(R.id.action_restaurantFragment_to_mainUserFragment, bundle)
+        }
     }
 
 
