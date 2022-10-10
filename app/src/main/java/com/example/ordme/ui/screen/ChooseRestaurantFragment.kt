@@ -82,6 +82,7 @@ class ChooseRestaurantFragment: BaseFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.basket -> {
+
                 findNavController().navigate(R.id.action_mainUserFragment_to_basketFragment)
             }
         }

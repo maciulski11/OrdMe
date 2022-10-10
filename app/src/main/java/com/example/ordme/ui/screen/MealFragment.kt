@@ -1,6 +1,5 @@
 package com.example.ordme.ui.screen
 
-import android.app.Application
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -53,7 +52,7 @@ class MealFragment : BaseFragment() {
                     Toast.makeText(requireContext(), "${meal.price}", Toast.LENGTH_SHORT).show()
 
                     val dish = hashMapOf(
-                        "price" to meal.price,
+                        "priceMeal" to meal.price,
                         "nameMeal" to meal.nameMeal,
                         "amountMeal" to meal.amount
 //                        "list" to arrayListOf("${meal.nameMeal}")
@@ -118,7 +117,7 @@ class MealFragment : BaseFragment() {
                 Toast.makeText(requireContext(), "${meal.price}", Toast.LENGTH_SHORT).show()
 
                 val dish = hashMapOf(
-                    "price" to w.toString(),
+                    "priceMeal" to w.toString(),
                     "nameMeal" to meal.nameMeal,
                     "amountMeal" to meal.amount
 //                        "list" to arrayListOf("${meal.nameMeal}")
@@ -138,6 +137,9 @@ class MealFragment : BaseFragment() {
                     "uidRestaurant",
                     uidRestaurant
                 )
+//
+//                //it transferred data to FragmentBasket without used navigate
+//                parentFragmentManager.setFragmentResult("dataRestaurantAndMeal", bundle)
 
                 findNavController().navigate(R.id.action_mealFragment_to_restaurantFragment, bundle)
 
@@ -190,7 +192,7 @@ class MealFragment : BaseFragment() {
                     Toast.makeText(requireContext(), "${meal.price}", Toast.LENGTH_SHORT).show()
 
                     val dish = hashMapOf(
-                        "price" to w.toString(),
+                        "priceMeal" to w.toString(),
                         "nameMeal" to meal.nameMeal,
                         "amountMeal" to meal.amount
 //                        "list" to arrayListOf("${meal.nameMeal}")
@@ -210,6 +212,9 @@ class MealFragment : BaseFragment() {
                         "uidRestaurant",
                         uidRestaurant
                     )
+//
+//                    //it transferred data to FragmentBasket without used navigate
+//                    parentFragmentManager.setFragmentResult("dataRestaurantAndMeal", bundle)
 
                     findNavController().navigate(
                         R.id.action_mealFragment_to_restaurantFragment,
@@ -246,6 +251,9 @@ class MealFragment : BaseFragment() {
                 "uidRestaurant",
                 uidRestaurant
             )
+//
+//            //it transferred data to FragmentBasket without used navigate
+//            parentFragmentManager.setFragmentResult("dataRestaurantAndMeal", bundle)
 
             findNavController().navigate(R.id.action_mealFragment_to_restaurantFragment, bundle)
 
