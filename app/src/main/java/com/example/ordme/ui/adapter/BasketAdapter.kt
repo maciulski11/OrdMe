@@ -6,9 +6,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ordme.R
 import com.example.ordme.ui.data.Basket
+import com.example.ordme.ui.data.Meal
 import kotlinx.android.synthetic.main.item_basket.view.*
 
-class BasketAdapter(private val basketList: ArrayList<Basket>): RecyclerView.Adapter<BasketAdapter.MyViewHolder>() {
+class BasketAdapter(private val basketList: ArrayList<Meal>): RecyclerView.Adapter<BasketAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BasketAdapter.MyViewHolder {
         val itemView =
@@ -18,9 +19,9 @@ class BasketAdapter(private val basketList: ArrayList<Basket>): RecyclerView.Ada
     }
 
     override fun onBindViewHolder(holder: BasketAdapter.MyViewHolder, position: Int) {
-        val basket: Basket = basketList[position]
+        val meal: Meal = basketList[position]
 
-        holder.bindView(basket)
+        holder.bindView(meal)
 
     }
 
@@ -28,10 +29,10 @@ class BasketAdapter(private val basketList: ArrayList<Basket>): RecyclerView.Ada
 
     inner class MyViewHolder(private var v: View) : RecyclerView.ViewHolder(v) {
 
-        fun bindView(b: Basket){
-            v.nameMealTV.text = b.nameMeal
-            v.amountTV.text = b.amountMeal
-            v.priceTV.text = b.priceMeal
+        fun bindView(meal: Meal){
+            v.nameMealTV.text = meal.name
+            v.amountTV.text = meal.amount.toString()
+            v.priceTV.text = meal.price.toString()
         }
     }
 }

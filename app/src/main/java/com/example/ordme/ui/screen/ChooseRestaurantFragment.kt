@@ -6,12 +6,16 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ordme.R
 import com.example.ordme.base.BaseFragment
 import com.example.ordme.ui.adapter.ChooseRestaurantAdapter
 import com.example.ordme.ui.data.Restaurant
+import com.example.ordme.ui.repository.FirebaseRepository
+import com.example.ordme.ui.view_model.MainViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import kotlinx.android.synthetic.main.fragment_choose_restaurant.*
@@ -20,9 +24,11 @@ class ChooseRestaurantFragment: BaseFragment() {
     override val layout: Int = R.layout.fragment_choose_restaurant
 
     private val fbAuth = FirebaseAuth.getInstance()
+    private var restaurantsList = ArrayList<Restaurant>()
     private lateinit var adapter: ChooseRestaurantAdapter
-    private lateinit var restaurantsList: ArrayList<Restaurant>
     private lateinit var db: FirebaseFirestore
+
+    val viewModel: MainViewModel by activityViewModels()
 
     override fun subscribeUi() {
         recyclerViewChooseRestaurant.layoutManager =
@@ -38,35 +44,19 @@ class ChooseRestaurantFragment: BaseFragment() {
         downloadDataFromFirebase()
 
 
+        viewModel.restaurantList.observe(this) {
+            adapter.restaurantsList = it
+            adapter.notifyDataSetChanged()
+        }
+
+        viewModel.fetchRestaurants()
+        viewModel.fetchBasketList()
+
     }
 
     private fun downloadDataFromFirebase(){
         db = FirebaseFirestore.getInstance()
-        db.collection("restaurants")
-            .limit(9)
-            .addSnapshotListener(object : EventListener<QuerySnapshot> {
 
-                @SuppressLint("NotifyDataSetChanged")
-                override fun onEvent(
-                    value: QuerySnapshot?,
-                    error: FirebaseFirestoreException?
-                ) {
-
-                    if (error != null) {
-                        Log.e("Jest blad", error.message.toString())
-                        return
-                    }
-
-                    for (dc: DocumentChange in value!!.documentChanges) {
-                        //sprawdxzamy czy dokument zostal poprawnie dodany:
-                        if (dc.type == DocumentChange.Type.ADDED) {
-
-                            restaurantsList.add(dc.document.toObject(Restaurant::class.java))
-                        }
-                    }
-                    adapter.notifyDataSetChanged()
-                }
-            })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,6 +80,6 @@ class ChooseRestaurantFragment: BaseFragment() {
     }
 
     override fun unsubscribeUi() {
-
+        viewModel.restaurantList.removeObservers(this)
     }
 }

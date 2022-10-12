@@ -6,12 +6,14 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ordme.R
 import com.example.ordme.base.BaseFragment
 import com.example.ordme.ui.adapter.RestaurantAdapter
+import com.example.ordme.ui.data.Basket
 import com.example.ordme.ui.data.Meal
 import com.example.ordme.ui.data.Restaurant
 import com.example.ordme.ui.repository.FirebaseRepository
@@ -20,6 +22,11 @@ import kotlinx.android.synthetic.main.fragment_meal.*
 import kotlinx.android.synthetic.main.fragment_restaurant.*
 import kotlinx.android.synthetic.main.fragment_restaurant.returnBT
 
+class RestaurantViewModel(var restaurantId: String = "", var basket: Basket? = null): ViewModel() {
+
+}
+
+
 class RestaurantFragment: BaseFragment() {
     override val layout: Int = R.layout.fragment_restaurant
 
@@ -27,11 +34,12 @@ class RestaurantFragment: BaseFragment() {
     private var restaurant = Restaurant()
     private lateinit var mealsList: ArrayList<Meal>
     private lateinit var adapter: RestaurantAdapter
+    private var viewModel = RestaurantViewModel()
 
 
     override fun subscribeUi() {
 
-        val uid = requireArguments().getString("uidRestaurant").toString()
+        viewModel.restaurantId = requireArguments().getString("uidRestaurant").toString()
 
         recyclerViewChooseDish.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -42,62 +50,20 @@ class RestaurantFragment: BaseFragment() {
         adapter = RestaurantAdapter(mealsList, requireView())
         recyclerViewChooseDish.adapter = adapter
 
-        db.collection(FirebaseRepository.RESTAURANTS).document(uid)
-            .get().addOnSuccessListener { snapshot ->
 
-                Log.d("RestarantFragment", "${snapshot.data} ")
+        textView7.text = restaurant.nameRestaurant
+        textView8.text = restaurant.uid
+        textView7.text = "Empty"
 
-                //przerabiam dane snaphot nadane restauracji jest w formie JSON
-                //let -> jezeli optional != null to sie wykona
-                snapshot.toObject(Restaurant::class.java)?.let {
-                    restaurant = it
-                    textView7.text = restaurant.nameRestaurant
-                    textView8.text = restaurant.uid
-                    //run -> dziala jak else
-                } ?: run {
-                    textView7.text = "Empty"
-                }
-            }
-
-        db.collection(FirebaseRepository.RESTAURANTS).document(uid.toString())
-            .collection(FirebaseRepository.MEALS)
-            .addSnapshotListener(object : EventListener<QuerySnapshot> {
-
-                @SuppressLint("NotifyDataSetChanged")
-                override fun onEvent(
-                    value: QuerySnapshot?,
-                    error: FirebaseFirestoreException?
-                ) {
-
-                    if (error != null) {
-                        Log.e("Jest blad", error.message.toString())
-                        return
-                    }
-
-                    for (dc: DocumentChange in value!!.documentChanges) {
-
-                        //sprawdxzamy czy dokument zostal poprawnie dodany:
-                        if (dc.type == DocumentChange.Type.ADDED) {
-                            val meal = dc.document.toObject(Meal::class.java)
-                            Log.d("Meals", "$meal ")
-                            mealsList.add(dc.document.toObject(Meal::class.java))
-
-                        }
-                        //else if(dc.type == DocumentChange.Type.MODIFIED){
-
-                       // }
-                    }
-                    adapter.notifyDataSetChanged()
-                }
-            })
 
         //if you click, return all the data in that meal back as it was
         returnBT.setOnClickListener {
             val bundle = Bundle()
             bundle.putString(
                 "uidRestaurant",
-                uid
+                viewModel.restaurantId
             )
+
             findNavController().navigate(R.id.action_restaurantFragment_to_mainUserFragment, bundle)
         }
     }
@@ -116,7 +82,12 @@ class RestaurantFragment: BaseFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.basket -> {
-                findNavController().navigate(R.id.action_restaurantFragment_to_basketFragment)
+                val bundle = Bundle()
+                bundle.putString(
+                    "uidRestaurant",
+                    viewModel.restaurantId
+                )
+                findNavController().navigate(R.id.action_restaurantFragment_to_basketFragment, bundle)
             }
         }
         return false

@@ -1,6 +1,6 @@
 package com.example.ordme.ui.data
 
-data class Users (
+data class User (
     val email: String? = null,
     val uid: String? = null,
     val name: String? = null,

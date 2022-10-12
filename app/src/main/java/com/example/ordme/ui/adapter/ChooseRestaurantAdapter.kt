@@ -13,7 +13,7 @@ import androidx.navigation.findNavController
 import kotlinx.android.synthetic.main.item_choose_restaurants.view.*
 
 class ChooseRestaurantAdapter(private val context: Context,
-                              private val restaurantsList: ArrayList<Restaurant>,
+                              var restaurantsList: ArrayList<Restaurant>,
                               private val v: View):
     RecyclerView.Adapter<ChooseRestaurantAdapter.MyViewHolder>() {
 

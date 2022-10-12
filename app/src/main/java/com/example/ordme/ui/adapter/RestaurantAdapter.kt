@@ -29,7 +29,7 @@ class RestaurantAdapter(private val mealsList: ArrayList<Meal>,
             val bundle = Bundle()
             bundle.putString(
                 "uidMeal",
-                mealsList[position].uidMeal
+                mealsList[position].uid
             )
             bundle.putString(
                 "uidRestaurant",
@@ -52,8 +52,8 @@ class RestaurantAdapter(private val mealsList: ArrayList<Meal>,
         val addMeal = v.findViewById<ImageView>(R.id.addMealBT)!!
 
         fun bindView(m: Meal) {
-            v.nameMealTV.text = m.nameMeal
-            v.priceTV.text = m.price
+            v.nameMealTV.text = m.name
+            v.priceTV.text = m.price.toString()
         }
     }
 }

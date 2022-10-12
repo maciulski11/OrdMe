@@ -2,19 +2,20 @@ package com.example.ordme.ui.screen
 
 import android.util.Log
 import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.ordme.R
 import com.example.ordme.base.BaseFragment
+import com.example.ordme.ui.view_model.MainViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_register.*
 
 class RegisterFragment: BaseFragment() {
     override val layout: Int = R.layout.fragment_register
 
     private val fbAuth = FirebaseAuth.getInstance()
-    private val cloud = FirebaseFirestore.getInstance()
+    private val viewModel: MainViewModel by viewModels()
 
     override fun subscribeUi() {
 
@@ -35,16 +36,17 @@ class RegisterFragment: BaseFragment() {
                 fbAuth.createUserWithEmailAndPassword(email, password)
                     .addOnSuccessListener { authResults ->
                         if (authResults.user != null) {
-                            val user = com.example.ordme.ui.data.Users(
+                            val user = com.example.ordme.ui.data.User(
                                 authResults.user!!.email,
                                 authResults.user!!.uid,
                                 name,
                                 surname,
                                 number,
                             )
-                            cloud.collection("users")
-                                .document(user.uid!!)
-                                .set(user)
+                            viewModel.createNewUser(user)
+//                            cloud.collection("users")
+//                                .document(user.uid!!)
+//                                .set(user)
 
                             //send verification email to your account
                             fbAuth.currentUser!!.sendEmailVerification()
