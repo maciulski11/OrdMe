@@ -38,9 +38,6 @@
             app:destination="@id/restaurantFragment">
 
         </action>
-        <action
-            android:id="@+id/action_mainUserFragment_to_basketFragment"
-            app:destination="@id/basketFragment" />
     </fragment>
     <fragment
         android:id="@+id/restaurantFragment"
@@ -60,6 +57,12 @@
         android:id="@+id/basketFragment"
         android:name="com.example.ordme.ui.screen.BasketFragment"
         android:label="BasketFragment" >
+        <action
+            android:id="@+id/action_basketFragment_to_restaurantFragment"
+            app:destination="@id/restaurantFragment" />
+        <action
+            android:id="@+id/action_basketFragment_to_checkoutFragment"
+            app:destination="@id/checkoutFragment" />
     </fragment>
     <fragment
         android:id="@+id/mealFragment"
@@ -72,4 +75,8 @@
             android:id="@+id/action_mealFragment_to_mainUserFragment"
             app:destination="@id/mainUserFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/checkoutFragment"
+        android:name="com.example.ordme.ui.screen.CheckoutFragment"
+        android:label="CheckoutFragment" />
 </navigation>
