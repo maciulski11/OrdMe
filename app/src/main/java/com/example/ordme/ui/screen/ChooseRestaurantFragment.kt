@@ -28,8 +28,9 @@ class ChooseRestaurantFragment: BaseFragment() {
     private lateinit var adapter: ChooseRestaurantAdapter
     private lateinit var db: FirebaseFirestore
 
-    val viewModel: MainViewModel by activityViewModels()
+    private val viewModel: MainViewModel by activityViewModels()
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun subscribeUi() {
         recyclerViewChooseRestaurant.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -49,7 +50,7 @@ class ChooseRestaurantFragment: BaseFragment() {
             adapter.notifyDataSetChanged()
         }
 
-        viewModel.fetchRestaurants()
+        viewModel.fetchRestaurantsList()
         viewModel.fetchBasketList()
 
     }
@@ -59,25 +60,27 @@ class ChooseRestaurantFragment: BaseFragment() {
 
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        setHasOptionsMenu(true)
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.basket_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.basket -> {
-
-                findNavController().navigate(R.id.action_mainUserFragment_to_basketFragment)
-            }
-        }
-        return false
-    }
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        setHasOptionsMenu(true)
+//        super.onCreate(savedInstanceState)
+//    }
+//
+//    @Deprecated("Deprecated in Java")
+//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+//        inflater.inflate(R.menu.basket_menu, menu)
+//        super.onCreateOptionsMenu(menu, inflater)
+//    }
+//
+//    @Deprecated("Deprecated in Java")
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        when (item.itemId) {
+//            R.id.basket -> {
+//
+//                findNavController().navigate(R.id.action_mainUserFragment_to_basketFragment)
+//            }
+//        }
+//        return false
+//    }
 
     override fun unsubscribeUi() {
         viewModel.restaurantList.removeObservers(this)

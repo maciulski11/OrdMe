@@ -3,18 +3,12 @@ package com.example.ordme.ui.repository
 
 import android.annotation.SuppressLint
 import android.util.Log
-import android.widget.Toast
-import androidx.navigation.fragment.findNavController
-import com.example.ordme.R
 import com.example.ordme.ui.data.Basket
 import com.example.ordme.ui.data.Meal
 import com.example.ordme.ui.data.Restaurant
 import com.example.ordme.ui.data.User
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
-import kotlinx.android.synthetic.main.fragment_login.*
-import kotlinx.android.synthetic.main.fragment_restaurant.*
 
 class FirebaseRepository {
 
@@ -22,10 +16,10 @@ class FirebaseRepository {
     private var db = FirebaseFirestore.getInstance()
     private val cloud = FirebaseFirestore.getInstance()
 
-    val currentUserId: String?
+    private val currentUserId: String?
         get() = fbAuth.currentUser?.uid
 
-    companion object{
+    companion object {
         val RESTAURANTS = "restaurants"
         val MEALS = "meals"
         val USERS = "users"
@@ -33,7 +27,7 @@ class FirebaseRepository {
     }
 
     @SuppressLint("RestrictedApi")
-    fun createNewUser(user: User){
+    fun createNewUser(user: User) {
         cloud.collection(USERS)
             .document(user.uid!!)
             .set(user)
@@ -88,7 +82,7 @@ class FirebaseRepository {
             })
     }
 
-    fun fetchRestaurantList(onComplete: (ArrayList<Restaurant>) -> Unit) {
+    fun fetchRestaurantsList(onComplete: (ArrayList<Restaurant>) -> Unit) {
         db.collection(RESTAURANTS)
             .limit(9)
             .addSnapshotListener(object : EventListener<QuerySnapshot> {
@@ -120,7 +114,7 @@ class FirebaseRepository {
     }
 
     fun fetchRestaurant(uid: String, onComplete: (Restaurant?) -> Unit) {
-        db.collection(FirebaseRepository.RESTAURANTS).document(uid)
+        db.collection(RESTAURANTS).document(uid)
             .get().addOnSuccessListener { snapshot ->
 
                 Log.d("RestarantFragment", "${snapshot.data} ")
@@ -137,7 +131,7 @@ class FirebaseRepository {
     }
 
     fun fetchBasketListForCurrentUser(onComplete: (ArrayList<Basket>) -> Unit) {
-        if(fbAuth.currentUser == null) {
+        if (fbAuth.currentUser == null) {
             onComplete.invoke(arrayListOf())
             return
         }
@@ -162,9 +156,60 @@ class FirebaseRepository {
             }
     }
 
+    fun fetchMeal(uidRestaurant: String, uidMeal: String, onComplete: (Meal?) -> Unit) {
+        //download date from firebase with uid restaurant and meal
+        db.collection(RESTAURANTS).document(uidRestaurant)
+            .collection(MEALS).document(uidMeal)
+            .get().addOnSuccessListener { snapshot ->
+
+                Log.d("RestarantFragment", "${snapshot.data} ")
+
+                //I pulled a snapshot of the data and if it is true i let to download data
+                snapshot.toObject(Meal::class.java)?.let {
+                    onComplete.invoke(it)
+
+                    //it is the same as else
+                } ?: run {
+                    onComplete.invoke(null)
+                }
+            }
+    }
+
+    fun chooseAmountMeal(uidRestaurant: String, uidMeal: String, price: Double, amount: Int){
+        //update my price and amount in my firebase and download data to layout
+            db.collection(RESTAURANTS).document(uidRestaurant)
+                .collection(MEALS).document(uidMeal)
+                .update("price", price, "amount", amount)
+                .addOnSuccessListener {
+                    Log.d("REPO_DEBUG", "Zaktualizowano dane!")
+                    Log.d("REPO", price.toString())
+
+                }
+                .addOnFailureListener {
+                    Log.d("REPO_DEBUG", it.toString())
+                }
+    }
 
     fun fetchBasket(uid: String, onComplete: (Basket?) -> Unit) {
-        //TODO: Pobierz konkretny basket i zwróć w onComplete
+        if (currentUserId == null) {
+            onComplete.invoke(null)
+            return
+        }
+
+        db.collection(USERS).document(currentUserId!!)
+            .collection(BASKET).document(uid)
+            .get().addOnSuccessListener { snapshot ->
+                snapshot.toObject(Basket::class.java)?.let {
+                    Log.d("REPO FetchBasket", it.toString())
+                    onComplete.invoke(it)
+                    //it is the same as else
+                } ?: run {
+                    onComplete.invoke(null)
+                }
+            }
+            .addOnFailureListener {
+                Log.d("REPO", it.toString())
+            }
     }
 
 }

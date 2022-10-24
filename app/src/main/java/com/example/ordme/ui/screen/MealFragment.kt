@@ -2,79 +2,138 @@ package com.example.ordme.ui.screen
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 import android.widget.Toast
-import androidx.lifecycle.LiveData
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import com.example.ordme.R
 import com.example.ordme.base.BaseFragment
 import com.example.ordme.ui.data.Basket
 import com.example.ordme.ui.data.Meal
 import com.example.ordme.ui.repository.FirebaseRepository
+import com.example.ordme.ui.view_model.MainViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_meal.*
-import kotlinx.android.synthetic.main.fragment_meal.nameMealTV
+import kotlinx.android.synthetic.main.fragment_meal.returnBT
+
+class MealViewModel(var basket: Basket? = null): ViewModel() {
+
+    private val repository = FirebaseRepository()
+    var meal: MutableLiveData<Meal?> = MutableLiveData()
+
+    val mealId: String?
+        get() = meal.value?.uidMeal
+
+    fun fetchMeal(restaurantId: String, mealId: String) {
+        repository.fetchMeal(restaurantId, mealId){
+            meal.postValue(it)
+        }
+    }
+
+    fun incrementAmount() {
+        val newValue = meal.value
+        newValue?.amount = meal.value?.amount?.inc()
+        meal.value = newValue
+    }
+
+    fun decrementAmount() {
+        if(meal.value?.amount ?: 0 > 1) {
+            val newValue = meal.value
+            newValue?.amount = meal.value?.amount?.dec()
+            meal.value = newValue
+
+        }
+    }
+
+    val totalPrice: String
+        get() {
+            val price = meal.value?.price ?: 0.0
+            val amount = meal.value?.amount?.toDouble() ?: 0.0
+            return "%.2f".format(price * amount)
+        }
+
+}
 
 class MealFragment : BaseFragment() {
     override val layout: Int = R.layout.fragment_meal
 
-    private var db = FirebaseFirestore.getInstance()
-    private val fbAuth = FirebaseAuth.getInstance()
-    private val random = java.util.Random().nextInt(999999999).toString()
-
-    private var meal: Meal? = null
+    private var mealViewModel = MealViewModel()
+    private var restaurantViewModel = RestaurantViewModel()
 
     var basket: Basket? = null
 
+    private val mainViewModel: MainViewModel by activityViewModels()
+
     override fun subscribeUi() {
         //get data from RestaurantAdapter
-        val uidMeal = requireArguments().getString("uidMeal").toString()
-        val uidRestaurant = requireArguments().getString("uidRestaurant").toString()
+        //TODO: Jak przesłać obiekt Meal
+//        requireArguments().getParcelable("meal", Meal::class.java)
+//        val restaurantId = requireArguments().getString("uidRestaurant") ?: ""
+        val mealId = requireArguments().getString("uidMeal") ?: ""
+        restaurantViewModel.restaurantId = requireArguments().getString("uidRestaurant") ?: ""
+//        mealViewModel.mealId = requireArguments().getString("uidMeal")
+//        mealViewModel.price = requireArguments().getDouble("price")
+//        mealViewModel.priceStart = requireArguments().getDouble("priceStart")
+//        mealViewModel.amount = requireArguments().getInt("amount")
 
-        FirebaseRepository().fetchBasket(uidRestaurant) {
-            basket = it
+        mealViewModel.meal.observe(this) { meal ->
+            view?.let {
+                val nameMeal = it.findViewById<TextView>(R.id.nameMealTV)
+                val priceTV = it.findViewById<TextView>(R.id.addMealToBasketBT)
+                val amountTV = it.findViewById<TextView>(R.id.amountTV)
+
+                nameMeal.text = meal?.name ?: "-"
+                amountTV.text = (meal?.amount ?: 0).toString()
+
+                //TODO: Change to button
+                priceTV.text = mealViewModel.totalPrice
+            }
         }
 
-        //download date from firebase with uid restaurant and meal
-        db.collection(FirebaseRepository.RESTAURANTS).document(uidRestaurant)
-            .collection(FirebaseRepository.MEALS).document(uidMeal)
-            .get().addOnSuccessListener { snapshot ->
 
-                Log.d("RestarantFragment", "${snapshot.data} ")
+        mealViewModel.fetchMeal(restaurantViewModel.restaurantId, mealId)
 
-                //I pulled a snapshot of the data and if it is true i let to download data
-                snapshot.toObject(Meal::class.java)?.let {
-                    meal = it
-                    nameMealTV.text = meal?.name
-                    addMealToBasketBT.text = meal?.price.toString()
-                    amountTV.text = "1"
+        FirebaseRepository().fetchBasket(restaurantViewModel.restaurantId) {
+            basket = it ?: Basket(restaurantViewModel.restaurantId)
+        }
 
-                    //it is the same as else
-                } ?: run {
-                    nameMealTV.text = "Null"
-                }
+        plusBT.setOnClickListener {
+            mealViewModel.incrementAmount()
 
-            }
+        }
+
+        minusBT.setOnClickListener {
+            mealViewModel.decrementAmount()
+
+        }
 
         addMealToBasketBT.setOnClickListener {
-            Toast.makeText(requireContext(), "${meal?.price}", Toast.LENGTH_SHORT).show()
 
-            meal?.let {
+            Toast.makeText(requireContext(), "Added", Toast.LENGTH_SHORT).show()
+
+            mealViewModel.meal.value?.let {
+                mealViewModel.meal.value?.price = mealViewModel.totalPrice.toDouble()
                 basket?.meals?.add(it)
+                Log.d("Basket", "$it")
                 basket?.let { basket ->
                     FirebaseRepository().update(basket)
+
+                    Log.d("Basket", "$basket")
+
                 }
             }
 
             val bundle = Bundle()
             bundle.putString(
                 "uidMeal",
-                uidMeal
+                mealViewModel.mealId
             )
             bundle.putString(
                 "uidRestaurant",
-                uidRestaurant
+                restaurantViewModel.restaurantId
             )
 
             //it transferred data to FragmentBasket without used navigate
@@ -86,213 +145,26 @@ class MealFragment : BaseFragment() {
             )
         }
 
-        var i = 1
+        returnToRestaurant()
+    }
 
-        plusBT.setOnClickListener {
-            i++
-            val x = meal?.price.toString().toDouble()
-
-            val w = x * i
-            amountTV.text = i.toString()
-
-            Log.d("REPO_DEBUG", "$w")
-
-            //update my price and amount in my firebase and download data to layout
-            db.collection(FirebaseRepository.RESTAURANTS).document(uidRestaurant)
-                .collection(FirebaseRepository.MEALS).document(uidMeal)
-                .update("price", w.toString(), "amount", i.toString())
-                .addOnSuccessListener {
-                    Log.d("REPO_DEBUG", "Zaktualizowano dane!")
-                    Log.d("REPO", "$x")
-
-                }
-                .addOnFailureListener {
-                    Log.d("REPO_DEBUG", it.toString())
-                }
-
-            //updates data in real time
-            getRealTimeData().observe(viewLifecycleOwner) { priceMeal ->
-                addMealToBasketBT.text = priceMeal.price.toString()
-            }
-
-            addMealToBasketBT.setOnClickListener {
-                Toast.makeText(requireContext(), "${meal?.price}", Toast.LENGTH_SHORT).show()
-
-                val dish = hashMapOf(
-                    "priceMeal" to w.toString(),
-                    "nameMeal" to meal?.name,
-                    "amountMeal" to meal?.amount
-                )
-
-                db.collection(FirebaseRepository.USERS).document(fbAuth.currentUser!!.uid)
-                    .collection(FirebaseRepository.BASKET).document(uidRestaurant)
-                    .collection(FirebaseRepository.MEALS).document(random)
-                    .set(dish)
-
-                val bundle = Bundle()
-                bundle.putString(
-                    "uidMeal",
-                    uidMeal
-                )
-                bundle.putString(
-                    "uidRestaurant",
-                    uidRestaurant
-                )
-
-                //it transferred data to FragmentBasket without used navigate
-//                parentFragmentManager.setFragmentResult("dataRestaurantAndMeal", bundle)
-
-
-                findNavController().navigate(R.id.action_mealFragment_to_restaurantFragment, bundle)
-
-                val n = 1
-
-                db.collection(FirebaseRepository.RESTAURANTS).document(uidRestaurant)
-                    .collection(FirebaseRepository.MEALS).document(uidMeal)
-                    .update("price", x.toString(), "amount", n.toString())
-                    .addOnSuccessListener {
-                        Log.d("REPO_DEBUG", "Zaktualizowano dane!")
-                    }
-                    .addOnFailureListener {
-                        Log.d("REPO_DEBUG", it.toString())
-                    }
-            }
-        }
-
-        minusBT.setOnClickListener {
-            if (i <= 1) {
-                onStop()
-            } else {
-                i--
-                val x = meal?.price.toString().toDouble()
-
-                val w = x * i
-
-                amountTV.text = i.toString()
-
-                Log.d("REPO_DEBUG", "$w")
-
-                addMealToBasketBT.setOnClickListener {
-                    Toast.makeText(requireContext(), "$w", Toast.LENGTH_SHORT).show()
-                }
-
-                db.collection(FirebaseRepository.RESTAURANTS).document(uidRestaurant)
-                    .collection(FirebaseRepository.MEALS).document(uidMeal)
-                    .update("price", w.toString(), "amount", i.toString())
-                    .addOnSuccessListener {
-                        Log.d("REPO_DEBUG", "Zaktualizowano dane!")
-                    }
-                    .addOnFailureListener {
-                        Log.d("REPO_DEBUG", it.toString())
-                    }
-
-                getRealTimeData().observe(viewLifecycleOwner) { priceMeal ->
-                    addMealToBasketBT.text = priceMeal.price.toString()
-                }
-
-                addMealToBasketBT.setOnClickListener {
-                    Toast.makeText(requireContext(), "${meal?.price}", Toast.LENGTH_SHORT).show()
-
-                    val dish = hashMapOf(
-                        "priceMeal" to w.toString(),
-                        "nameMeal" to meal?.name,
-                        "amountMeal" to meal?.amount
-//                        "list" to arrayListOf("${meal.nameMeal}")
-                    )
-
-                    db.collection(FirebaseRepository.USERS).document(fbAuth.currentUser!!.uid)
-                        .collection(FirebaseRepository.BASKET).document(uidRestaurant)
-                        .collection(FirebaseRepository.MEALS).document(random)
-                        .set(dish)
-
-                    val bundle = Bundle()
-                    bundle.putString(
-                        "uidMeal",
-                        uidMeal
-                    )
-                    bundle.putString(
-                        "uidRestaurant",
-                        uidRestaurant
-                    )
-
-                    //it transferred data to FragmentBasket without used navigate
-                    parentFragmentManager.setFragmentResult("dataRestaurantAndMeal", bundle)
-
-                    findNavController().navigate(
-                        R.id.action_mealFragment_to_restaurantFragment,
-                        bundle
-                    )
-
-                    val n = 1
-
-                    db.collection(FirebaseRepository.RESTAURANTS).document(uidRestaurant)
-                        .collection(FirebaseRepository.MEALS).document(uidMeal)
-                        .update("price", x.toString(), "amount", n.toString())
-                        .addOnSuccessListener {
-                            Log.d("REPO_DEBUG", "Zaktualizowano dane!")
-                        }
-                        .addOnFailureListener {
-                            Log.d("REPO_DEBUG", it.toString())
-                        }
-
-                }
-            }
-        }
-
+    private fun returnToRestaurant(){
         //if you click, return all the data in that meal back as it was
         returnBT.setOnClickListener {
-            val x = meal?.price.toString().toDouble()
-            i = 1
 
             val bundle = Bundle()
             bundle.putString(
-                "uidMeal",
-                uidMeal
-            )
-            bundle.putString(
                 "uidRestaurant",
-                uidRestaurant
+                restaurantViewModel.restaurantId
             )
-//
-//            //it transferred data to FragmentBasket without used navigate
-//            parentFragmentManager.setFragmentResult("dataRestaurantAndMeal", bundle)
+
+            mainViewModel.fetchRestaurantMeals(restaurantViewModel.restaurantId)
 
             findNavController().navigate(R.id.action_mealFragment_to_restaurantFragment, bundle)
-
-            db.collection(FirebaseRepository.RESTAURANTS).document(uidRestaurant)
-                .collection(FirebaseRepository.MEALS).document(uidMeal)
-                .update("price", x.toString(), "amount", i.toString())
-                .addOnSuccessListener {
-                    Log.d("REPO_DEBUG", "Zaktualizowano dane!")
-                }
-                .addOnFailureListener {
-                    Log.d("REPO_DEBUG", it.toString())
-                }
         }
     }
 
-    //this function updates my data in real time in firebase
-    private fun getRealTimeData(): LiveData<Meal> {
-        val uidMeal = requireArguments().getString("uidMeal").toString()
-        val uidRestaurant = requireArguments().getString("uidRestaurant").toString()
-        val cloudResult = MutableLiveData<Meal>()
-
-        //tworzymy zapytacie do kolekcji, podajemy sciezke czyli naszego user
-        db.collection(FirebaseRepository.RESTAURANTS).document(uidRestaurant)
-            .collection(FirebaseRepository.MEALS).document(uidMeal)
-            .get()//potem uzyskaj ten dokument
-            .addOnSuccessListener {
-                val meal = it.toObject(Meal::class.java)
-                cloudResult.postValue(meal!!)
-            }
-            .addOnFailureListener {
-                Log.d("REPO_DEBUG", it.message.toString())
-            }
-
-        return cloudResult
-    }
-
     override fun unsubscribeUi() {
-
+        mealViewModel.meal.removeObservers(this)
     }
 }

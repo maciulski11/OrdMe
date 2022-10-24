@@ -1,20 +1,22 @@
 package com.example.ordme.ui.view_model
 
+import android.view.View
+import android.widget.TextView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.ordme.R
 import com.example.ordme.ui.data.Basket
+import com.example.ordme.ui.data.Meal
 import com.example.ordme.ui.data.Restaurant
 import com.example.ordme.ui.data.User
 import com.example.ordme.ui.repository.FirebaseRepository
-import com.google.firebase.firestore.FirebaseFirestore
 
 class MainViewModel: ViewModel() {
 
     private val repository = FirebaseRepository()
 
-    private lateinit var db: FirebaseFirestore
-
     var restaurantList = MutableLiveData<ArrayList<Restaurant>>()
+    var mealsList = MutableLiveData<ArrayList<Meal>>()
     var basketList = MutableLiveData<ArrayList<Basket>>()
 
 
@@ -22,19 +24,30 @@ class MainViewModel: ViewModel() {
         repository.createNewUser(user)
     }
 
-    fun fetchRestaurants() {
-        repository.fetchRestaurantList {
+    fun fetchRestaurantsList() {
+        repository.fetchRestaurantsList {
             restaurantList.postValue(it)
         }
     }
-
-    fun fetchBasketList() {
-        repository.fetchBasketListForCurrentUser {
-            basketList.postValue(it)
+    fun fetchRestaurantMeals(uid: String){
+        repository.fetchRestaurantMeals(uid){
+            mealsList.postValue(it)
         }
     }
 
-    fun getBasketWith(uid: String): Basket? =
-        basketList.value?.firstOrNull { it.uid == uid }
+        fun fetchBasketList() {
+        repository.fetchBasketListForCurrentUser {
+            basketList.postValue(it)
 
+
+        }
+    }
+
+    fun fetchRestaurant(uid: String, v: View){
+        repository.fetchRestaurant(uid){
+
+            val nameRestaurant = v.findViewById<TextView>(R.id.textView7)
+            nameRestaurant.text = it!!.nameRestaurant
+        }
+    }
 }
