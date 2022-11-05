@@ -14,21 +14,20 @@ class FirebaseRepository {
 
     private val fbAuth = FirebaseAuth.getInstance()
     private var db = FirebaseFirestore.getInstance()
-    private val cloud = FirebaseFirestore.getInstance()
 
     private val currentUserId: String?
         get() = fbAuth.currentUser?.uid
 
     companion object {
-        val RESTAURANTS = "restaurants"
-        val MEALS = "meals"
-        val USERS = "users"
-        val BASKET = "basket"
+        const val RESTAURANTS = "restaurants"
+        const val MEALS = "meals"
+        const val USERS = "users"
+        const val BASKET = "basket"
     }
 
     @SuppressLint("RestrictedApi")
     fun createNewUser(user: User) {
-        cloud.collection(USERS)
+        db.collection(USERS)
             .document(user.uid!!)
             .set(user)
     }
@@ -42,7 +41,6 @@ class FirebaseRepository {
             .document(basket.uid)
             .set(basket)
     }
-
 
     fun fetchRestaurantMeals(uid: String, onComplete: (ArrayList<Meal>) -> Unit) {
         db.collection(RESTAURANTS).document(uid)
@@ -69,7 +67,6 @@ class FirebaseRepository {
                             val meal = dc.document.toObject(Meal::class.java)
                             Log.d("Meals", "$meal ")
                             mealList.add(dc.document.toObject(Meal::class.java))
-
                         }
                         //else if(dc.type == DocumentChange.Type.MODIFIED){
 

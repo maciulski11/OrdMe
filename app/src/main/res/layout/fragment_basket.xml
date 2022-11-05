@@ -76,6 +76,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editText4" />
 
     <Button
+        android:id="@+id/checkoutBT"
         android:layout_width="360dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"

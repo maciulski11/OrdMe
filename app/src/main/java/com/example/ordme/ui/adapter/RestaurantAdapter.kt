@@ -1,5 +1,7 @@
 package com.example.ordme.ui.adapter
 
+import android.annotation.SuppressLint
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -33,6 +35,7 @@ class RestaurantAdapter(var mealsList: ArrayList<Meal>,
 
             //TODO: Skończ to
 //            bundle.putParcelable()
+//            bundle.getParcelable("meal", Meal::class.java)
             bundle.putString(
                 "uidMeal",
                 mealsList[position].uidMeal

@@ -32,7 +32,7 @@ class LoginFragment: BaseFragment() {
     private lateinit var googleSignInClient: GoogleSignInClient
     private val fbAuth = FirebaseAuth.getInstance()
     private val fbUser = fbAuth.currentUser
-    private val cloud = FirebaseFirestore.getInstance()
+    private val db = FirebaseFirestore.getInstance()
 
     override fun subscribeUi() {
 
@@ -174,7 +174,7 @@ class LoginFragment: BaseFragment() {
             "photo" to currentUser?.photoUrl
         )
 
-        cloud.collection("users")
+        db.collection("users")
             .document(currentUser!!.uid)
             .set(dataUser)
 

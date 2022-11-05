@@ -2,7 +2,6 @@ package com.example.ordme.ui.screen
 
 
 import android.os.Bundle
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
@@ -18,11 +17,12 @@ import com.example.ordme.ui.repository.FirebaseRepository
 import com.example.ordme.ui.view_model.MainViewModel
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_basket.*
-import kotlinx.android.synthetic.main.item_basket.view.*
 
 class BasketViewModel(var basket: Basket? = null) : ViewModel() {
 
+    val meals: MutableLiveData<ArrayList<Basket>> = MutableLiveData(arrayListOf())
     var meal: MutableLiveData<Meal?> = MutableLiveData()
+
 
 }
 
@@ -32,6 +32,7 @@ class BasketFragment : BaseFragment() {
     private val fbAuth = FirebaseAuth.getInstance()
     private lateinit var adapter: BasketAdapter
     private lateinit var basketList: ArrayList<Basket>
+
 
     //wywolanie viewmodel we calej aktywnosci, poniewaz ten fragment nie jest wywolywany po kolei
     val mainViewModel: MainViewModel by activityViewModels()
@@ -48,14 +49,23 @@ class BasketFragment : BaseFragment() {
 
         basketList = arrayListOf()
 
+
         FirebaseRepository().fetchBasket(uidRestaurant) { it ->
             basketViewModel.basket = it ?: Basket(restaurantViewModel.restaurantId)
 
             basketViewModel.basket?.meals?.let {
                 adapter = BasketAdapter(it, requireContext())
                 recyclerViewBasket.adapter = adapter
+
             }
         }
+
+        basketViewModel.meal.observe(this){ meal ->
+            view?.let{
+
+            }
+        }
+
 
         exitBT.setOnClickListener {
             val bundle = Bundle()
@@ -72,6 +82,7 @@ class BasketFragment : BaseFragment() {
 
 
     override fun unsubscribeUi() {
+        basketViewModel.meals.removeObservers(this)
 
     }
 }
