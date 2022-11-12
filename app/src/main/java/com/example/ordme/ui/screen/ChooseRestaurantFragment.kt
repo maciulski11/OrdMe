@@ -26,7 +26,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ChooseRestaurantFragment: BaseFragment() {
+class ChooseRestaurantFragment : BaseFragment() {
     override val layout: Int = R.layout.fragment_choose_restaurant
 
     private lateinit var binding: FragmentChooseRestaurantBinding
@@ -61,36 +61,36 @@ class ChooseRestaurantFragment: BaseFragment() {
         recyclerViewChooseRestaurant.adapter = adapter
 
         //uzywamy instancji modernizacji zeby wywolac losowy posilek
-        RetrofitInstance.api.getRandomMeal().enqueue(object: Callback<MealList>{ //uzywamy wywolania zwrotnego z callback
-            override fun onResponse(call: Call<MealList>, response: Response<MealList>) {
-                if (response.body() != null){ //spr. czy callback nie jest nullem
+        RetrofitInstance.api.getRandomMeal()
+            .enqueue(object : Callback<MealList> { //uzywamy wywolania zwrotnego z callback
+                override fun onResponse(call: Call<MealList>, response: Response<MealList>) {
+                    if (response.body() != null) { //spr. czy callback nie jest nullem
 
-                    //dajemy meals i index 0 poniewaz bierzemy tylko 1 posilek
-                    val randomMeal: Meal = response.body()!!.meals[0]
-                    Glide.with(this@ChooseRestaurantFragment)
-                        .load(randomMeal.strMealThumb)
-                        .into(binding.randomMeal)
+                        //dajemy meals i index 0 poniewaz bierzemy tylko 1 posilek
+                        val randomMeal: Meal = response.body()!!.meals[0]
+                        Glide.with(this@ChooseRestaurantFragment)
+                            .load(randomMeal.strMealThumb)
+                            .into(binding.randomMeal)
 
-                    Glide.with(this@ChooseRestaurantFragment)
-                        .load(randomMeal.strMealThumb)
-                        .into(binding.rawndomMeal)
+                        Glide.with(this@ChooseRestaurantFragment)
+                            .load(randomMeal.strMealThumb)
+                            .into(binding.rawndomMeal)
 
 
-                    Log.d("TEST", "meal id ${randomMeal.idMeal} name ${randomMeal.strMeal}")
+                        Log.d("TEST", "meal id ${randomMeal.idMeal} name ${randomMeal.strMeal}")
+                    } else {
+                        return
+                    }
                 }
-                else{
-                    return
+
+                override fun onFailure(call: Call<MealList>, t: Throwable) {
+                    Log.d("ChooseRestaurantFragment", t.message.toString())
                 }
-            }
 
-            override fun onFailure(call: Call<MealList>, t: Throwable) {
-                Log.d("ChooseRestaurantFragment", t.message.toString())
-            }
-
-        })
+            })
 
         mSearchRestaurant = searchRestaurant
-        mSearchRestaurant.addTextChangedListener(object: TextWatcher{
+        mSearchRestaurant.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
             }

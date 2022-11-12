@@ -21,7 +21,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_login.*
 
-class LoginFragment: BaseFragment() {
+class LoginFragment : BaseFragment() {
     override val layout: Int = R.layout.fragment_login
 
     private companion object {
@@ -37,7 +37,7 @@ class LoginFragment: BaseFragment() {
     override fun subscribeUi() {
 
         //we check that your account isn't null and your email verified
-        if (fbUser != null && fbUser.isEmailVerified){
+        if (fbUser != null && fbUser.isEmailVerified) {
             findNavController().navigate(R.id.action_loginUserFragment_to_mainUserFragment)
         }
 
@@ -49,7 +49,7 @@ class LoginFragment: BaseFragment() {
         googleSignIN()
     }
 
-    private fun loginClick(){
+    private fun loginClick() {
         loginBT.setOnClickListener {
             val email = emailET.text.toString()
             val password = passwordET.text.toString()
@@ -69,13 +69,21 @@ class LoginFragment: BaseFragment() {
                             //before your login we check that you verified your email
                             if (fbAuth.currentUser!!.isEmailVerified) {
                                 findNavController().navigate(R.id.action_loginUserFragment_to_mainUserFragment)
-                            } else{
-                                Toast.makeText(context, "Please verify your email.", Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "Please verify your email.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
                     }
                     .addOnFailureListener { exception ->
-                        Snackbar.make(requireView(), "Your account is not exist.", Snackbar.LENGTH_SHORT)
+                        Snackbar.make(
+                            requireView(),
+                            "Your account is not exist.",
+                            Snackbar.LENGTH_SHORT
+                        )
                             .show()
                         Log.d("DEBUG", exception.message.toString())
                     }
@@ -85,13 +93,13 @@ class LoginFragment: BaseFragment() {
 
     private fun googleSignIN() {
 
-            // Configure Google Sign In
-            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.web))
-                .requestEmail()
-                .build()
+        // Configure Google Sign In
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.web))
+            .requestEmail()
+            .build()
 
-            googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
+        googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
 
         //sign in google account
         googleSignIn.setOnClickListener {
@@ -136,7 +144,7 @@ class LoginFragment: BaseFragment() {
                     // Google Sign In failed, update UI appropriately
                     Log.w("SigInGoogle", "Google sign in failed", e)
                 }
-            } else{
+            } else {
                 Log.w("SigInGoogle", excepction.toString())
             }
         }
@@ -163,7 +171,7 @@ class LoginFragment: BaseFragment() {
             }
     }
 
-    private fun addUserToFirebase(){
+    private fun addUserToFirebase() {
         val currentUser = fbAuth.currentUser
 
         val dataUser = hashMapOf(

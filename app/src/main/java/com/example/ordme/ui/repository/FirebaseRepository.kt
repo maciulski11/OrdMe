@@ -172,19 +172,19 @@ class FirebaseRepository {
             }
     }
 
-    fun chooseAmountMeal(uidRestaurant: String, uidMeal: String, price: Double, amount: Int){
+    fun chooseAmountMeal(uidRestaurant: String, uidMeal: String, price: Double, amount: Int) {
         //update my price and amount in my firebase and download data to layout
-            db.collection(RESTAURANTS).document(uidRestaurant)
-                .collection(MEALS).document(uidMeal)
-                .update("price", price, "amount", amount)
-                .addOnSuccessListener {
-                    Log.d("REPO_DEBUG", "Zaktualizowano dane!")
-                    Log.d("REPO", price.toString())
+        db.collection(RESTAURANTS).document(uidRestaurant)
+            .collection(MEALS).document(uidMeal)
+            .update("price", price, "amount", amount)
+            .addOnSuccessListener {
+                Log.d("REPO_DEBUG", "Zaktualizowano dane!")
+                Log.d("REPO", price.toString())
 
-                }
-                .addOnFailureListener {
-                    Log.d("REPO_DEBUG", it.toString())
-                }
+            }
+            .addOnFailureListener {
+                Log.d("REPO_DEBUG", it.toString())
+            }
     }
 
     fun fetchBasket(uid: String, onComplete: (Basket?) -> Unit) {

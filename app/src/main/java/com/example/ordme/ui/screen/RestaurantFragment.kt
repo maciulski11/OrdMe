@@ -18,11 +18,11 @@ import com.example.ordme.ui.view_model.MainViewModel
 import kotlinx.android.synthetic.main.fragment_restaurant.*
 import kotlinx.android.synthetic.main.fragment_restaurant.returnBT
 
-class RestaurantViewModel(var restaurantId: String = "", var basket: Basket? = null): ViewModel() {
+class RestaurantViewModel(var restaurantId: String = "", var basket: Basket? = null) : ViewModel() {
 
 }
 
-class RestaurantFragment: BaseFragment() {
+class RestaurantFragment : BaseFragment() {
     override val layout: Int = R.layout.fragment_restaurant
 
     private lateinit var mealsList: ArrayList<Meal>
@@ -88,7 +88,10 @@ class RestaurantFragment: BaseFragment() {
                     "uidRestaurant",
                     restaurantViewModel.restaurantId
                 )
-                findNavController().navigate(R.id.action_restaurantFragment_to_basketFragment, bundle)
+                findNavController().navigate(
+                    R.id.action_restaurantFragment_to_basketFragment,
+                    bundle
+                )
             }
         }
         return false

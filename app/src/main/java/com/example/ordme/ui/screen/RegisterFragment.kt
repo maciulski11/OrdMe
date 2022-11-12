@@ -11,7 +11,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_register.*
 
-class RegisterFragment: BaseFragment() {
+class RegisterFragment : BaseFragment() {
     override val layout: Int = R.layout.fragment_register
 
     private val fbAuth = FirebaseAuth.getInstance()
@@ -52,11 +52,17 @@ class RegisterFragment: BaseFragment() {
                             fbAuth.currentUser!!.sendEmailVerification()
                                 .addOnCompleteListener { task ->
                                     if (task.isSuccessful) {
-                                        Toast.makeText(context,
+                                        Toast.makeText(
+                                            context,
                                             "Register successfully. Please check your email for verification.",
-                                            Toast.LENGTH_SHORT).show()
-                                    } else{
-                                        Toast.makeText(context, task.exception!!.message, Toast.LENGTH_SHORT).show()
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    } else {
+                                        Toast.makeText(
+                                            context,
+                                            task.exception!!.message,
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                     }
                                 }
 

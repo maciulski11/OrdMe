@@ -68,7 +68,8 @@ class BasketFragment : BaseFragment() {
             val bundle = Bundle()
             bundle.putString(
                 "uidRestaurant",
-                basketViewModel.basket?.uid!!            )
+                basketViewModel.basket?.uid!!
+            )
 
             mainViewModel.fetchRestaurantMeals(basketViewModel.basket?.uid!!)
 
