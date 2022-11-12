@@ -16,9 +16,10 @@ import kotlinx.android.synthetic.main.fragment_meal.view.*
 import kotlinx.android.synthetic.main.item_meal.view.*
 import kotlinx.android.synthetic.main.item_meal.view.nameMealTV
 
-class RestaurantAdapter(var mealsList: ArrayList<Meal>,
-                        private val v: View
-                        ): RecyclerView.Adapter<RestaurantAdapter.MyViewHolder>() {
+class RestaurantAdapter(
+    var mealsList: ArrayList<Meal>,
+    private val v: View
+) : RecyclerView.Adapter<RestaurantAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView =
@@ -34,27 +35,15 @@ class RestaurantAdapter(var mealsList: ArrayList<Meal>,
             val bundle = Bundle()
 
             //TODO: Skończ to
-//            bundle.putParcelable()
-//            bundle.getParcelable("meal", Meal::class.java)
-            bundle.putString(
-                "uidMeal",
-                mealsList[position].uidMeal
-            )
-            bundle.putString(
-                "uidRestaurant",
-                mealsList[position].uidRestaurant
-            )
-            bundle.putDouble(
-                "price",
-                mealsList[position].price!!.toDouble()
-            )
-            bundle.putDouble(
-                "priceStart",
-                mealsList[position].price!!.toDouble()
-            )
-            bundle.putInt(
-                "amount",
-                mealsList[position].amount!!.toInt()
+            bundle.putParcelable(
+                "meal",
+                Meal(
+                    meal.name,
+                    meal.amount,
+                    meal.price,
+                    meal.uidMeal,
+                    meal.uidRestaurant
+                )
             )
 
             v.findNavController().navigate(R.id.action_restaurantFragment_to_mealFragment, bundle)

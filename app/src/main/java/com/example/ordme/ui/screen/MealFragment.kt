@@ -14,15 +14,14 @@ import com.example.ordme.ui.data.Basket
 import com.example.ordme.ui.data.Meal
 import com.example.ordme.ui.repository.FirebaseRepository
 import com.example.ordme.ui.view_model.MainViewModel
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_meal.*
 import kotlinx.android.synthetic.main.fragment_meal.returnBT
 
-class MealViewModel(var basket: Basket? = null): ViewModel() {
+class MealViewModel(): ViewModel() {
 
     private val repository = FirebaseRepository()
     var meal: MutableLiveData<Meal?> = MutableLiveData()
+    var basket: MutableLiveData<Basket?> = MutableLiveData()
 
     val mealId: String?
         get() = meal.value?.uidMeal
@@ -55,29 +54,26 @@ class MealViewModel(var basket: Basket? = null): ViewModel() {
             return "%.2f".format(price * amount)
         }
 
+    val priceOfBasket: String
+        get() {
+            val priceOfBasket: Double = totalPrice.toDouble()
+            return "%.2f".format(priceOfBasket)
+        }
+
 }
 
 class MealFragment : BaseFragment() {
     override val layout: Int = R.layout.fragment_meal
 
     private var mealViewModel = MealViewModel()
-    private var restaurantViewModel = RestaurantViewModel()
 
     var basket: Basket? = null
 
     private val mainViewModel: MainViewModel by activityViewModels()
 
     override fun subscribeUi() {
-        //get data from RestaurantAdapter
         //TODO: Jak przesłać obiekt Meal
-//        requireArguments().getParcelable("meal", Meal::class.java)
-//        val restaurantId = requireArguments().getString("uidRestaurant") ?: ""
-        val mealId = requireArguments().getString("uidMeal") ?: ""
-        restaurantViewModel.restaurantId = requireArguments().getString("uidRestaurant") ?: ""
-//        mealViewModel.mealId = requireArguments().getString("uidMeal")
-//        mealViewModel.price = requireArguments().getDouble("price")
-//        mealViewModel.priceStart = requireArguments().getDouble("priceStart")
-//        mealViewModel.amount = requireArguments().getInt("amount")
+        val meal = requireArguments().getParcelable<Meal>("meal")
 
         mealViewModel.meal.observe(this) { meal ->
             view?.let {
@@ -88,16 +84,18 @@ class MealFragment : BaseFragment() {
                 nameMeal.text = meal?.name ?: "-"
                 amountTV.text = (meal?.amount ?: 0).toString()
 
-                //TODO: Change to button
                 priceTV.text = mealViewModel.totalPrice
             }
         }
 
 
-        mealViewModel.fetchMeal(restaurantViewModel.restaurantId, mealId)
+        mealViewModel.fetchMeal(meal?.uidRestaurant!!, meal.uidMeal!!)
 
-        FirebaseRepository().fetchBasket(restaurantViewModel.restaurantId) {
-            basket = it ?: Basket(restaurantViewModel.restaurantId)
+        FirebaseRepository().fetchBasket(meal.uidRestaurant) {
+            basket = it ?: Basket(meal.uidRestaurant)
+
+            Log.d("Basket", "${basket?.totalPrice}")
+
         }
 
         plusBT.setOnClickListener {
@@ -129,11 +127,11 @@ class MealFragment : BaseFragment() {
             val bundle = Bundle()
             bundle.putString(
                 "uidMeal",
-                mealViewModel.mealId
+                meal.uidMeal
             )
             bundle.putString(
                 "uidRestaurant",
-                restaurantViewModel.restaurantId
+                meal.uidRestaurant
             )
 
             //it transferred data to FragmentBasket without used navigate
@@ -149,16 +147,18 @@ class MealFragment : BaseFragment() {
     }
 
     private fun returnToRestaurant(){
+        val meal = requireArguments().getParcelable<Meal>("meal")
+
         //if you click, return all the data in that meal back as it was
         returnBT.setOnClickListener {
 
             val bundle = Bundle()
             bundle.putString(
                 "uidRestaurant",
-                restaurantViewModel.restaurantId
+                meal?.uidRestaurant
             )
 
-            mainViewModel.fetchRestaurantMeals(restaurantViewModel.restaurantId)
+            mainViewModel.fetchRestaurantMeals(meal?.uidRestaurant!!)
 
             findNavController().navigate(R.id.action_mealFragment_to_restaurantFragment, bundle)
         }
