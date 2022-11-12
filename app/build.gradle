@@ -3,8 +3,12 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'androidx.navigation.safeargs.kotlin'
-    id 'kotlin-android-extensions'
     id 'com.google.gms.google-services'
+    id 'kotlin-android-extensions'
+}
+
+androidExtensions{
+    experimental = true
 }
 
 android {
