@@ -19,13 +19,23 @@ import com.example.ordme.ui.screen.MealViewModel
 import kotlinx.android.synthetic.main.item_basket.view.*
 import kotlin.math.absoluteValue
 
-class BasketAdapter(var basketList: ArrayList<Meal>, val context: Context): RecyclerView.Adapter<BasketAdapter.MyViewHolder>() {
+class BasketAdapter(var basketList: ArrayList<Meal>, val context: Context) :
+    RecyclerView.Adapter<BasketAdapter.MyViewHolder>() {
 
     private var meals: ArrayList<Meal> = ArrayList()
+    private var selected: Meal? = null
+    var meal: MutableLiveData<Meal?> = MutableLiveData()
+
+
+    fun incrementAmount() {
+        val newValue = meal.value
+        newValue?.amount = meal.value?.amount?.inc()
+        meal.value = newValue
+    }
 
 
     @SuppressLint("NotifyDataSetChanged")
-    fun update(meals: ArrayList<Meal>){
+    fun update(meals: ArrayList<Meal>) {
         this.meals = ArrayList(meals.reversed())
 
         notifyDataSetChanged()
@@ -72,7 +82,7 @@ class BasketAdapter(var basketList: ArrayList<Meal>, val context: Context): Recy
         val minusBT = v.findViewById<ImageView>(R.id.minusBT)!!
         val deleteBT = v.findViewById<ImageView>(R.id.deleteBT)!!
 
-        fun bindView(meal: Meal){
+        fun bindView(meal: Meal) {
             val price = "%.2f".format(meal.price)
 
             v.nameMealTV.text = meal.name
@@ -82,20 +92,23 @@ class BasketAdapter(var basketList: ArrayList<Meal>, val context: Context): Recy
 
         }
 
-        fun minusClick(meal: Meal){
-            if(meal.amount ?: 0 > 1) {
+        fun minusClick(meal: Meal) {
+            if (meal.amount ?: 0 > 1) {
                 val newValue = meal.amount?.dec()
 
                 v.amountTV.text = newValue.toString()
             }
         }
 
-        fun plusClick(meal: Meal){
+        fun plusClick(meal: Meal) {
 
 
             plusBT.setOnClickListener {
                 Toast.makeText(context, "click +", Toast.LENGTH_SHORT).show()
 
+                val newValue = meal.amount?.inc()
+
+                v.amountTV.text = newValue.toString()
             }
         }
     }

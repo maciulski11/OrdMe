@@ -2,7 +2,6 @@ package com.example.ordme.ui.screen
 
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,7 +22,6 @@ class BasketViewModel(var basket: Basket? = null) : ViewModel() {
     val meals: MutableLiveData<ArrayList<Basket>> = MutableLiveData(arrayListOf())
     var meal: MutableLiveData<Meal?> = MutableLiveData()
 
-
 }
 
 class BasketFragment : BaseFragment() {
@@ -38,6 +36,8 @@ class BasketFragment : BaseFragment() {
     val mainViewModel: MainViewModel by activityViewModels()
     private var basketViewModel = BasketViewModel()
     private var restaurantViewModel = RestaurantViewModel()
+
+    private val viewModel: MainViewModel by activityViewModels()
 
     override fun subscribeUi() {
 
@@ -60,12 +60,9 @@ class BasketFragment : BaseFragment() {
             }
         }
 
-        basketViewModel.meal.observe(this){ meal ->
-            view?.let{
-
-            }
+        checkoutBT.setOnClickListener {
+            findNavController().navigate(R.id.action_basketFragment_to_checkoutFragment)
         }
-
 
         exitBT.setOnClickListener {
             val bundle = Bundle()
@@ -77,9 +74,7 @@ class BasketFragment : BaseFragment() {
 
             findNavController().navigate(R.id.action_basketFragment_to_restaurantFragment, bundle)
         }
-
     }
-
 
     override fun unsubscribeUi() {
         basketViewModel.meals.removeObservers(this)

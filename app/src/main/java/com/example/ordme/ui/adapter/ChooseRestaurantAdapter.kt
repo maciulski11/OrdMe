@@ -12,14 +12,17 @@ import android.os.Bundle
 import androidx.navigation.findNavController
 import kotlinx.android.synthetic.main.item_choose_restaurants.view.*
 
-class ChooseRestaurantAdapter(private val context: Context,
-                              var restaurantsList: ArrayList<Restaurant>,
-                              private val v: View):
+class ChooseRestaurantAdapter(
+    private val context: Context,
+    var restaurantsList: ArrayList<Restaurant>,
+    private val v: View
+) :
     RecyclerView.Adapter<ChooseRestaurantAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_choose_restaurants, parent, false)
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_choose_restaurants, parent, false)
 
         return MyViewHolder(itemView)
     }
@@ -27,20 +30,21 @@ class ChooseRestaurantAdapter(private val context: Context,
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val restaurant: Restaurant = restaurantsList[position]
 
-        holder.chooseRestaurant.setOnClickListener{
+        holder.chooseRestaurant.setOnClickListener {
             val bundle = Bundle()
             bundle.putString(
                 "uidRestaurant",
                 restaurantsList[position].uid
             )
-            v.findNavController().navigate(R.id.action_mainUserFragment_to_restaurantFragment, bundle)
+            v.findNavController()
+                .navigate(R.id.action_mainUserFragment_to_restaurantFragment, bundle)
 
         }
 
         holder.bindView(restaurant)
 
-
     }
+
     override fun getItemCount(): Int = restaurantsList.size
 
     inner class MyViewHolder(private var v: View) : RecyclerView.ViewHolder(v) {
