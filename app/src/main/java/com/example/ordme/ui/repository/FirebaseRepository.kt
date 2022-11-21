@@ -3,12 +3,13 @@ package com.example.ordme.ui.repository
 
 import android.annotation.SuppressLint
 import android.util.Log
-import com.example.ordme.ui.data.Basket
-import com.example.ordme.ui.data.Meal
-import com.example.ordme.ui.data.Restaurant
-import com.example.ordme.ui.data.User
+import com.example.ordme.ui.data.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
+import com.google.firebase.firestore.EventListener
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class FirebaseRepository {
 
@@ -172,21 +173,6 @@ class FirebaseRepository {
             }
     }
 
-    fun chooseAmountMeal(uidRestaurant: String, uidMeal: String, price: Double, amount: Int) {
-        //update my price and amount in my firebase and download data to layout
-        db.collection(RESTAURANTS).document(uidRestaurant)
-            .collection(MEALS).document(uidMeal)
-            .update("price", price, "amount", amount)
-            .addOnSuccessListener {
-                Log.d("REPO_DEBUG", "Zaktualizowano dane!")
-                Log.d("REPO", price.toString())
-
-            }
-            .addOnFailureListener {
-                Log.d("REPO_DEBUG", it.toString())
-            }
-    }
-
     fun fetchBasket(uid: String, onComplete: (Basket?) -> Unit) {
         if (currentUserId == null) {
             onComplete.invoke(null)
@@ -209,4 +195,24 @@ class FirebaseRepository {
             }
     }
 
+    fun fetchAdditions(uidRestaurant: String, uidMeal: String, onComplete: (Meal) -> Unit) {
+        db.collection(RESTAURANTS).document(uidRestaurant)
+            .collection(MEALS).document(uidMeal)
+            .get().addOnSuccessListener { snapshot ->
+                snapshot.toObject(Meal::class.java)?.let {
+                    Log.d("REPO FetchAdditions", it.toString())
+                    onComplete.invoke(it)
+
+                }
+            }
+            .addOnFailureListener {
+                Log.d("REPO", it.toString())
+            }
+    }
+
+    fun addTotalPrice(basket: String, totalPrice: HashMap<String, Double>) {
+        db.collection(USERS).document(currentUserId!!)
+            .collection(BASKET).document(basket)
+            .update(totalPrice as Map<String, Any>)
+    }
 }

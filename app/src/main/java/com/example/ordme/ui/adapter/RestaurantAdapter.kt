@@ -41,8 +41,11 @@ class RestaurantAdapter(
                     meal.name,
                     meal.amount,
                     meal.price,
+                    meal.priceStart,
+                    meal.uid,
                     meal.uidMeal,
-                    meal.uidRestaurant
+                    meal.uidRestaurant,
+                    meal.additions
                 )
             )
 

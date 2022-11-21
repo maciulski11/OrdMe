@@ -8,23 +8,24 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ordme.R
 import com.example.ordme.base.BaseFragment
+import com.example.ordme.ui.adapter.MealAdapter
+import com.example.ordme.ui.data.Addition
 import com.example.ordme.ui.data.Basket
 import com.example.ordme.ui.data.Meal
 import com.example.ordme.ui.repository.FirebaseRepository
 import com.example.ordme.ui.view_model.MainViewModel
 import kotlinx.android.synthetic.main.fragment_meal.*
 import kotlinx.android.synthetic.main.fragment_meal.returnBT
+import java.util.*
+import kotlin.collections.ArrayList
 
-class MealViewModel(): ViewModel() {
+class MealViewModel(var meall: Meal? = null): ViewModel() {
 
     private val repository = FirebaseRepository()
     var meal: MutableLiveData<Meal?> = MutableLiveData()
-    var basket: MutableLiveData<Basket?> = MutableLiveData()
-
-    val mealId: String?
-        get() = meal.value?.uidMeal
 
     fun fetchMeal(restaurantId: String, mealId: String) {
         repository.fetchMeal(restaurantId, mealId){
@@ -53,18 +54,13 @@ class MealViewModel(): ViewModel() {
             val amount = meal.value?.amount?.toDouble() ?: 0.0
             return "%.2f".format(price * amount)
         }
-
-    val priceOfBasket: String
-        get() {
-            val priceOfBasket: Double = totalPrice.toDouble()
-            return "%.2f".format(priceOfBasket)
-        }
-
-}
+    }
 
 class MealFragment : BaseFragment() {
     override val layout: Int = R.layout.fragment_meal
 
+    private lateinit var adapter: MealAdapter
+    private lateinit var additionsList: ArrayList<Addition>
     private var mealViewModel = MealViewModel()
 
     var basket: Basket? = null
@@ -75,37 +71,48 @@ class MealFragment : BaseFragment() {
         //TODO: Jak przesłać obiekt Meal
         val meal = requireArguments().getParcelable<Meal>("meal")
 
-        mealViewModel.meal.observe(this) { meal ->
+        additionRecyclerView.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        additionRecyclerView.setHasFixedSize(true)
+
+        additionsList = arrayListOf()
+
+        FirebaseRepository().fetchAdditions(meal?.uidRestaurant!!, meal.uidMeal!!){ it ->
+            mealViewModel.meall = it ?: Meal()
+
+            mealViewModel.meall?.additions?.let {
+                adapter = MealAdapter(it)
+                additionRecyclerView.adapter = adapter
+            }
+        }
+
+        mealViewModel.meal.observe(this) {
             view?.let {
                 val nameMeal = it.findViewById<TextView>(R.id.nameMealTV)
                 val priceTV = it.findViewById<TextView>(R.id.addMealToBasketBT)
                 val amountTV = it.findViewById<TextView>(R.id.amountTV)
 
-                nameMeal.text = meal?.name ?: "-"
-                amountTV.text = (meal?.amount ?: 0).toString()
+                nameMeal.text = meal.name ?: "-"
+                amountTV.text = (mealViewModel.meal.value?.amount ?: 0).toString()
 
                 priceTV.text = mealViewModel.totalPrice
             }
         }
 
-
-        mealViewModel.fetchMeal(meal?.uidRestaurant!!, meal.uidMeal!!)
+        mealViewModel.fetchMeal(meal.uidRestaurant, meal.uidMeal)
 
         FirebaseRepository().fetchBasket(meal.uidRestaurant) {
             basket = it ?: Basket(meal.uidRestaurant)
 
-            Log.d("Basket", "${basket?.totalPrice}")
 
         }
 
         plusBT.setOnClickListener {
             mealViewModel.incrementAmount()
-
         }
 
         minusBT.setOnClickListener {
             mealViewModel.decrementAmount()
-
         }
 
         addMealToBasketBT.setOnClickListener {
@@ -114,6 +121,7 @@ class MealFragment : BaseFragment() {
 
             mealViewModel.meal.value?.let {
                 mealViewModel.meal.value?.price = mealViewModel.totalPrice.toDouble()
+                mealViewModel.meal.value?.uid = UUID.randomUUID().toString()
                 basket?.meals?.add(it)
                 Log.d("Basket", "$it")
                 basket?.let { basket ->
@@ -132,6 +140,10 @@ class MealFragment : BaseFragment() {
             bundle.putString(
                 "uidRestaurant",
                 meal.uidRestaurant
+            )
+            bundle.putDouble(
+                "price",
+                meal.price!!.toDouble()
             )
 
             //it transferred data to FragmentBasket without used navigate
