@@ -78,5 +78,12 @@
     <fragment
         android:id="@+id/checkoutFragment"
         android:name="com.example.ordme.ui.screen.CheckoutFragment"
-        android:label="CheckoutFragment" />
+        android:label="CheckoutFragment" >
+        <action
+            android:id="@+id/action_checkoutFragment_to_restaurantFragment"
+            app:destination="@id/restaurantFragment" />
+        <action
+            android:id="@+id/action_checkoutFragment_to_basketFragment"
+            app:destination="@id/basketFragment" />
+    </fragment>
 </navigation>

@@ -68,7 +68,6 @@ class RestaurantFragment : BaseFragment() {
         }
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
         super.onCreate(savedInstanceState)

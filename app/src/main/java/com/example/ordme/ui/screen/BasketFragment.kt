@@ -88,10 +88,8 @@ class BasketFragment : BaseFragment() {
     private lateinit var adapter: BasketAdapter
 
     //wywolanie viewmodel we calej aktywnosci, poniewaz ten fragment nie jest wywolywany po kolei
-    val mainViewModel: MainViewModel by activityViewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
     private var basketViewModel = BasketViewModel()
-
-    private val viewModel: MainViewModel by activityViewModels()
 
     override fun subscribeUi() {
 
@@ -122,8 +120,16 @@ class BasketFragment : BaseFragment() {
                     map
                 )
 
-                findNavController().navigate(R.id.action_basketFragment_to_checkoutFragment)
-
+                val bundle = Bundle()
+                bundle.putParcelable(
+                    "basket",
+                    Basket(
+                        basketViewModel.basket.value?.uid,
+                        basketViewModel.meals,
+                        basketViewModel.basket.value?.totalPrice
+                    )
+                )
+                findNavController().navigate(R.id.action_basketFragment_to_checkoutFragment, bundle)
             }
         }
 
