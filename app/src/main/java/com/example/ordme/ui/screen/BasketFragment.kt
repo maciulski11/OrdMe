@@ -3,9 +3,11 @@ package com.example.ordme.ui.screen
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
+import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isEmpty
@@ -16,6 +18,7 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ordme.R
+import com.example.ordme.base.BaseDialogFragment
 import com.example.ordme.base.BaseFragment
 import com.example.ordme.ui.adapter.BasketAdapter
 import com.example.ordme.ui.data.Basket
@@ -27,7 +30,7 @@ import kotlinx.android.synthetic.main.fragment_checkout.view.*
 import kotlinx.android.synthetic.main.item_basket.*
 import kotlin.math.absoluteValue
 
-class BasketViewModel() : ViewModel() {
+class BasketViewModel(): ViewModel() {
 
     var basket: MutableLiveData<Basket?> = MutableLiveData(null)
 
@@ -82,7 +85,7 @@ class BasketViewModel() : ViewModel() {
     }
 }
 
-class BasketFragment : BaseFragment() {
+class BasketFragment : BaseFragment(){
     override val layout: Int = R.layout.fragment_basket
 
     private lateinit var adapter: BasketAdapter
@@ -162,7 +165,9 @@ class BasketFragment : BaseFragment() {
             basketViewModel.deleteMeal(it)
             adapter.update(basketViewModel.meals)
             updateTotalPrice()
-        }, basketList = basketViewModel.meals)
+        },
+            requireActivity(),
+            basketList = basketViewModel.meals)
 
         recyclerViewBasket.adapter = adapter
     }

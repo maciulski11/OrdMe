@@ -12,7 +12,9 @@
         <entry key="app/src/main/res/drawable/ic_baseline_clear.xml" value="0.175" />
         <entry key="app/src/main/res/drawable/ic_baseline_minus.xml" value="0.175" />
         <entry key="app/src/main/res/drawable/ic_baseline_theater.xml" value="0.16" />
+        <entry key="app/src/main/res/drawable/rounded_button.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.22395833333333334" />
+        <entry key="app/src/main/res/layout/dialog_delete.xml" value="0.2874074074074074" />
         <entry key="app/src/main/res/layout/drawer_header.xml" value="0.2234375" />
         <entry key="app/src/main/res/layout/fragment_add_company.xml" value="0.23802083333333332" />
         <entry key="app/src/main/res/layout/fragment_add_restaurant.xml" value="0.2234375" />
@@ -46,6 +48,7 @@
         <entry key="app/src/main/res/menu/login_user_menu.xml" value="0.25" />
         <entry key="app/src/main/res/menu/logout_user.xml" value="0.2234375" />
         <entry key="app/src/main/res/menu/logout_user_menu.xml" value="0.2234375" />
+        <entry key="app/src/main/res/xml/dialog_scan_scene.xml" value="0.22552083333333334" />
       </map>
     </option>
   </component>
