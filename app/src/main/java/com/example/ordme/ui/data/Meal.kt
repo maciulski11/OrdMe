@@ -9,9 +9,8 @@ data class Meal (
     val name: String? = null,
     var amount: Int? = null,
     var price: Double? = null,
-    val priceStart: Double? = null,
     var uid: String? = null,
     val uidMeal: String? = null,
     val uidRestaurant: String? = null,
-    val additions: @RawValue ArrayList<Addition>? = arrayListOf()
+    var additions: @RawValue ArrayList<Addition>? = arrayListOf()
     ) : Parcelable {}

@@ -32,7 +32,7 @@ class CheckoutViewModel: ViewModel(){
 
     val orderValue: Double
         get() =
-            meals.sumOf { meal -> (meal.priceStart ?: 0.0) * (meal.amount?.toDouble() ?: 0.0) }
+            meals.sumOf { meal -> (meal.price ?: 0.0) * (meal.amount?.toDouble() ?: 0.0) }
 
     val delivery: Double
     get() = 2.99

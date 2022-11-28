@@ -43,13 +43,23 @@
 
     <TextView
         android:id="@+id/additionsTV"
-        android:layout_width="240dp"
+        android:layout_width="wrap_content"
         android:layout_height="20dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="6dp"
-        android:text="additions"
+        android:text="additions: "
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+    <TextView
+        android:id="@+id/additionsCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        app:layout_constraintStart_toEndOf="@id/additionsTV"
+        app:layout_constraintTop_toTopOf="@id/additionsTV"
+        app:layout_constraintBottom_toBottomOf="@id/additionsTV"
+        app:layout_constraintEnd_toStartOf="@id/priceTV"/>
 
         <ImageView
             android:id="@+id/plusBT"

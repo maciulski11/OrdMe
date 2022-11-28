@@ -2,8 +2,6 @@ package com.example.ordme.ui.screen
 
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
@@ -20,9 +18,7 @@ import com.example.ordme.ui.data.Meal
 import com.example.ordme.ui.repository.FirebaseRepository
 import com.example.ordme.ui.view_model.MainViewModel
 import kotlinx.android.synthetic.main.fragment_meal.*
-import kotlinx.android.synthetic.main.fragment_meal.returnBT
 import java.util.*
-import kotlin.collections.ArrayList
 
 class MealViewModel(var meall: Meal? = null): ViewModel() {
 
@@ -168,7 +164,6 @@ class MealFragment : BaseFragment() {
             Toast.makeText(requireContext(), "Added", Toast.LENGTH_SHORT).show()
 
             mealViewModel.meal.value?.let {
-                mealViewModel.meal.value?.price = mealViewModel.totalPrice.toDouble()
                 mealViewModel.meal.value?.uid = UUID.randomUUID().toString()
 
                 basket?.meals?.add(it)

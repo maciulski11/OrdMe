@@ -3,6 +3,7 @@ package com.example.ordme.ui.screen
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.INVISIBLE
@@ -26,22 +27,30 @@ import com.example.ordme.ui.data.Basket
 import com.example.ordme.ui.data.Meal
 import com.example.ordme.ui.repository.FirebaseRepository
 import com.example.ordme.ui.view_model.MainViewModel
+import kotlinx.android.parcel.RawValue
 import kotlinx.android.synthetic.main.fragment_basket.*
 import kotlinx.android.synthetic.main.fragment_checkout.view.*
 import kotlinx.android.synthetic.main.item_basket.*
 import kotlin.math.absoluteValue
 
-class BasketViewModel(): ViewModel() {
+class BasketViewModel() : ViewModel() {
 
     var basket: MutableLiveData<Basket?> = MutableLiveData(null)
+    var meal: MutableLiveData<Meal?> = MutableLiveData()
+
+    val ad: java.util.ArrayList<Addition>
+        get() = meal.value?.additions ?: arrayListOf()
 
     val meals: ArrayList<Meal>
         get() = basket.value?.meals ?: arrayListOf()
 
-
     val totalPrice: Double
         get() =
-            meals.sumOf { meal -> (meal.priceStart ?: 0.0) * (meal.amount?.toDouble() ?: 0.0)}
+            meals.sumOf { meal ->
+                ((meal.price ?: 0.0) + (meal.additions?.filter { it.amount ?: 0 > 0 }!!
+                    .sumOf { it.priceAddition ?: 0.0 })) *
+                        (meal.amount?.toDouble() ?: 0.0)
+            }
 
 
     fun fetchBasket(uidRestaurant: String) {
@@ -56,9 +65,6 @@ class BasketViewModel(): ViewModel() {
         if (index != -1) {
             meals[index].amount = meals[index].amount?.inc()
 
-            meals[index].price =
-                (meals[index].amount?.inc()!! - 1) * (meals[index].priceStart!!.toDouble())
-
             FirebaseRepository().update(basket.value!!)
         }
     }
@@ -69,9 +75,6 @@ class BasketViewModel(): ViewModel() {
         if (index != -1) {
             if (meals[index].amount ?: 0 > 1) {
                 meals[index].amount = meals[index].amount?.dec()
-
-                meals[index].price =
-                    (meals[index].amount?.dec()!! + 1) * (meals[index].priceStart!!.toDouble())
 
                 FirebaseRepository().update(basket.value!!)
             }
@@ -87,7 +90,7 @@ class BasketViewModel(): ViewModel() {
     }
 }
 
-class BasketFragment : BaseFragment(){
+class BasketFragment : BaseFragment() {
     override val layout: Int = R.layout.fragment_basket
 
     private lateinit var adapter: BasketAdapter
@@ -169,7 +172,8 @@ class BasketFragment : BaseFragment(){
             updateTotalPrice()
         },
             requireActivity(),
-            basketList = basketViewModel.meals)
+            basketList = basketViewModel.meals
+        )
 
         recyclerViewBasket.adapter = adapter
     }
