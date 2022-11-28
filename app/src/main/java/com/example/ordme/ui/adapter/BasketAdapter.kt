@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.ordme.R
 import com.example.ordme.base.BaseDialogFragment
 import com.example.ordme.dialogs.DeleteDialogFragment
+import com.example.ordme.ui.data.Addition
 import com.example.ordme.ui.data.Meal
 import com.example.ordme.ui.repository.FirebaseRepository
 import com.example.ordme.ui.screen.BasketViewModel
@@ -27,6 +28,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.dialog_delete.view.*
 import kotlinx.android.synthetic.main.item_basket.view.*
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.joinAll
 import retrofit2.http.DELETE
 import kotlin.math.absoluteValue
 
@@ -42,6 +45,7 @@ class BasketAdapter(
 
     private var meals: ArrayList<Meal> = ArrayList()
     var meal: MutableLiveData<Meal?> = MutableLiveData()
+    var addition: MutableLiveData<Addition?> = MutableLiveData()
 
     @SuppressLint("NotifyDataSetChanged")
     fun update(meals: ArrayList<Meal>) {
@@ -74,9 +78,11 @@ class BasketAdapter(
         private val plusBT = v.findViewById<ImageView>(R.id.plusBT)!!
         private val minusBT = v.findViewById<ImageView>(R.id.minusBT)!!
         private val deleteBT = v.findViewById<ImageView>(R.id.deleteBT)!!
+        private val additionsTV = v.findViewById<TextView>(R.id.additionsTV)
 
         fun bindView(meal: Meal) {
             val price = "%.2f".format(meal.price)
+            val x = addition.value?.nameAddition
 
             v.nameMealTV.text = meal.name
             v.amountTV.text = meal.amount.toString()
@@ -94,7 +100,6 @@ class BasketAdapter(
                 DeleteDialogFragment(action =  {
                     onDelete(meal.uid ?: "")
                 }).show(activity)
-                true
             }
         }
     }

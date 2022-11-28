@@ -6,20 +6,50 @@
     android:layout_height="36dp"
     android:id="@+id/addition">
 
-    <CheckBox
-        android:id="@+id/nameAdditionCheckBox"
-        android:layout_width="240dp"
-        android:layout_height="wrap_content"
+    <Button
+        android:id="@+id/addedAdditionBT"
+        android:layout_width="62dp"
+        android:layout_height="30dp"
         android:layout_marginStart="8dp"
+        android:text="Added"
+        android:textSize="8sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:backgroundTint="@color/green"
+        tools:visibility="invisible"/>
+
+    <Button
+        android:id="@+id/addAdditionBT"
+        android:layout_width="62dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="8dp"
+        android:text="Add"
+        android:textSize="8sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/addedAdditionBT"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/nameAdditionCheckBox"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:onClick="onCheckboxClicked"
         android:text="onion"
         android:textColor="@color/black"
         android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/addAdditionBT"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.555"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/priceAdditionTV"
-        android:layout_width="70dp"
+        android:layout_width="60dp"
         android:layout_height="22dp"
         android:gravity="right"
         android:text="4.00"

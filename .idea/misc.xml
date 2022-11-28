@@ -32,7 +32,7 @@
         <entry key="app/src/main/res/layout/fragment_main.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_main_restaurant.xml" value="0.2234375" />
         <entry key="app/src/main/res/layout/fragment_main_user.xml" value="0.2234375" />
-        <entry key="app/src/main/res/layout/fragment_meal.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_meal.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_register.xml" value="0.2953125" />
         <entry key="app/src/main/res/layout/fragment_register_restaurant.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_register_user.xml" value="0.23802083333333332" />

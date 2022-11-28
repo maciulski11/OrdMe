@@ -132,7 +132,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="1dp"
                     android:background="@color/white"
-                    android:text="Normal" />
+                    android:text="Normal"/>
 
                 <RadioButton
                     android:id="@+id/radioButton2"

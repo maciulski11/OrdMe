@@ -21,6 +21,7 @@ import com.example.ordme.R
 import com.example.ordme.base.BaseDialogFragment
 import com.example.ordme.base.BaseFragment
 import com.example.ordme.ui.adapter.BasketAdapter
+import com.example.ordme.ui.data.Addition
 import com.example.ordme.ui.data.Basket
 import com.example.ordme.ui.data.Meal
 import com.example.ordme.ui.repository.FirebaseRepository
@@ -37,9 +38,10 @@ class BasketViewModel(): ViewModel() {
     val meals: ArrayList<Meal>
         get() = basket.value?.meals ?: arrayListOf()
 
+
     val totalPrice: Double
         get() =
-            meals.sumOf { meal -> (meal.priceStart ?: 0.0) * (meal.amount?.toDouble() ?: 0.0) }
+            meals.sumOf { meal -> (meal.priceStart ?: 0.0) * (meal.amount?.toDouble() ?: 0.0)}
 
 
     fun fetchBasket(uidRestaurant: String) {

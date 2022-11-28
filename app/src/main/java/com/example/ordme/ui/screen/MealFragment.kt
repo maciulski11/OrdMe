@@ -2,6 +2,8 @@ package com.example.ordme.ui.screen
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
@@ -27,9 +29,38 @@ class MealViewModel(var meall: Meal? = null): ViewModel() {
     private val repository = FirebaseRepository()
     var meal: MutableLiveData<Meal?> = MutableLiveData()
 
+    val ad: ArrayList<Addition>
+        get() = meal.value?.additions ?: arrayListOf()
+
     fun fetchMeal(restaurantId: String, mealId: String) {
         repository.fetchMeal(restaurantId, mealId){
             meal.postValue(it)
+        }
+    }
+
+    fun incrementAddition(uidAdd: String) {
+        val index = ad.indexOfFirst { it.nameAddition == uidAdd }
+
+        if (index != -1) {
+            ad[index].amount = ad[index].amount?.inc()
+
+            val price =
+                (ad[index].amount?.inc()!! - 1) * (ad[index].priceAddition!!.toDouble())
+
+            Log.d("ADDITION", "$price, ${ad[index].amount}, ${ad[index].priceAddition}")
+
+            val x = ad.sumOf { add-> add.amount!! * add.priceAddition!! }
+
+            Log.d("ADDITION SUM", "${meal.value?.additions}")
+
+        }
+    }
+
+    fun decrementAddition(uidAdd: String) {
+        val index = ad.indexOfFirst { it.nameAddition == uidAdd }
+
+        if (index != -1) {
+            ad[index].amount = ad[index].amount?.dec()
         }
     }
 
@@ -44,15 +75,18 @@ class MealViewModel(var meall: Meal? = null): ViewModel() {
             val newValue = meal.value
             newValue?.amount = meal.value?.amount?.dec()
             meal.value = newValue
-
         }
     }
+
+    val xxx: Double
+        get() =
+            ad.sumOf { add-> add.amount!! * add.priceAddition!! }
 
     val totalPrice: String
         get() {
             val price = meal.value?.price ?: 0.0
             val amount = meal.value?.amount?.toDouble() ?: 0.0
-            return "%.2f".format(price * amount)
+            return "%.2f".format((price + xxx) * amount)
         }
     }
 
@@ -81,7 +115,23 @@ class MealFragment : BaseFragment() {
             mealViewModel.meall = it ?: Meal()
 
             mealViewModel.meall?.additions?.let {
-                adapter = MealAdapter(it)
+                adapter = MealAdapter({ uid ->
+                    mealViewModel.incrementAddition(uid)
+                    mealViewModel.meal.observe(this){
+                        view?.let {
+                            val priceTV = it.findViewById<TextView>(R.id.addMealToBasketBT)
+                            priceTV.text = mealViewModel.totalPrice
+                        }
+                    }
+                },{ uid ->
+                    mealViewModel.decrementAddition(uid)
+                    mealViewModel.meal.observe(this){
+                        view?.let {
+                            val priceTV = it.findViewById<TextView>(R.id.addMealToBasketBT)
+                            priceTV.text = mealViewModel.totalPrice
+                        }
+                    }
+                },it)
                 additionRecyclerView.adapter = adapter
             }
         }
@@ -94,7 +144,6 @@ class MealFragment : BaseFragment() {
 
                 nameMeal.text = meal.name ?: "-"
                 amountTV.text = (mealViewModel.meal.value?.amount ?: 0).toString()
-
                 priceTV.text = mealViewModel.totalPrice
             }
         }
@@ -103,7 +152,6 @@ class MealFragment : BaseFragment() {
 
         FirebaseRepository().fetchBasket(meal.uidRestaurant) {
             basket = it ?: Basket(meal.uidRestaurant)
-
 
         }
 
@@ -122,6 +170,7 @@ class MealFragment : BaseFragment() {
             mealViewModel.meal.value?.let {
                 mealViewModel.meal.value?.price = mealViewModel.totalPrice.toDouble()
                 mealViewModel.meal.value?.uid = UUID.randomUUID().toString()
+
                 basket?.meals?.add(it)
                 Log.d("Basket", "$it")
                 basket?.let { basket ->
