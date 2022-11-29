@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ordme.R
-import com.example.ordme.ui.data.Restaurant
+import com.example.ordme.data.model.Restaurant
 import android.content.Context
 import android.os.Bundle
 import androidx.navigation.findNavController

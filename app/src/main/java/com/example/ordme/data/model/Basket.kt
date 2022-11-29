@@ -1,4 +1,4 @@
-package com.example.ordme.ui.data
+package com.example.ordme.data.model
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

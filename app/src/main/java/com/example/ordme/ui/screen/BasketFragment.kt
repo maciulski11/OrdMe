@@ -3,43 +3,25 @@ package com.example.ordme.ui.screen
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
-import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
-import androidx.core.view.isEmpty
-import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ordme.R
-import com.example.ordme.base.BaseDialogFragment
 import com.example.ordme.base.BaseFragment
 import com.example.ordme.ui.adapter.BasketAdapter
-import com.example.ordme.ui.data.Addition
-import com.example.ordme.ui.data.Basket
-import com.example.ordme.ui.data.Meal
+import com.example.ordme.data.model.Basket
+import com.example.ordme.data.model.Meal
 import com.example.ordme.ui.repository.FirebaseRepository
 import com.example.ordme.ui.view_model.MainViewModel
-import kotlinx.android.parcel.RawValue
 import kotlinx.android.synthetic.main.fragment_basket.*
-import kotlinx.android.synthetic.main.fragment_checkout.view.*
-import kotlinx.android.synthetic.main.item_basket.*
-import kotlin.math.absoluteValue
 
 class BasketViewModel() : ViewModel() {
 
     var basket: MutableLiveData<Basket?> = MutableLiveData(null)
     var meal: MutableLiveData<Meal?> = MutableLiveData()
-
-    val ad: java.util.ArrayList<Addition>
-        get() = meal.value?.additions ?: arrayListOf()
 
     val meals: ArrayList<Meal>
         get() = basket.value?.meals ?: arrayListOf()
@@ -51,7 +33,6 @@ class BasketViewModel() : ViewModel() {
                     .sumOf { it.priceAddition ?: 0.0 })) *
                         (meal.amount?.toDouble() ?: 0.0)
             }
-
 
     fun fetchBasket(uidRestaurant: String) {
         FirebaseRepository().fetchBasket(uidRestaurant) {

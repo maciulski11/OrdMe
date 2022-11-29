@@ -3,11 +3,13 @@ package com.example.ordme.ui.repository
 
 import android.annotation.SuppressLint
 import android.util.Log
-import com.example.ordme.ui.data.*
+import com.example.ordme.data.model.Basket
+import com.example.ordme.data.model.Meal
+import com.example.ordme.data.model.Restaurant
+import com.example.ordme.data.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
-import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 

@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.ordme.R
 import com.example.ordme.base.BaseFragment
+import com.example.ordme.data.model.User
 import com.example.ordme.ui.view_model.MainViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -36,7 +37,7 @@ class RegisterFragment : BaseFragment() {
                 fbAuth.createUserWithEmailAndPassword(email, password)
                     .addOnSuccessListener { authResults ->
                         if (authResults.user != null) {
-                            val user = com.example.ordme.ui.data.User(
+                            val user = User(
                                 authResults.user!!.email,
                                 authResults.user!!.uid,
                                 name,

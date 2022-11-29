@@ -1,4 +1,4 @@
-package com.example.ordme.activity
+package com.example.ordme.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

@@ -2,11 +2,8 @@ package com.example.ordme.ui.screen
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.*
-import android.widget.EditText
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -15,12 +12,10 @@ import com.example.ordme.api.pojo.Meal
 import com.example.ordme.api.pojo.MealList
 import com.example.ordme.api.retrofit.RetrofitInstance
 import com.example.ordme.base.BaseFragment
-import com.example.ordme.databinding.FragmentChooseRestaurantBinding
 import com.example.ordme.ui.adapter.ChooseRestaurantAdapter
-import com.example.ordme.ui.data.Restaurant
+import com.example.ordme.data.model.Restaurant
+import com.example.ordme.databinding.FragmentChooseRestaurantBinding
 import com.example.ordme.ui.view_model.MainViewModel
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.*
 import kotlinx.android.synthetic.main.fragment_choose_restaurant.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -31,11 +26,8 @@ class ChooseRestaurantFragment : BaseFragment() {
 
     private lateinit var binding: FragmentChooseRestaurantBinding
 
-    private val fbAuth = FirebaseAuth.getInstance()
     private var restaurantsList = ArrayList<Restaurant>()
     private lateinit var adapter: ChooseRestaurantAdapter
-    private lateinit var db: FirebaseFirestore
-    private lateinit var mSearchRestaurant: EditText
 
     private val viewModel: MainViewModel by activityViewModels()
 
@@ -59,6 +51,10 @@ class ChooseRestaurantFragment : BaseFragment() {
 
         adapter = ChooseRestaurantAdapter(requireContext(), restaurantsList, requireView())
         recyclerViewChooseRestaurant.adapter = adapter
+
+        searchRestaurant.setOnClickListener {
+            
+        }
 
         //uzywamy instancji modernizacji zeby wywolac losowy posilek
         RetrofitInstance.api.getRandomMeal()
@@ -89,22 +85,26 @@ class ChooseRestaurantFragment : BaseFragment() {
 
             })
 
-        mSearchRestaurant = searchRestaurant
-        mSearchRestaurant.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-                val searchRestaurant = mSearchRestaurant.text.toString().trim()
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-
-            }
-
-        })
+//        val name = viewModel.meal.value?.name
+//
+//        searchRestaurant.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+//            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+//            override fun onQueryTextSubmit(p0: String?): Boolean {
+//                searchRestaurant.clearFocus()
+//                if (name!!.contains(p0.toString())){
+//                    adapter.restaurantsList.filter { it.nameRestaurant == p0 }
+//                } else {
+//
+//                    Toast.makeText(context, "", Toast.LENGTH_SHORT).show()
+//                }
+//                return false
+//            }
+//
+//            override fun onQueryTextChange(p0: String?): Boolean {
+//                adapter.restaurantsList.filter { it.nameRestaurant == p0 }
+//                return false
+//            }
+//        })
 
         viewModel.restaurantList.observe(this) {
             adapter.restaurantsList = it

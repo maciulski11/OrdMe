@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ordme.R
 import com.example.ordme.base.BaseFragment
 import com.example.ordme.ui.adapter.RestaurantAdapter
-import com.example.ordme.ui.data.Basket
-import com.example.ordme.ui.data.Meal
+import com.example.ordme.data.model.Basket
+import com.example.ordme.data.model.Meal
 import com.example.ordme.ui.view_model.MainViewModel
 import kotlinx.android.synthetic.main.fragment_restaurant.*
 import kotlinx.android.synthetic.main.fragment_restaurant.returnBT

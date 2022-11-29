@@ -3,7 +3,6 @@ package com.example.ordme.ui.adapter
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +12,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ordme.R
 import com.example.ordme.dialogs.DeleteDialogFragment
-import com.example.ordme.ui.data.Addition
-import com.example.ordme.ui.data.Meal
+import com.example.ordme.data.model.Addition
+import com.example.ordme.data.model.Meal
 import kotlinx.android.synthetic.main.item_basket.view.*
 
 class BasketAdapter(
@@ -28,7 +27,6 @@ class BasketAdapter(
 
     private var meals: ArrayList<Meal> = ArrayList()
     var meal: MutableLiveData<Meal?> = MutableLiveData()
-    var addition: MutableLiveData<Addition?> = MutableLiveData()
 
     @SuppressLint("NotifyDataSetChanged")
     fun update(meals: ArrayList<Meal>) {
@@ -61,7 +59,6 @@ class BasketAdapter(
         private val plusBT = v.findViewById<ImageView>(R.id.plusBT)!!
         private val minusBT = v.findViewById<ImageView>(R.id.minusBT)!!
         private val deleteBT = v.findViewById<ImageView>(R.id.deleteBT)!!
-        private val additionsTV = v.findViewById<TextView>(R.id.additionsTV)
         private val additionsCount = v.findViewById<TextView>(R.id.additionsCount)
 
         fun bindView(meal: Meal) {
@@ -71,7 +68,8 @@ class BasketAdapter(
 
             v.nameMealTV.text = meal.name
             v.amountTV.text = meal.amount.toString()
-            v.priceTV.text = "%.2f".format(totalPrice)
+            val priceTV = "%.2f".format(totalPrice)
+            v.priceTV.text = priceTV
 
             plusBT.setOnClickListener {
                 onInc(meal.uid ?: "")

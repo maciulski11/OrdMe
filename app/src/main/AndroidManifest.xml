@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OrdMe">
         <activity
-            android:name=".activity.MainActivity"
+            android:name="com.example.ordme.ui.activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

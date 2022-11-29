@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ordme.R
-import com.example.ordme.ui.data.Addition
+import com.example.ordme.data.model.Addition
 import kotlinx.android.synthetic.main.item_addition.view.*
 
 class MealAdapter(val onAddAddition: (String) -> Unit, val onAddedAddition: (String) -> Unit, var additionsList: ArrayList<Addition>): RecyclerView.Adapter<MealAdapter.MyViewHolder>() {

@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ordme.R
 import com.example.ordme.base.BaseFragment
 import com.example.ordme.ui.adapter.CheckoutAdapter
-import com.example.ordme.ui.data.Basket
-import com.example.ordme.ui.data.Meal
+import com.example.ordme.data.model.Basket
+import com.example.ordme.data.model.Meal
 import com.example.ordme.ui.repository.FirebaseRepository
 import com.example.ordme.ui.view_model.MainViewModel
 import kotlinx.android.synthetic.main.fragment_checkout.*
@@ -74,7 +74,6 @@ class CheckoutFragment: BaseFragment() {
 
         returnToBasket()
         returnToRestaurant()
-
     }
 
     @SuppressLint("SetTextI18n")
@@ -98,7 +97,6 @@ class CheckoutFragment: BaseFragment() {
                 "uidRestaurant",
                 basket?.uid
             )
-
             mainViewModel.fetchRestaurantMeals(basket?.uid!!)
 
             findNavController().navigate(R.id.action_checkoutFragment_to_restaurantFragment, bundle)
@@ -114,7 +112,6 @@ class CheckoutFragment: BaseFragment() {
                 "uidRestaurant",
                 basket?.uid
             )
-
             checkoutViewModel.fetchCheckout(basket?.uid!!)
 
             findNavController().navigate(R.id.action_checkoutFragment_to_basketFragment, bundle)

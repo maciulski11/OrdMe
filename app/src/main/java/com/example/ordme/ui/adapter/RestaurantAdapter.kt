@@ -1,7 +1,5 @@
 package com.example.ordme.ui.adapter
 
-import android.annotation.SuppressLint
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,8 +9,7 @@ import android.widget.ImageView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ordme.R
-import com.example.ordme.ui.data.Meal
-import kotlinx.android.synthetic.main.fragment_meal.view.*
+import com.example.ordme.data.model.Meal
 import kotlinx.android.synthetic.main.item_meal.view.*
 import kotlinx.android.synthetic.main.item_meal.view.nameMealTV
 

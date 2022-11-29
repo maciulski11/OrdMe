@@ -1,4 +1,4 @@
-package com.example.ordme.ui.data
+package com.example.ordme.data.model
 
 data class Addition (
     val nameAddition: String? = null,

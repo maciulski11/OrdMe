@@ -12,9 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ordme.R
 import com.example.ordme.base.BaseFragment
 import com.example.ordme.ui.adapter.MealAdapter
-import com.example.ordme.ui.data.Addition
-import com.example.ordme.ui.data.Basket
-import com.example.ordme.ui.data.Meal
+import com.example.ordme.data.model.Addition
+import com.example.ordme.data.model.Basket
+import com.example.ordme.data.model.Meal
 import com.example.ordme.ui.repository.FirebaseRepository
 import com.example.ordme.ui.view_model.MainViewModel
 import kotlinx.android.synthetic.main.fragment_meal.*
@@ -25,7 +25,7 @@ class MealViewModel(var meall: Meal? = null): ViewModel() {
     private val repository = FirebaseRepository()
     var meal: MutableLiveData<Meal?> = MutableLiveData()
 
-    val ad: ArrayList<Addition>
+    private val additions: ArrayList<Addition>
         get() = meal.value?.additions ?: arrayListOf()
 
     fun fetchMeal(restaurantId: String, mealId: String) {
@@ -35,17 +35,17 @@ class MealViewModel(var meall: Meal? = null): ViewModel() {
     }
 
     fun incrementAddition(uidAdd: String) {
-        val index = ad.indexOfFirst { it.nameAddition == uidAdd }
+        val index = additions.indexOfFirst { it.nameAddition == uidAdd }
 
         if (index != -1) {
-            ad[index].amount = ad[index].amount?.inc()
+            additions[index].amount = additions[index].amount?.inc()
 
             val price =
-                (ad[index].amount?.inc()!! - 1) * (ad[index].priceAddition!!.toDouble())
+                (additions[index].amount?.inc()!! - 1) * (additions[index].priceAddition!!.toDouble())
 
-            Log.d("ADDITION", "$price, ${ad[index].amount}, ${ad[index].priceAddition}")
+            Log.d("ADDITION", "$price, ${additions[index].amount}, ${additions[index].priceAddition}")
 
-            val x = ad.sumOf { add-> add.amount!! * add.priceAddition!! }
+            val x = additions.sumOf { add-> add.amount!! * add.priceAddition!! }
 
             Log.d("ADDITION SUM", "${meal.value?.additions}")
 
@@ -53,10 +53,10 @@ class MealViewModel(var meall: Meal? = null): ViewModel() {
     }
 
     fun decrementAddition(uidAdd: String) {
-        val index = ad.indexOfFirst { it.nameAddition == uidAdd }
+        val index = additions.indexOfFirst { it.nameAddition == uidAdd }
 
         if (index != -1) {
-            ad[index].amount = ad[index].amount?.dec()
+            additions[index].amount = additions[index].amount?.dec()
         }
     }
 
@@ -76,7 +76,7 @@ class MealViewModel(var meall: Meal? = null): ViewModel() {
 
     val xxx: Double
         get() =
-            ad.sumOf { add-> add.amount!! * add.priceAddition!! }
+            additions.sumOf { add-> add.amount!! * add.priceAddition!! }
 
     val totalPrice: String
         get() {

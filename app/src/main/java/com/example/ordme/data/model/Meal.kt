@@ -1,6 +1,7 @@
-package com.example.ordme.ui.data
+package com.example.ordme.data.model
 
 import android.os.Parcelable
+import com.example.ordme.data.model.Addition
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.parcel.RawValue
 
