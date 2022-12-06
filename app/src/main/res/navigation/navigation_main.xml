@@ -13,7 +13,7 @@
             app:destination="@id/registerUserFragment" />
         <action
             android:id="@+id/action_loginUserFragment_to_mainUserFragment"
-            app:destination="@id/mainUserFragment" />
+            app:destination="@id/chooseRestaurantFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerUserFragment"
@@ -21,15 +21,15 @@
         android:label="RegisterUserFragment" >
         <action
             android:id="@+id/action_registerUserFragment_to_mainUserFragment"
-            app:destination="@id/mainUserFragment" />
+            app:destination="@id/chooseRestaurantFragment" />
         <action
             android:id="@+id/action_registerUserFragment_to_loginUserFragment"
             app:destination="@id/loginUserFragment" />
     </fragment>
     <fragment
-        android:id="@+id/mainUserFragment"
+        android:id="@+id/chooseRestaurantFragment"
         android:name="com.example.ordme.ui.screen.ChooseRestaurantFragment"
-        android:label="MainUserFragment">
+        android:label="ChooseRestaurantFragment">
         <action
             android:id="@+id/action_mainUserFragment_to_loginUserFragment"
             app:destination="@id/loginUserFragment" />
@@ -51,7 +51,7 @@
             app:destination="@id/mealFragment" />
         <action
             android:id="@+id/action_restaurantFragment_to_mainUserFragment"
-            app:destination="@id/mainUserFragment" />
+            app:destination="@id/chooseRestaurantFragment" />
     </fragment>
     <fragment
         android:id="@+id/basketFragment"
@@ -73,7 +73,7 @@
             app:destination="@id/restaurantFragment" />
         <action
             android:id="@+id/action_mealFragment_to_mainUserFragment"
-            app:destination="@id/mainUserFragment" />
+            app:destination="@id/chooseRestaurantFragment" />
     </fragment>
     <fragment
         android:id="@+id/checkoutFragment"
@@ -85,5 +85,12 @@
         <action
             android:id="@+id/action_checkoutFragment_to_basketFragment"
             app:destination="@id/basketFragment" />
+        <action
+            android:id="@+id/action_checkoutFragment_to_locationFragment"
+            app:destination="@id/locationFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/locationFragment"
+        android:name="com.example.ordme.ui.screen.LocationFragment"
+        android:label="LocationFragment" />
 </navigation>

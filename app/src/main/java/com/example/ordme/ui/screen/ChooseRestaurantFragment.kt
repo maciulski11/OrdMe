@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -53,7 +54,7 @@ class ChooseRestaurantFragment : BaseFragment() {
         recyclerViewChooseRestaurant.adapter = adapter
 
         searchRestaurant.setOnClickListener {
-            
+            Toast.makeText(context, "clik", Toast.LENGTH_SHORT).show()
         }
 
         //uzywamy instancji modernizacji zeby wywolac losowy posilek
@@ -85,26 +86,8 @@ class ChooseRestaurantFragment : BaseFragment() {
 
             })
 
-//        val name = viewModel.meal.value?.name
-//
-//        searchRestaurant.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
-//            androidx.appcompat.widget.SearchView.OnQueryTextListener {
-//            override fun onQueryTextSubmit(p0: String?): Boolean {
-//                searchRestaurant.clearFocus()
-//                if (name!!.contains(p0.toString())){
-//                    adapter.restaurantsList.filter { it.nameRestaurant == p0 }
-//                } else {
-//
-//                    Toast.makeText(context, "", Toast.LENGTH_SHORT).show()
-//                }
-//                return false
-//            }
-//
-//            override fun onQueryTextChange(p0: String?): Boolean {
-//                adapter.restaurantsList.filter { it.nameRestaurant == p0 }
-//                return false
-//            }
-//        })
+        //TODO: Add searchView
+
 
         viewModel.restaurantList.observe(this) {
             adapter.restaurantsList = it

@@ -12,6 +12,7 @@ import com.example.ordme.base.BaseFragment
 import com.example.ordme.ui.adapter.CheckoutAdapter
 import com.example.ordme.data.model.Basket
 import com.example.ordme.data.model.Meal
+import com.example.ordme.ui.activity.MainActivity
 import com.example.ordme.ui.repository.FirebaseRepository
 import com.example.ordme.ui.view_model.MainViewModel
 import kotlinx.android.synthetic.main.fragment_checkout.*
@@ -74,6 +75,10 @@ class CheckoutFragment: BaseFragment() {
 
         returnToBasket()
         returnToRestaurant()
+
+        addressBT.setOnClickListener {
+            findNavController().navigate(R.id.action_checkoutFragment_to_locationFragment)
+        }
     }
 
     @SuppressLint("SetTextI18n")

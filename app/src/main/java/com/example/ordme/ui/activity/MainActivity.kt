@@ -6,9 +6,16 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
+import com.android.car.ui.utils.CarUiUtils.getActivity
 import com.example.ordme.R
+import com.example.ordme.ui.adapter.ChooseRestaurantAdapter
 import com.example.ordme.ui.screen.BasketFragment
 import com.example.ordme.ui.screen.ChooseRestaurantFragment
+import com.example.ordme.ui.screen.LocationFragment
+import com.example.ordme.ui.screen.ProfileFragment
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 
@@ -43,10 +50,12 @@ class MainActivity : AppCompatActivity() {
 
             when (it.itemId) {
 
-                R.id.nav_home -> replaceFragment(ChooseRestaurantFragment(), it.title.toString())
-                R.id.nav_message -> replaceFragment(
-                    BasketFragment(),
-                    it.title.toString()
+                R.id.nav_home -> replaceFragment(
+                    ChooseRestaurantFragment(),
+                "")
+                R.id.nav_profile -> replaceFragment(
+                    ProfileFragment(),
+                    ""
                 )
                 R.id.nav_logout -> {
                     fbAuth.signOut()
@@ -66,8 +75,6 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.replace(R.id.fragment, fragment)
         fragmentTransaction.commit()
         drawerLayout.closeDrawers()
-        setTitle(title)
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -78,4 +85,5 @@ class MainActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+
 }
