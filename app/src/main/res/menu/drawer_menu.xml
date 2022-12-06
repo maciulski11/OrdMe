@@ -19,6 +19,11 @@
         android:title="Settings"/>
 
     <item
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/ic_baseline_person"
+        android:title="Profile"/>
+
+    <item
         android:id="@+id/nav_contact"
         android:icon="@drawable/ic_baseline_info_24"
         android:title="Contact"/>
