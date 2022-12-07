@@ -17,13 +17,18 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="${GOOGLE_MAPS_API_KEY}" />
         <activity
-            android:name="com.example.ordme.ui.activity.MainActivity"
-            android:exported="true">
+            android:name=".ui.activity.SplashScreenActivity"
+            android:exported="true"
+            android:screenOrientation="fullUser">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.example.ordme.ui.activity.MainActivity"
+            android:exported="true">
         </activity>
     </application>
 
