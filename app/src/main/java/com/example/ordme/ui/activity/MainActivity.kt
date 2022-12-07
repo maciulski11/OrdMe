@@ -7,6 +7,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.android.car.ui.utils.CarUiUtils.getActivity
 import com.example.ordme.R
 import com.example.ordme.ui.adapter.ChooseRestaurantAdapter
@@ -32,7 +33,6 @@ class MainActivity : AppCompatActivity() {
         drawer()
     }
 
-
     private fun drawer() {
         drawerLayout = findViewById(R.id.drawerLayout)
         val drawView: NavigationView = findViewById(R.id.draw_view)
@@ -42,7 +42,6 @@ class MainActivity : AppCompatActivity() {
         toggle.syncState()
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
 
         drawView.setNavigationItemSelectedListener {
 
@@ -55,7 +54,7 @@ class MainActivity : AppCompatActivity() {
                 "")
                 R.id.nav_profile -> replaceFragment(
                     ProfileFragment(),
-                    ""
+                    "" ,
                 )
                 R.id.nav_logout -> {
                     fbAuth.signOut()
@@ -63,10 +62,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             true
-
         }
     }
-
 
     private fun replaceFragment(fragment: Fragment, title: String) {
 
@@ -75,6 +72,7 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.replace(R.id.fragment, fragment)
         fragmentTransaction.commit()
         drawerLayout.closeDrawers()
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
