@@ -5,6 +5,7 @@ data class Restaurant (
     val nameRestaurant: String? = null,
     val description: String? = null,
     val uid: String? = null,
+    val icon: String? = null,
     val image_photo: String? = null,
     val number: String? = null,
     val secondNumber: String? = null,

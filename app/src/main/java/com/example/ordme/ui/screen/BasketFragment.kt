@@ -14,6 +14,7 @@ import com.example.ordme.base.BaseFragment
 import com.example.ordme.ui.adapter.BasketAdapter
 import com.example.ordme.data.model.Basket
 import com.example.ordme.data.model.Meal
+import com.example.ordme.data.model.Order
 import com.example.ordme.ui.repository.FirebaseRepository
 import com.example.ordme.ui.view_model.MainViewModel
 import kotlinx.android.synthetic.main.fragment_basket.*
@@ -29,7 +30,7 @@ class BasketViewModel() : ViewModel() {
     val totalPrice: Double
         get() =
             meals.sumOf { meal ->
-                ((meal.price ?: 0.0) + (meal.additions?.filter { it.amount ?: 0 > 0 }!!
+                ((meal.price ?: 0.0) + (meal.additions?.filter { (it.amount ?: 0) > 0 }!!
                     .sumOf { it.priceAddition ?: 0.0 })) *
                         (meal.amount?.toDouble() ?: 0.0)
             }
@@ -54,7 +55,7 @@ class BasketViewModel() : ViewModel() {
         val index = meals.indexOfFirst { it.uid == mealId }
 
         if (index != -1) {
-            if (meals[index].amount ?: 0 > 1) {
+            if ((meals[index].amount ?: 0) > 1) {
                 meals[index].amount = meals[index].amount?.dec()
 
                 FirebaseRepository().update(basket.value!!)
@@ -115,6 +116,7 @@ class BasketFragment : BaseFragment() {
                     Basket(
                         basketViewModel.basket.value?.uid,
                         basketViewModel.meals,
+                        basketViewModel.basket.value?.information,
                         basketViewModel.basket.value?.totalPrice
                     )
                 )

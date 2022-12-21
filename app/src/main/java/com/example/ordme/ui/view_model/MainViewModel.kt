@@ -39,8 +39,6 @@ class MainViewModel: ViewModel() {
         fun fetchBasketList() {
         repository.fetchBasketListForCurrentUser {
             basketList.postValue(it)
-
-
         }
     }
 

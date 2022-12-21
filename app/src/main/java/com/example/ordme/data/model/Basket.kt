@@ -5,7 +5,8 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Basket (
-    val uid: String? = null,
+    var uid: String? = null,
     val meals: ArrayList<Meal>? = arrayListOf(),
+    val information: String? = null,
     var totalPrice: Double? = null
 ) : Parcelable {}

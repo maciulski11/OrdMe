@@ -1,41 +1,36 @@
 package com.example.ordme.ui.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import com.android.car.ui.utils.CarUiUtils.getActivity
+import androidx.navigation.fragment.NavHostFragment
 import com.example.ordme.R
-import com.example.ordme.ui.adapter.ChooseRestaurantAdapter
-import com.example.ordme.ui.screen.BasketFragment
-import com.example.ordme.ui.screen.ChooseRestaurantFragment
-import com.example.ordme.ui.screen.LocationFragment
-import com.example.ordme.ui.screen.ProfileFragment
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var toggle: ActionBarDrawerToggle
+    private lateinit var toggle: ActionBarDrawerToggle
     lateinit var drawerLayout: DrawerLayout
     private val fbAuth = FirebaseAuth.getInstance()
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         drawer()
+        changeDrawerState()
     }
 
     private fun drawer() {
+        navController = findNavController(R.id.fragment)
         drawerLayout = findViewById(R.id.drawerLayout)
-        val drawView: NavigationView = findViewById(R.id.draw_view)
 
         toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close)
         drawerLayout.addDrawerListener(toggle)
@@ -43,19 +38,25 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        drawView.setNavigationItemSelectedListener {
+        navView.setNavigationItemSelectedListener {
 
             it.isChecked = true
 
-            when (it.itemId) {
+                when (it.itemId) {
 
-                R.id.nav_home -> replaceFragment(
-                    ChooseRestaurantFragment(),
-                "")
-                R.id.nav_profile -> replaceFragment(
-                    ProfileFragment(),
-                    "" ,
-                )
+                R.id.nav_profile -> {
+                    findNavController(R.id.chooseRestaurant)
+                        .navigate(R.id.action_chooseRestaurantFragment_to_profileFragment2)
+                    drawerLayout.closeDrawers()
+                }
+
+                R.id.nav_message -> {
+                    findNavController(R.id.chooseRestaurant)
+                        .navigate(R.id.action_chooseRestaurantFragment_to_messageFragment)
+                    drawerLayout.closeDrawers()
+
+                }
+
                 R.id.nav_logout -> {
                     fbAuth.signOut()
                     finish()
@@ -65,15 +66,28 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun replaceFragment(fragment: Fragment, title: String) {
-
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.fragment, fragment)
-        fragmentTransaction.commit()
-        drawerLayout.closeDrawers()
-
+    //this function is blocking and it is making invisible icon and functions of drawer
+    private fun changeDrawerState() {
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.fragment) as NavHostFragment
+        val drawer = findViewById<DrawerLayout>(R.id.drawerLayout)
+        navHostFragment.navController.addOnDestinationChangedListener(listener = { _, destination, _ ->
+            //set in case app asked for verify auth, signIn page drawer will be locked
+            if (destination.id != R.id.chooseRestaurantFragment) {
+                drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+                supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            }
+            else if (drawer.getDrawerLockMode(GravityCompat.START) != DrawerLayout.LOCK_MODE_UNLOCKED) {
+                drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+                supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            }
+        })
     }
+
+//    override fun onSupportNavigateUp(): Boolean {
+//        val navController = findNavController(R.id.fragmentt)
+//        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+//    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 

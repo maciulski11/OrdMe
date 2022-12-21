@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
@@ -60,7 +60,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
-        app:layout_constraintTop_toBottomOf="@id/header">
+        app:layout_constraintTop_toBottomOf="@id/header"
+        tools:layout_editor_absoluteX="-16dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -423,8 +424,8 @@
                 android:id="@+id/submitOrderBT"
                 android:layout_width="350dp"
                 android:layout_height="42dp"
-                android:layout_marginTop="34dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="56dp"
                 android:background="@color/black"
                 android:scaleType="centerCrop"
                 android:text="Submit order"

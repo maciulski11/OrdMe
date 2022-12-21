@@ -3,10 +3,7 @@ package com.example.ordme.ui.repository
 
 import android.annotation.SuppressLint
 import android.util.Log
-import com.example.ordme.data.model.Basket
-import com.example.ordme.data.model.Meal
-import com.example.ordme.data.model.Restaurant
-import com.example.ordme.data.model.User
+import com.example.ordme.data.model.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
@@ -26,6 +23,7 @@ class FirebaseRepository {
         const val MEALS = "meals"
         const val USERS = "users"
         const val BASKET = "basket"
+        const val ORDER = "orders"
     }
 
     @SuppressLint("RestrictedApi")
@@ -41,7 +39,7 @@ class FirebaseRepository {
         db.collection(USERS)
             .document(currentUserId!!)
             .collection(BASKET)
-            .document(basket.uid)
+            .document(basket.uid!!)
             .set(basket)
     }
 
@@ -217,4 +215,16 @@ class FirebaseRepository {
             .collection(BASKET).document(basket)
             .update(totalPrice as Map<String, Any>)
     }
+
+    fun submitOrder(order: Order, uidRestaurant: String, uid: String){
+        if (currentUserId == null) return
+
+        db.collection(RESTAURANTS)
+            .document(uidRestaurant)
+            .collection(ORDER)
+            .document(uid)
+            .set(order)
+
+    }
+
 }

@@ -67,7 +67,7 @@ class MealViewModel(var meall: Meal? = null): ViewModel() {
     }
 
     fun decrementAmount() {
-        if(meal.value?.amount ?: 0 > 1) {
+        if((meal.value?.amount ?: 0) > 1) {
             val newValue = meal.value
             newValue?.amount = meal.value?.amount?.dec()
             meal.value = newValue
@@ -98,7 +98,6 @@ class MealFragment : BaseFragment() {
     private val mainViewModel: MainViewModel by activityViewModels()
 
     override fun subscribeUi() {
-        //TODO: Jak przesłać obiekt Meal
         val meal = requireArguments().getParcelable<Meal>("meal")
 
         additionRecyclerView.layoutManager =
@@ -172,7 +171,6 @@ class MealFragment : BaseFragment() {
                     FirebaseRepository().update(basket)
 
                     Log.d("Basket", "$basket")
-
                 }
             }
 

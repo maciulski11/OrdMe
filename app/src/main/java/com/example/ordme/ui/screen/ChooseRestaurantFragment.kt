@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.ordme.R
@@ -57,7 +58,7 @@ class ChooseRestaurantFragment : BaseFragment() {
             Toast.makeText(context, "clik", Toast.LENGTH_SHORT).show()
         }
 
-        //uzywamy instancji modernizacji zeby wywolac losowy posilek
+        //API: uzywamy instancji modernizacji zeby wywolac losowy posilek
         RetrofitInstance.api.getRandomMeal()
             .enqueue(object : Callback<MealList> { //uzywamy wywolania zwrotnego z callback
                 override fun onResponse(call: Call<MealList>, response: Response<MealList>) {
@@ -94,8 +95,13 @@ class ChooseRestaurantFragment : BaseFragment() {
             adapter.notifyDataSetChanged()
         }
 
+        searchRestaurant.setOnClickListener {
+            findNavController().navigate(R.id.action_chooseRestaurantFragment_to_searchRestaurantFragment)
+        }
+
         viewModel.fetchRestaurantsList()
         viewModel.fetchBasketList()
+
     }
 
     override fun unsubscribeUi() {

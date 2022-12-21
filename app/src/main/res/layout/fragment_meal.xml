@@ -99,7 +99,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/additionRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="250dp"
         android:layout_marginStart="26dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="60dp"

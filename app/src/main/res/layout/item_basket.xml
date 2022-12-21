@@ -62,12 +62,12 @@
         app:layout_constraintEnd_toStartOf="@id/priceTV"/>
 
         <ImageView
-            android:id="@+id/plusBT"
+            android:id="@+id/minusBT"
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:layout_marginStart="14dp"
             android:layout_marginTop="24dp"
-            android:src="@drawable/ic_baseline_add_0"
+            android:src="@drawable/ic_baseline_minus"
             app:layout_constraintStart_toEndOf="@+id/textView11"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -81,16 +81,16 @@
             android:text="0"
             android:textColor="@color/black"
             android:textSize="22sp"
-            app:layout_constraintStart_toEndOf="@+id/plusBT"
+            app:layout_constraintStart_toEndOf="@+id/minusBT"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/minusBT"
+            android:id="@+id/plusBT"
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:layout_marginStart="6dp"
             android:layout_marginTop="24dp"
-            android:src="@drawable/ic_baseline_minus"
+            android:src="@drawable/ic_baseline_add_0"
             app:layout_constraintStart_toEndOf="@+id/amountTV"
             app:layout_constraintTop_toTopOf="parent" />
 

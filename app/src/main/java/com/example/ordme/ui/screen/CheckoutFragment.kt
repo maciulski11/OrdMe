@@ -12,15 +12,22 @@ import com.example.ordme.base.BaseFragment
 import com.example.ordme.ui.adapter.CheckoutAdapter
 import com.example.ordme.data.model.Basket
 import com.example.ordme.data.model.Meal
-import com.example.ordme.ui.activity.MainActivity
+import com.example.ordme.data.model.Order
 import com.example.ordme.ui.repository.FirebaseRepository
 import com.example.ordme.ui.view_model.MainViewModel
 import kotlinx.android.synthetic.main.fragment_checkout.*
 import kotlinx.android.synthetic.main.fragment_checkout.returnBT
+import java.time.Instant
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+import java.util.*
+import kotlin.collections.ArrayList
 
 class CheckoutViewModel: ViewModel(){
 
     var basket: MutableLiveData<Basket?> = MutableLiveData(null)
+    var order: MutableLiveData<Order?> = MutableLiveData(null)
+    var meal: MutableLiveData<Meal?> = MutableLiveData()
 
     val meals: ArrayList<Meal>
         get() = basket.value?.meals ?: arrayListOf()
@@ -29,6 +36,10 @@ class CheckoutViewModel: ViewModel(){
         FirebaseRepository().fetchBasket(uidRestaurant) {
             basket.value = it ?: Basket(uidRestaurant)
         }
+    }
+
+    fun submitOrder(order: Order, uidRestaurant: String, uid: String){
+        FirebaseRepository().submitOrder(order, uidRestaurant, uid)
     }
 
     val orderValue: Double
@@ -56,6 +67,7 @@ class CheckoutFragment: BaseFragment() {
     private val checkoutViewModel = CheckoutViewModel()
     private val mainViewModel: MainViewModel by activityViewModels()
 
+    @SuppressLint("SimpleDateFormat")
     override fun subscribeUi() {
 
         val basket = requireArguments().getParcelable<Basket>("basket")
@@ -78,6 +90,29 @@ class CheckoutFragment: BaseFragment() {
 
         addressBT.setOnClickListener {
             findNavController().navigate(R.id.action_checkoutFragment_to_locationFragment)
+        }
+
+        submitOrderBT.setOnClickListener {
+                val uid = UUID.randomUUID().toString()
+                val time = DateTimeFormatter
+                    .ofPattern("dd.MM.yyyy HH:mm:ss")
+                    .withZone(ZoneOffset.UTC)
+                    .format(Instant.now())
+
+                Order(
+                    uid,
+                    basket?.meals,
+                    "",
+                    "",
+                    checkoutViewModel.totalPrice,
+                    "",
+                    time,
+                    false
+                ).let { order ->
+                    checkoutViewModel.submitOrder(order, basket?.uid.toString(), uid)
+                }
+
+                findNavController().navigate(R.id.action_checkoutFragment_to_finalFragment)
         }
     }
 

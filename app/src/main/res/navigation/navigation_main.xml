@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_main"
     app:startDestination="@id/loginUserFragment">
 
@@ -38,6 +39,15 @@
             app:destination="@id/restaurantFragment">
 
         </action>
+        <action
+            android:id="@+id/action_chooseRestaurantFragment_to_profileFragment2"
+            app:destination="@id/profileFragment2" />
+        <action
+            android:id="@+id/action_chooseRestaurantFragment_to_messageFragment"
+            app:destination="@id/messageFragment" />
+        <action
+            android:id="@+id/action_chooseRestaurantFragment_to_searchRestaurantFragment"
+            app:destination="@id/searchRestaurantFragment" />
     </fragment>
     <fragment
         android:id="@+id/restaurantFragment"
@@ -88,9 +98,40 @@
         <action
             android:id="@+id/action_checkoutFragment_to_locationFragment"
             app:destination="@id/locationFragment" />
+        <action
+            android:id="@+id/action_checkoutFragment_to_finalFragment"
+            app:destination="@id/finalFragment" />
     </fragment>
     <fragment
         android:id="@+id/locationFragment"
         android:name="com.example.ordme.ui.screen.LocationFragment"
         android:label="LocationFragment" />
+    <fragment
+        android:id="@+id/finalFragment"
+        android:name="com.example.ordme.ui.screen.FinalFragment"
+        android:label="FinalFragment" />
+    <fragment
+        android:id="@+id/profileFragment2"
+        android:name="com.example.ordme.ui.screen.ProfileFragment"
+        android:label="ProfileFragment" >
+        <action
+            android:id="@+id/action_profileFragment2_to_chooseRestaurantFragment"
+            app:destination="@id/chooseRestaurantFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/messageFragment"
+        android:name="com.example.ordme.ui.screen.MessageFragment"
+        android:label="MessageFragment" >
+        <action
+            android:id="@+id/action_messageFragment_to_chooseRestaurantFragment"
+            app:destination="@id/chooseRestaurantFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchRestaurantFragment"
+        android:name="com.example.ordme.ui.screen.SearchRestaurantFragment"
+        android:label="SearchRestaurantFragment" >
+        <action
+            android:id="@+id/action_searchRestaurantFragment_to_chooseRestaurantFragment"
+            app:destination="@id/chooseRestaurantFragment" />
+    </fragment>
 </navigation>

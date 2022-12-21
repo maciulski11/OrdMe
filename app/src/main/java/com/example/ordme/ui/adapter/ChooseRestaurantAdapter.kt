@@ -9,7 +9,9 @@ import com.example.ordme.R
 import com.example.ordme.data.model.Restaurant
 import android.content.Context
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.navigation.findNavController
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.item_choose_restaurants.view.*
 
 class ChooseRestaurantAdapter(
@@ -29,6 +31,19 @@ class ChooseRestaurantAdapter(
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val restaurant: Restaurant = restaurantsList[position]
+
+        val image = holder.itemView.findViewById<ImageView>(R.id.imageProducts)
+        Glide.with(holder.itemView)
+            .load(restaurant.image_photo)
+            .override(900)
+            .into(image)
+
+        val icon = holder.itemView.findViewById<ImageView>(R.id.icon)
+        Glide.with(holder.itemView)
+            .load(restaurant.icon)
+            .override(100,100)
+            .circleCrop()
+            .into(icon)
 
         holder.chooseRestaurant.setOnClickListener {
             val bundle = Bundle()
