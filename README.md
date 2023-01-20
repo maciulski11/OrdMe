@@ -6,27 +6,6 @@ Simple delivery app with Kotlin and Firebase
 * [Technologies](#technologies)
 * [Setup](#setup)
 
-gfbg
-gf
-g
-g
-
-g
-g
-g
-g
-g
-
-g
-g
-g
-g
-
-g
-g
-g
-g
-
-g
-g
 ## General info
+## Technologies
+## Setup
