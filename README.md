@@ -15,7 +15,7 @@ This app is inspired by the delivery of food and groceries by couriers. For exam
 
 ## Technologies
 Project is created with:
-* Kotlin version: 12.0
+* Kotlin version: 1.3.61
 * Firebase
 
 ## Setup
