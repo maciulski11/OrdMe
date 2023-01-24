@@ -12,5 +12,5 @@ Simple delivery app with Kotlin and Firebase. In this application you will be ab
 Project is created with:
 * Kotlin version: 12.0
 * Firebase
-* 
+
 ## Setup
