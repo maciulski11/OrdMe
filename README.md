@@ -2,7 +2,7 @@
 
 ## Table of Contents
 * [General info](#general-info)
-* [Sources] (#sources)
+* [Sources](#sources)
 * [Technologies](#technologies)
 * [Setup](#setup)
 
