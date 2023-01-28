@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,14 +13,17 @@ import com.example.ordme.api.pojo.Meal
 import com.example.ordme.api.pojo.MealList
 import com.example.ordme.api.retrofit.RetrofitInstance
 import com.example.ordme.base.BaseFragment
-import com.example.ordme.ui.adapter.ChooseRestaurantAdapter
 import com.example.ordme.data.model.Restaurant
 import com.example.ordme.databinding.FragmentChooseRestaurantBinding
+import com.example.ordme.ui.adapter.ChooseRestaurantAdapter
 import com.example.ordme.ui.view_model.MainViewModel
+import com.google.firebase.firestore.*
 import kotlinx.android.synthetic.main.fragment_choose_restaurant.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
+
 
 class ChooseRestaurantFragment : BaseFragment() {
     override val layout: Int = R.layout.fragment_choose_restaurant
@@ -54,10 +56,6 @@ class ChooseRestaurantFragment : BaseFragment() {
         adapter = ChooseRestaurantAdapter(requireContext(), restaurantsList, requireView())
         recyclerViewChooseRestaurant.adapter = adapter
 
-        searchRestaurant.setOnClickListener {
-            Toast.makeText(context, "clik", Toast.LENGTH_SHORT).show()
-        }
-
         //API: uzywamy instancji modernizacji zeby wywolac losowy posilek
         RetrofitInstance.api.getRandomMeal()
             .enqueue(object : Callback<MealList> { //uzywamy wywolania zwrotnego z callback
@@ -87,20 +85,23 @@ class ChooseRestaurantFragment : BaseFragment() {
 
             })
 
-        //TODO: Add searchView
-
 
         viewModel.restaurantList.observe(this) {
-            adapter.restaurantsList = it
+            adapter.restaurantList = it
             adapter.notifyDataSetChanged()
-        }
-
-        searchRestaurant.setOnClickListener {
-            findNavController().navigate(R.id.action_chooseRestaurantFragment_to_searchRestaurantFragment)
         }
 
         viewModel.fetchRestaurantsList()
         viewModel.fetchBasketList()
+
+        searchRestaurant.setOnClickListener {
+//            val bundle = Bundle()
+//            bundle.putString(
+//                "uidRestaurant",
+//
+//            )
+            findNavController().navigate(R.id.action_chooseRestaurantFragment_to_searchViewFragment2)
+        }
 
     }
 

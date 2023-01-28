@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/loginUserFragment"
         android:name="com.example.ordme.ui.screen.LoginFragment"
-        android:label="LoginUserFragment" >
+        android:label="LoginUserFragment">
         <action
             android:id="@+id/action_loginUserFragment_to_registerUserFragment"
             app:destination="@id/registerUserFragment" />
@@ -19,7 +19,7 @@
     <fragment
         android:id="@+id/registerUserFragment"
         android:name="com.example.ordme.ui.screen.RegisterFragment"
-        android:label="RegisterUserFragment" >
+        android:label="RegisterUserFragment">
         <action
             android:id="@+id/action_registerUserFragment_to_mainUserFragment"
             app:destination="@id/chooseRestaurantFragment" />
@@ -36,9 +36,7 @@
             app:destination="@id/loginUserFragment" />
         <action
             android:id="@+id/action_mainUserFragment_to_restaurantFragment"
-            app:destination="@id/restaurantFragment">
-
-        </action>
+            app:destination="@id/restaurantFragment"/>
         <action
             android:id="@+id/action_chooseRestaurantFragment_to_profileFragment2"
             app:destination="@id/profileFragment2" />
@@ -46,13 +44,16 @@
             android:id="@+id/action_chooseRestaurantFragment_to_messageFragment"
             app:destination="@id/messageFragment" />
         <action
-            android:id="@+id/action_chooseRestaurantFragment_to_searchRestaurantFragment"
-            app:destination="@id/searchRestaurantFragment" />
+            android:id="@+id/action_chooseRestaurantFragment_to_searchViewFragment2"
+            app:destination="@id/searchViewFragment2" />
+        <action
+            android:id="@+id/action_chooseRestaurantFragment_to_restaurantFragment"
+            app:destination="@id/restaurantFragment" />
     </fragment>
     <fragment
         android:id="@+id/restaurantFragment"
         android:name="com.example.ordme.ui.screen.RestaurantFragment"
-        android:label="RestaurantFragment" >
+        android:label="RestaurantFragment">
         <action
             android:id="@+id/action_restaurantFragment_to_basketFragment"
             app:destination="@id/basketFragment" />
@@ -62,11 +63,14 @@
         <action
             android:id="@+id/action_restaurantFragment_to_mainUserFragment"
             app:destination="@id/chooseRestaurantFragment" />
+        <action
+            android:id="@+id/action_restaurantFragment_to_chooseRestaurantFragment"
+            app:destination="@id/chooseRestaurantFragment" />
     </fragment>
     <fragment
         android:id="@+id/basketFragment"
         android:name="com.example.ordme.ui.screen.BasketFragment"
-        android:label="BasketFragment" >
+        android:label="BasketFragment">
         <action
             android:id="@+id/action_basketFragment_to_restaurantFragment"
             app:destination="@id/restaurantFragment" />
@@ -77,7 +81,7 @@
     <fragment
         android:id="@+id/mealFragment"
         android:name="com.example.ordme.ui.screen.MealFragment"
-        android:label="MealFragment" >
+        android:label="MealFragment">
         <action
             android:id="@+id/action_mealFragment_to_restaurantFragment"
             app:destination="@id/restaurantFragment" />
@@ -88,7 +92,7 @@
     <fragment
         android:id="@+id/checkoutFragment"
         android:name="com.example.ordme.ui.screen.CheckoutFragment"
-        android:label="CheckoutFragment" >
+        android:label="CheckoutFragment">
         <action
             android:id="@+id/action_checkoutFragment_to_restaurantFragment"
             app:destination="@id/restaurantFragment" />
@@ -113,7 +117,7 @@
     <fragment
         android:id="@+id/profileFragment2"
         android:name="com.example.ordme.ui.screen.ProfileFragment"
-        android:label="ProfileFragment" >
+        android:label="ProfileFragment">
         <action
             android:id="@+id/action_profileFragment2_to_chooseRestaurantFragment"
             app:destination="@id/chooseRestaurantFragment" />
@@ -121,17 +125,20 @@
     <fragment
         android:id="@+id/messageFragment"
         android:name="com.example.ordme.ui.screen.MessageFragment"
-        android:label="MessageFragment" >
+        android:label="MessageFragment">
         <action
             android:id="@+id/action_messageFragment_to_chooseRestaurantFragment"
             app:destination="@id/chooseRestaurantFragment" />
     </fragment>
     <fragment
-        android:id="@+id/searchRestaurantFragment"
-        android:name="com.example.ordme.ui.screen.SearchRestaurantFragment"
-        android:label="SearchRestaurantFragment" >
+        android:id="@+id/searchViewFragment2"
+        android:name="com.example.ordme.ui.screen.SearchViewFragment"
+        android:label="SearchViewFragment" >
         <action
-            android:id="@+id/action_searchRestaurantFragment_to_chooseRestaurantFragment"
+            android:id="@+id/action_searchViewFragment2_to_chooseRestaurantFragment"
             app:destination="@id/chooseRestaurantFragment" />
+        <action
+            android:id="@+id/action_searchViewFragment2_to_restaurantFragment"
+            app:destination="@id/restaurantFragment" />
     </fragment>
 </navigation>
