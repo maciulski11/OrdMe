@@ -74,7 +74,6 @@ class FirebaseRepository {
                         // }
                     }
 
-
                     onComplete.invoke(mealList)
                 }
             })
@@ -216,7 +215,7 @@ class FirebaseRepository {
             .update(totalPrice as Map<String, Any>)
     }
 
-    fun submitOrder(order: Order, uidRestaurant: String, uid: String){
+    fun submitOrder(order: Order, uidRestaurant: String, uid: String) {
         if (currentUserId == null) return
 
         db.collection(RESTAURANTS)

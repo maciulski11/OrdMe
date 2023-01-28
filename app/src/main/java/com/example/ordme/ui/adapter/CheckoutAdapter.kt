@@ -33,7 +33,9 @@ class CheckoutAdapter(var basketList: ArrayList<Meal> = arrayListOf()): Recycler
 
         fun bindView(meal: Meal) {
             val mealPrice = (meal.price ?: 0.0) * (meal.amount ?: 0).toDouble()
-            val additionsPrice = meal.additions?.filter { it.amount ?: 0 > 0 }?.sumOf { it.priceAddition ?: 0.0 * (it.amount?.toDouble() ?: 0.0) } ?: 0.0
+            val additionsPrice = meal.additions?.filter { (it.amount ?: 0) > 0 }?.sumOf {
+                it.priceAddition ?: (0.0 * (it.amount?.toDouble() ?: 0.0))
+            } ?: 0.0
             val totalPrice = mealPrice + (additionsPrice * (meal.amount ?: 0).toDouble())
             val price = "%.2f".format(totalPrice)
 

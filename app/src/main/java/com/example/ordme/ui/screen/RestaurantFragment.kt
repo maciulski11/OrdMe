@@ -97,6 +97,6 @@ class RestaurantFragment : BaseFragment() {
     }
 
     override fun unsubscribeUi() {
-
+        viewModel.mealsList.removeObservers(this)
     }
 }

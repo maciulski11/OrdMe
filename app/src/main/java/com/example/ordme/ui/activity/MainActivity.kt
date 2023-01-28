@@ -1,5 +1,6 @@
 package com.example.ordme.ui.activity
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -28,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         changeDrawerState()
     }
 
+    @SuppressLint("SuspiciousIndentation")
     private fun drawer() {
         navController = findNavController(R.id.fragment)
         drawerLayout = findViewById(R.id.drawerLayout)
