@@ -64,9 +64,6 @@ class ChooseRestaurantFragment : BaseFragment() {
 
                         //dajemy meals i index 0 poniewaz bierzemy tylko 1 posilek
                         val randomMeal: Meal = response.body()!!.meals[0]
-                        Glide.with(this@ChooseRestaurantFragment)
-                            .load(randomMeal.strMealThumb)
-                            .into(binding.randomMeal)
 
                         Glide.with(this@ChooseRestaurantFragment)
                             .load(randomMeal.strMealThumb)
@@ -94,12 +91,10 @@ class ChooseRestaurantFragment : BaseFragment() {
         viewModel.fetchRestaurantsList()
         viewModel.fetchBasketList()
 
+        //hiding the shifter
+        horizontalScrollView.isHorizontalScrollBarEnabled = false
+
         searchRestaurant.setOnClickListener {
-//            val bundle = Bundle()
-//            bundle.putString(
-//                "uidRestaurant",
-//
-//            )
             findNavController().navigate(R.id.action_chooseRestaurantFragment_to_searchViewFragment2)
         }
 
