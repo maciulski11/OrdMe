@@ -9,9 +9,13 @@ import com.example.ordme.R
 import com.example.ordme.data.model.Restaurant
 import android.content.Context
 import android.os.Bundle
+import android.util.DisplayMetrics
+import android.view.WindowManager
 import android.widget.ImageView
 import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.example.ordme.data.model.Meal
 import kotlinx.android.synthetic.main.item_choose_restaurants.view.*
 
 class ChooseRestaurantAdapter(
@@ -32,16 +36,22 @@ class ChooseRestaurantAdapter(
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val restaurant: Restaurant = restaurantList[position]
 
+        val displayMetrics = DisplayMetrics()
+        val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        val screenWidth = displayMetrics.widthPixels
+
         val image = holder.itemView.findViewById<ImageView>(R.id.imageProducts)
-        Glide.with(holder.itemView)
+        Glide.with(context)
             .load(restaurant.image_photo)
-            .override(900)
+            .apply(RequestOptions().override(screenWidth, 650))
+//            .override(900, 900)
             .into(image)
 
         val icon = holder.itemView.findViewById<ImageView>(R.id.icon)
         Glide.with(holder.itemView)
             .load(restaurant.icon)
-            .override(100,100)
+            .override(180,180)
             .circleCrop()
             .into(icon)
 

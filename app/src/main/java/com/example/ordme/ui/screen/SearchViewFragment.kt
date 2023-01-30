@@ -25,11 +25,8 @@ import kotlin.collections.ArrayList
 class SearchViewFragment : BaseFragment() {
     override val layout: Int = R.layout.fragment_search_view
 
-    //    private lateinit var searchView: SearchView
     private var restaurantList = ArrayList<Restaurant>()
     private lateinit var adapter: SearchViewAdapter
-
-    private var db = FirebaseFirestore.getInstance()
 
     private val viewModel: MainViewModel by activityViewModels()
 
