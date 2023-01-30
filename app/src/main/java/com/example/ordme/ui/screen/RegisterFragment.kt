@@ -42,7 +42,7 @@ class RegisterFragment : BaseFragment() {
                                 authResults.user!!.uid,
                                 name,
                                 surname,
-                                number,
+                                number.toInt(),
                             )
                             viewModel.createNewUser(user)
 //                            cloud.collection("users")

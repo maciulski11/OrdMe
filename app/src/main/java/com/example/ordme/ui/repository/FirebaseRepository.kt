@@ -226,4 +226,26 @@ class FirebaseRepository {
 
     }
 
+    fun fetchUser(onComplete: (User?) -> Unit) {
+        if (currentUserId == null) {
+            onComplete.invoke(null)
+            return
+        }
+
+            db.collection(USERS)
+                .document(currentUserId!!)
+                .get().addOnSuccessListener { snapshot ->
+                    snapshot.toObject(User::class.java)?.let {
+                        Log.d("REPO FetchUser", "${snapshot.data}")
+                        onComplete.invoke(it)
+                        //it is the same as else
+                    } ?: run {
+                        onComplete.invoke(null)
+                    }
+                }
+                .addOnFailureListener {
+                    Log.d("REPO", it.toString())
+                }
+    }
+
 }
