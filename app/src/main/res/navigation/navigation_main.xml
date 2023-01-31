@@ -39,7 +39,7 @@
             app:destination="@id/restaurantFragment"/>
         <action
             android:id="@+id/action_chooseRestaurantFragment_to_profileFragment2"
-            app:destination="@id/profileFragment2" />
+            app:destination="@id/profileFragment" />
         <action
             android:id="@+id/action_chooseRestaurantFragment_to_messageFragment"
             app:destination="@id/messageFragment" />
@@ -115,12 +115,15 @@
         android:name="com.example.ordme.ui.screen.FinalFragment"
         android:label="FinalFragment" />
     <fragment
-        android:id="@+id/profileFragment2"
+        android:id="@+id/profileFragment"
         android:name="com.example.ordme.ui.screen.ProfileFragment"
         android:label="ProfileFragment">
         <action
-            android:id="@+id/action_profileFragment2_to_chooseRestaurantFragment"
+            android:id="@+id/action_profileFragment_to_chooseRestaurantFragment"
             app:destination="@id/chooseRestaurantFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_profileEditFragment"
+            app:destination="@id/profileEditFragment" />
     </fragment>
     <fragment
         android:id="@+id/messageFragment"
@@ -140,5 +143,13 @@
         <action
             android:id="@+id/action_searchViewFragment2_to_restaurantFragment"
             app:destination="@id/restaurantFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileEditFragment"
+        android:name="com.example.ordme.ui.screen.ProfileEditFragment"
+        android:label="ProfileEditFragment" >
+        <action
+            android:id="@+id/action_profileEditFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
 </navigation>

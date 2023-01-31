@@ -232,20 +232,33 @@ class FirebaseRepository {
             return
         }
 
-            db.collection(USERS)
-                .document(currentUserId!!)
-                .get().addOnSuccessListener { snapshot ->
-                    snapshot.toObject(User::class.java)?.let {
-                        Log.d("REPO FetchUser", "${snapshot.data}")
-                        onComplete.invoke(it)
-                        //it is the same as else
-                    } ?: run {
-                        onComplete.invoke(null)
-                    }
+        db.collection(USERS)
+            .document(currentUserId!!)
+            .get().addOnSuccessListener { snapshot ->
+                snapshot.toObject(User::class.java)?.let {
+                    Log.d("REPO FetchUser", "${snapshot.data}")
+                    onComplete.invoke(it)
+                    //it is the same as else
+                } ?: run {
+                    onComplete.invoke(null)
                 }
-                .addOnFailureListener {
-                    Log.d("REPO", it.toString())
-                }
+            }
+            .addOnFailureListener {
+                Log.d("REPO", it.toString())
+            }
     }
+
+    fun updateUser(map: Map<String, Long>) {
+        db.collection("users")
+            .document(fbAuth.currentUser!!.uid)
+            .update(map)
+            .addOnSuccessListener {
+                Log.d("REPO_DEBUG", "Zaktualizowano dane!")
+            }
+            .addOnFailureListener {
+                Log.d("REPO_DEBUG", it.message.toString())
+            }
+    }
+
 
 }

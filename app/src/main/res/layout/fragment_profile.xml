@@ -32,14 +32,14 @@
         android:orientation="horizontal">
 
 
-        <ImageButton
-            android:id="@+id/userImage"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+        <ImageView
+            android:id="@+id/userPhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
             android:layout_marginTop="4dp"
             android:backgroundTint="#FFFFFF"
             tools:src="@tools:sample/avatars" />
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -54,39 +54,18 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="2dp"
                 android:textAlignment="center"
-                android:text="name:"
+                android:text="full name:"
                 android:textSize="14sp"
                 android:textColor="@color/black"/>
 
             <TextView
-                android:id="@+id/nameET"
+                android:id="@+id/fullNameTV"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:textAlignment="center"
-                android:textSize="24sp"
-                android:textColor="@color/black"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="2dp"
-                android:textAlignment="center"
-                android:text="surname:"
-                android:textSize="14sp"
-                android:textColor="@color/black"/>
-
-            <TextView
-                android:id="@+id/surnameET"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:textAlignment="center"
-                android:textSize="24sp"
+                android:textSize="26sp"
                 android:textColor="@color/black"/>
 
             <TextView
@@ -107,7 +86,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:textAlignment="center"
-                android:textSize="24sp"
+                android:textSize="26sp"
                 android:textColor="@color/black"/>
 
         </LinearLayout>

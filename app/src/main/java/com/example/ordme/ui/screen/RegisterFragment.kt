@@ -10,7 +10,13 @@ import com.example.ordme.data.model.User
 import com.example.ordme.ui.view_model.MainViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.fragment_profile_edit.*
 import kotlinx.android.synthetic.main.fragment_register.*
+import kotlinx.android.synthetic.main.fragment_register.enterNumberUser
+import kotlinx.android.synthetic.main.fragment_register.enterPasswordUser
+import kotlinx.android.synthetic.main.fragment_register.enterRepeatPasswordUser
+import kotlinx.android.synthetic.main.fragment_register.enterSurnameUser
+import kotlinx.android.synthetic.main.fragment_register.registerButton
 
 class RegisterFragment : BaseFragment() {
     override val layout: Int = R.layout.fragment_register
@@ -27,8 +33,7 @@ class RegisterFragment : BaseFragment() {
         registerButton.setOnClickListener {
 
             val email = enterEmailUser.text.toString()
-            val name = enterNameUser.text.toString()
-            val surname = enterSurnameUser.text.toString()
+            val fullName = editFullName.text.toString()
             val number = enterNumberUser.text.toString()
             val password = enterPasswordUser.text.toString()
             val repeatPassword = enterRepeatPasswordUser.text.toString()
@@ -40,9 +45,8 @@ class RegisterFragment : BaseFragment() {
                             val user = User(
                                 authResults.user!!.email,
                                 authResults.user!!.uid,
-                                name,
-                                surname,
-                                number.toInt(),
+                                fullName,
+                                number.toLong(),
                             )
                             viewModel.createNewUser(user)
 //                            cloud.collection("users")
