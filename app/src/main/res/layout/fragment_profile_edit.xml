@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/view_stub">
 
     <ImageView
         android:id="@+id/returnBT"
@@ -36,7 +37,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2"
         app:layout_constraintBottom_toTopOf="@+id/enterNameUser1"
-        android:src="@drawable/ic_baseline_camera_alt_24" />
+        />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/enterNameUser1"
