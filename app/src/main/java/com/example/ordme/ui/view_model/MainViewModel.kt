@@ -6,7 +6,6 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.bumptech.glide.Glide
@@ -17,7 +16,6 @@ import com.example.ordme.data.model.Meal
 import com.example.ordme.data.model.Restaurant
 import com.example.ordme.data.model.User
 import com.example.ordme.ui.repository.FirebaseRepository
-import kotlinx.android.synthetic.main.fragment_restaurant.*
 
 class MainViewModel: ViewModel() {
 
@@ -76,4 +74,8 @@ class MainViewModel: ViewModel() {
                 .into(image)
         }
     }
+
+//    fun uploadUserPhoto(bytes: ByteArray) {
+//        FirebaseRepository().uploadUserPhoto(bytes)
+//    }
 }
