@@ -16,12 +16,27 @@ import com.example.ordme.data.model.User
 import com.example.ordme.ui.repository.FirebaseRepository
 import kotlinx.android.synthetic.main.fragment_meal.returnBT
 import kotlinx.android.synthetic.main.fragment_profile.*
+import kotlinx.android.synthetic.main.fragment_profile.view.progress_bar_layout
+import kotlinx.android.synthetic.main.fragment_profile.view.view_layout
 
 class ProfileViewModel: ViewModel(){
 
     var user: MutableLiveData<User?> = MutableLiveData(null)
 
-    fun fetchUser(context: Context, v: View) {
+    fun checkConnectivityAndFirestoreAvailability(context: Context, view: View) {
+        FirebaseRepository().checkConnectivityAndFirestoreAvailability(
+            context,
+            { // success:
+                fetchUser(context, view)
+            },
+            { // failure:
+                view.progress_bar_layout.visibility = View.VISIBLE
+                view.view_layout.visibility = View.GONE
+            }
+        )
+    }
+
+    private fun fetchUser(context: Context, v: View) {
         FirebaseRepository().fetchUser {
 
             val fullName = v.findViewById<TextView>(R.id.fullNameTV)
@@ -34,8 +49,8 @@ class ProfileViewModel: ViewModel(){
             val city = v.findViewById<TextView>(R.id.cityTV)
             val userPhoto = v.findViewById<ImageView>(R.id.userPhoto)
 
-            fullName.text = it?.full_name
-            number.text = it?.number!!.toString()
+            fullName.text = it!!.full_name
+            number.text = it.number!!.toString()
             street.text = it.street
             door.text = it.door
             flat.text = it.flat
@@ -65,7 +80,7 @@ class ProfileFragment: BaseFragment() {
     override fun subscribeUi() {
 
         profileViewModel.user.observe(this) {
-            profileViewModel.fetchUser(requireContext(), requireView())
+            profileViewModel.checkConnectivityAndFirestoreAvailability(requireContext(), requireView())
         }
 
         editProfileBT.setOnClickListener {

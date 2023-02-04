@@ -2,11 +2,21 @@ package com.example.ordme.ui.repository
 
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.net.ConnectivityManager
 import android.util.Log
+import android.view.View
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.example.ordme.data.model.*
+import com.example.ordme.ui.screen.ProfileEditViewModel
+import com.example.ordme.ui.screen.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import kotlinx.android.synthetic.main.fragment_profile_edit.*
+import kotlinx.android.synthetic.main.fragment_profile_edit.view.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
@@ -14,6 +24,7 @@ class FirebaseRepository {
 
     private val fbAuth = FirebaseAuth.getInstance()
     private var db = FirebaseFirestore.getInstance()
+    private val storage = FirebaseStorage.getInstance()
 
     private val currentUserId: String?
         get() = fbAuth.currentUser?.uid
@@ -259,6 +270,68 @@ class FirebaseRepository {
                 Log.d("REPO_DEBUG", it.message.toString())
             }
     }
+
+    fun checkConnectivityAndFirestoreAvailability(context: Context, success: () -> Unit, failure: () -> Unit) {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connectivityManager.activeNetworkInfo
+
+        if (networkInfo != null && networkInfo.isConnected) {
+            // Internet is available
+            FirebaseFirestore.getInstance().runBatch {
+                // Perform a dummy write operation to Firestore
+                setOf(
+                    FirebaseFirestore.getInstance().collection("test").document(),
+                    mapOf("test" to "test")
+                )
+            }.addOnSuccessListener {
+                // Firestore is available
+                success()
+            }.addOnFailureListener {
+                // Firestore is not available
+                failure()
+            }
+        }
+    }
+
+    //wczytanie zdjecia
+//    fun uploadUserPhoto(bytes: ByteArray) {
+//        storage.getReference("photoUser")
+//            .child("${fbAuth.currentUser!!.uid}.jpg")
+//            .putBytes(bytes)
+//            .addOnCompleteListener {
+//                Log.d("REPO_DEBUG", "COMPLETE UPLOAD PHOTO")
+//            }
+//            .addOnSuccessListener {
+//                getPhotoDownloadUrl(it.storage)
+//
+//            }
+//            .addOnFailureListener {
+//                Log.d("REPO_DEBUG", it.message.toString())
+//            }
+//    }
+
+//    private fun getPhotoDownloadUrl(storage: StorageReference) {
+//        storage.downloadUrl
+//            .addOnSuccessListener {
+//                updateUserPhoto(it.toString())
+//            }
+//            .addOnFailureListener {
+//                Log.d("REPO_DEBUG", it.message.toString())
+//            }
+//    }
+
+//    private fun updateUserPhoto(url: String?) {
+//        db.collection("user")
+//            .document(fbAuth.currentUser!!.uid)
+//            .update("photo", url)
+//            .addOnSuccessListener {
+//                Log.d("REPO_DEBUG", "UPDATE USER PHOTO!")
+//            }
+//            .addOnFailureListener {
+//                Log.d("REPO_DEBUG", it.message.toString())
+//            }
+//    }
 
 
 }

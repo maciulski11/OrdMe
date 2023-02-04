@@ -1,37 +1,37 @@
 package com.example.ordme.ui.screen
 
-import android.annotation.SuppressLint
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
-import android.net.ConnectivityManager
-import android.net.NetworkInfo
-import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import com.example.ordme.R
 import com.example.ordme.base.BaseFragment
 import com.example.ordme.ui.repository.FirebaseRepository
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
-import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_profile.returnBT
 import kotlinx.android.synthetic.main.fragment_profile_edit.*
-import kotlinx.android.synthetic.main.fragment_profile_edit.progress_bar_layout
-import kotlinx.android.synthetic.main.fragment_profile_edit.view_layout
+import kotlinx.android.synthetic.main.fragment_profile_edit.view.*
 
 class ProfileEditViewModel() : ViewModel() {
 
-    fun fetchUser(context: Context, v: View) {
+    fun checkConnectivityAndFirestoreAvailability(context: Context, view: View) {
+        FirebaseRepository().checkConnectivityAndFirestoreAvailability(
+            context,
+            { // success:
+                fetchUser(context, view)
+            },
+            { // failure:
+                view.progress_bar_layout.visibility = View.VISIBLE
+                view.view_layout.visibility = View.GONE
+            }
+        )
+    }
+
+    private fun fetchUser(context: Context, v: View) {
         FirebaseRepository().fetchUser {
 
             val editPhoto = v.findViewById<ImageButton>(R.id.editUserPhoto)
@@ -73,18 +73,8 @@ class ProfileEditFragment() : BaseFragment() {
 
     private var profileEditViewModel = ProfileEditViewModel()
 
-    private val fbAuth = FirebaseAuth.getInstance()
-    private var db = FirebaseFirestore.getInstance()
-    private val storage = FirebaseStorage.getInstance()
-
-    private val currentUserId: String?
-        get() = fbAuth.currentUser?.uid
-
-
-    private lateinit var connectivityManager: ConnectivityManager
-    private val liveData = MutableLiveData<Map<String, Any>?>()
-
     override fun subscribeUi() {
+
 
         saveButton.setOnClickListener {
 
@@ -130,32 +120,12 @@ class ProfileEditFragment() : BaseFragment() {
             findNavController().navigate(R.id.action_profileEditFragment_to_profileFragment)
         }
 
-        checkConnectivityAndFirestoreAvailability()
+        profileEditViewModel.checkConnectivityAndFirestoreAvailability(
+            requireContext(),
+            requireView()
+        )
 
-    }
 
-    private fun checkConnectivityAndFirestoreAvailability() {
-        val connectivityManager =
-            requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkInfo = connectivityManager.activeNetworkInfo
-
-        if (networkInfo != null && networkInfo.isConnected) {
-            // Internet is available
-            FirebaseFirestore.getInstance().runBatch {
-                // Perform a dummy write operation to Firestore
-                setOf(
-                    FirebaseFirestore.getInstance().collection("test").document(),
-                    mapOf("test" to "test")
-                )
-            }.addOnSuccessListener {
-                // Firestore is available
-                profileEditViewModel.fetchUser(requireContext(), requireView())
-            }.addOnFailureListener {
-                // Firestore is not available
-                progress_bar_layout.visibility = View.VISIBLE
-                view_layout.visibility = View.GONE
-            }
-        }
     }
 
     override fun unsubscribeUi() {
