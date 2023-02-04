@@ -3,7 +3,9 @@ package com.example.ordme.ui.screen
 import android.content.Context
 import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
@@ -14,7 +16,6 @@ import com.example.ordme.data.model.User
 import com.example.ordme.ui.repository.FirebaseRepository
 import kotlinx.android.synthetic.main.fragment_meal.returnBT
 import kotlinx.android.synthetic.main.fragment_profile.*
-import kotlinx.android.synthetic.main.fragment_profile.view.*
 
 class ProfileViewModel: ViewModel(){
 
@@ -33,8 +34,8 @@ class ProfileViewModel: ViewModel(){
             val city = v.findViewById<TextView>(R.id.cityTV)
             val userPhoto = v.findViewById<ImageView>(R.id.userPhoto)
 
-            fullName.text = it!!.full_name
-            number.text = it.number!!.toString()
+            fullName.text = it?.full_name
+            number.text = it?.number!!.toString()
             street.text = it.street
             door.text = it.door
             flat.text = it.flat
@@ -42,12 +43,16 @@ class ProfileViewModel: ViewModel(){
             postCode.text = it.postCode
             city.text = it.city
 
-            Glide.with(context)
-                .load(it.photo)
-                .override(400,400)
-                .circleCrop()
-                .into(userPhoto)
+                Glide.with(context)
+                    .load(it.photo)
+                    .override(400, 400)
+                    .circleCrop()
+                    .into(userPhoto)
 
+            val progress = v.findViewById<LinearLayout>(R.id.progress_bar_layout)
+            val viewLayout = v.findViewById<ConstraintLayout>(R.id.view_layout)
+            progress.visibility = View.GONE
+            viewLayout.visibility = View.VISIBLE
         }
     }
 }
