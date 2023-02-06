@@ -20,12 +20,13 @@ import com.example.ordme.ui.repository.FirebaseRepository
 class MainViewModel: ViewModel() {
 
     private val repository = FirebaseRepository()
+    val user1 = repository.getUserData()
+
 
     var meal: MutableLiveData<Meal?> = MutableLiveData()
     var restaurantList = MutableLiveData<ArrayList<Restaurant>>()
     var mealsList = MutableLiveData<ArrayList<Meal>>()
     var basketList = MutableLiveData<ArrayList<Basket>>()
-
 
     fun createNewUser(user: User){
         repository.createNewUser(user)
