@@ -5,11 +5,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
 import android.util.Log
-import android.view.View
-import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.ordme.data.model.*
-import com.example.ordme.ui.screen.ProfileEditViewModel
-import com.example.ordme.ui.screen.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
@@ -35,6 +33,7 @@ class FirebaseRepository {
         const val USERS = "users"
         const val BASKET = "basket"
         const val ORDER = "orders"
+        const val PHOTO = "photo"
     }
 
     @SuppressLint("RestrictedApi")
@@ -52,6 +51,26 @@ class FirebaseRepository {
             .collection(BASKET)
             .document(basket.uid!!)
             .set(basket)
+    }
+
+    //twotzymy fun ktora ma nam zwrocic LiveData<User>
+    fun getUserData(): LiveData<User> {
+        val cloudResult = MutableLiveData<User>()
+
+        //tworzymy zapytacie do kolekcji, podajemy sciezke czyli naszego user
+        db.collection(USERS)
+            .document(currentUserId!!) //potem do jakiego dokumentu o nazwie uid
+            .get()//potem uzyskaj ten dokument
+            .addOnSuccessListener {
+                val user = it.toObject(User::class.java)
+                cloudResult.postValue(user!!)
+                Log.d("REPO_DEBUG", user.toString())
+            }
+            .addOnFailureListener {
+                Log.d("REPO_DEBUG", it.message.toString())
+            }
+
+        return cloudResult//zwracamy nasz LiveData
     }
 
     fun fetchRestaurantMeals(uid: String, onComplete: (ArrayList<Meal>) -> Unit) {
@@ -295,43 +314,43 @@ class FirebaseRepository {
     }
 
     //wczytanie zdjecia
-//    fun uploadUserPhoto(bytes: ByteArray) {
-//        storage.getReference("photoUser")
-//            .child("${fbAuth.currentUser!!.uid}.jpg")
-//            .putBytes(bytes)
-//            .addOnCompleteListener {
-//                Log.d("REPO_DEBUG", "COMPLETE UPLOAD PHOTO")
-//            }
-//            .addOnSuccessListener {
-//                getPhotoDownloadUrl(it.storage)
-//
-//            }
-//            .addOnFailureListener {
-//                Log.d("REPO_DEBUG", it.message.toString())
-//            }
-//    }
+    fun uploadUserPhoto(bytes: ByteArray) {
+        storage.getReference("photoUser")
+            .child("${currentUserId!!}.jpg")
+            .putBytes(bytes)
+            .addOnCompleteListener {
+                Log.d("REPO_DEBUG", "COMPLETE UPLOAD PHOTO")
+            }
+            .addOnSuccessListener {
+                getPhotoDownloadUrl(it.storage)
 
-//    private fun getPhotoDownloadUrl(storage: StorageReference) {
-//        storage.downloadUrl
-//            .addOnSuccessListener {
-//                updateUserPhoto(it.toString())
-//            }
-//            .addOnFailureListener {
-//                Log.d("REPO_DEBUG", it.message.toString())
-//            }
-//    }
+            }
+            .addOnFailureListener {
+                Log.d("REPO_DEBUG", it.message.toString())
+            }
+    }
 
-//    private fun updateUserPhoto(url: String?) {
-//        db.collection("user")
-//            .document(fbAuth.currentUser!!.uid)
-//            .update("photo", url)
-//            .addOnSuccessListener {
-//                Log.d("REPO_DEBUG", "UPDATE USER PHOTO!")
-//            }
-//            .addOnFailureListener {
-//                Log.d("REPO_DEBUG", it.message.toString())
-//            }
-//    }
+    private fun getPhotoDownloadUrl(storage: StorageReference) {
+        storage.downloadUrl
+            .addOnSuccessListener {
+                updateUserPhoto(it.toString())
+            }
+            .addOnFailureListener {
+                Log.d("REPO_DEBUG", it.message.toString())
+            }
+    }
+
+    private fun updateUserPhoto(url: String?) {
+        db.collection(USERS)
+            .document(currentUserId!!)
+            .update(PHOTO, url)
+            .addOnSuccessListener {
+                Log.d("REPO_DEBUG", "UPDATE USER PHOTO!")
+            }
+            .addOnFailureListener {
+                Log.d("REPO_DEBUG", it.message.toString())
+            }
+    }
 
 
 }

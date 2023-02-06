@@ -1,8 +1,14 @@
 package com.example.ordme.ui.activity
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
+import android.util.AttributeSet
 import android.view.MenuItem
+import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -10,9 +16,13 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import com.bumptech.glide.Glide
 import com.example.ordme.R
+import com.example.ordme.ui.repository.FirebaseRepository
+import com.example.ordme.ui.view_model.MainViewModel
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_checkout.view.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var drawerLayout: DrawerLayout
     private val fbAuth = FirebaseAuth.getInstance()
     private lateinit var navController: NavController
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +38,7 @@ class MainActivity : AppCompatActivity() {
 
         drawer()
         changeDrawerState()
+            drawerUserInfo()
     }
 
     @SuppressLint("SuspiciousIndentation")
@@ -65,6 +77,23 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             true
+        }
+    }
+
+    private fun drawerUserInfo() {
+        FirebaseRepository().fetchUser {
+            val photo = findViewById<ImageView>(R.id.imageView)
+            val fullName = findViewById<TextView>(R.id.fullNameTextView)
+            val email = findViewById<TextView>(R.id.emailTextView)
+
+            fullName.text = it?.full_name
+            email.text = it?.email
+
+            Glide.with(this)
+                .load(it?.photo)
+                .override(450, 450)
+                .circleCrop()
+                .into(photo)
         }
     }
 
