@@ -1,22 +1,31 @@
 package com.example.ordme.ui.screen
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
+import android.provider.MediaStore
+import android.util.Log
 import android.view.View
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.LinearLayout
-import android.widget.Toast
+import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.example.ordme.R
 import com.example.ordme.base.BaseFragment
 import com.example.ordme.ui.repository.FirebaseRepository
 import kotlinx.android.synthetic.main.fragment_profile.returnBT
+import kotlinx.android.synthetic.main.fragment_profile.view.*
 import kotlinx.android.synthetic.main.fragment_profile_edit.*
 import kotlinx.android.synthetic.main.fragment_profile_edit.view.*
+import java.io.ByteArrayOutputStream
 
 class ProfileEditViewModel() : ViewModel() {
+
+    fun uploadUserPhoto(bytes: ByteArray) {
+        FirebaseRepository().uploadUserPhoto(bytes)
+    }
 
     fun checkConnectivityAndFirestoreAvailability(context: Context, view: View) {
         FirebaseRepository().checkConnectivityAndFirestoreAvailability(
@@ -25,8 +34,10 @@ class ProfileEditViewModel() : ViewModel() {
                 fetchUser(context, view)
             },
             { // failure:
-                view.progress_bar_layout.visibility = View.VISIBLE
-                view.view_layout.visibility = View.GONE
+                val progress = view.findViewById<LinearLayout>(R.id.progress_bar_layout)
+                val viewLayout = view.findViewById<ConstraintLayout>(R.id.view_layout)
+                progress.visibility = View.GONE
+                viewLayout.visibility = View.VISIBLE
             }
         )
     }
@@ -34,7 +45,7 @@ class ProfileEditViewModel() : ViewModel() {
     private fun fetchUser(context: Context, v: View) {
         FirebaseRepository().fetchUser {
 
-            val editPhoto = v.findViewById<ImageButton>(R.id.editUserPhoto)
+            val editPhoto = v.findViewById<ImageView>(R.id.editUserPhoto)
             val fullName = v.findViewById<EditText>(R.id.editFullName)
             val number = v.findViewById<EditText>(R.id.editPhoneUser)
             val street = v.findViewById<EditText>(R.id.editStreet)
@@ -53,11 +64,11 @@ class ProfileEditViewModel() : ViewModel() {
             postCode.setText(it?.postCode)
             city.setText(it?.city)
 
-//            Glide.with(context)
-//                .load(it?.photo)
-//                .override(400, 400)
-//                .circleCrop()
-//                .into(editPhoto)
+            Glide.with(context)
+                .load(it?.photo)
+                .override(450, 450)
+                .circleCrop()
+                .into(editPhoto)
 
             val progress = v.findViewById<LinearLayout>(R.id.progress_bar_layout)
             val viewLayout = v.findViewById<ConstraintLayout>(R.id.view_layout)
@@ -68,8 +79,11 @@ class ProfileEditViewModel() : ViewModel() {
     }
 }
 
-class ProfileEditFragment() : BaseFragment() {
+class ProfileEditFragment : BaseFragment() {
     override val layout: Int = R.layout.fragment_profile_edit
+
+    private val PROFILE_DEBUG = "TAKE PHOTO"
+    private val REQUEST_IMAGE_CAPTURE = 1
 
     private var profileEditViewModel = ProfileEditViewModel()
 
@@ -122,14 +136,130 @@ class ProfileEditFragment() : BaseFragment() {
 
         profileEditViewModel.checkConnectivityAndFirestoreAvailability(
             requireContext(),
-            requireView()
-        )
+            requireView())
 
+        setupTakePictureClick()
+    }
 
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
+            val imageBitmap = data?.extras?.get("data") as Bitmap
+
+            Log.d(PROFILE_DEBUG, "BITMAP: " + imageBitmap.byteCount.toString())
+
+            Glide.with(this)
+                .load(imageBitmap)
+                .circleCrop()
+                .override(480, 480)
+                .into(editUserPhoto)
+
+            val stream = ByteArrayOutputStream()
+            val result = imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+            val byteArray = stream.toByteArray()
+
+            if (result) profileEditViewModel.uploadUserPhoto(byteArray)
+        }
+    }
+
+    private fun setupTakePictureClick() {
+        //funkcja ktora odpowiada za zrobienie zdjecia po klikniecu w nasz imagebutton
+        editUserPhoto.setOnClickListener {
+
+            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE_SECURE)
+            try {
+                startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
+            } catch (exc: Exception) {
+                Log.d(PROFILE_DEBUG, exc.message.toString())
+            }
+        }
     }
 
     override fun unsubscribeUi() {
 
     }
 
+
+    //    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+//       }
+//
+//    private val networkReceiver = NetworkReceiver()
+//
+//
+//    override fun onResume() {
+//        super.onResume()
+//        val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+//        context?.registerReceiver(networkReceiver, filter)
+//    }
+//
+//    override fun onPause() {
+//        super.onPause()
+//        context?.unregisterReceiver(networkReceiver)
+//    }
+//
+//    private fun isOnline(): Boolean {
+//        val networkInfo = connectivityManager.activeNetworkInfo
+//        return networkInfo != null && networkInfo.isConnected
+//    }
+//
+//    private fun listenForUpdates() {
+//        val docRef = db.collection("users").document(fbAuth.currentUser!!.uid)
+//        docRef.addSnapshotListener { documentSnapshot, exception ->
+//            if (exception != null) {
+//                // Handle error
+//                progress_bar_layout.visibility = View.VISIBLE
+//
+//                return@addSnapshotListener
+//            }
+//            if (documentSnapshot != null && documentSnapshot.exists()) {
+//                // Handle updated data
+//                val updatedData = documentSnapshot.data
+//                liveData.value = updatedData
+//                view?.let { profileEditViewModel.fetchUser(requireContext(), it) }
+//
+//            }
+//        }
+//    }
+//
+//    private fun registerConnectivityReceiver() {
+//        val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+//        requireContext().registerReceiver(connectivityReceiver, intentFilter)
+//        progress_bar_layout.visibility = View.VISIBLE
+//    }
+//
+//    private val connectivityReceiver = object : BroadcastReceiver() {
+//        override fun onReceive(context: Context?, intent: Intent?) {
+//
+//            if(isOnline()) {
+//                    listenForUpdates()
+//                    requireContext().unregisterReceiver(this)
+//
+//                } else {
+//                    registerConnectivityReceiver()
+//
+//                }
+//
+//        }
+//    }
+//inner class NetworkReceiver() : BroadcastReceiver() {
+//
+//
+//    override fun onReceive(context: Context?, intent: Intent?) {
+//        val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+//        val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
+//        val isConnected: Boolean = activeNetwork?.isConnectedOrConnecting == true
+//
+//        if (isConnected) {
+//            // Aktualizuj fragment, np. za pomocą metody refreshData()
+//
+//            val toast = Toast.makeText(context, "jest net", Toast.LENGTH_SHORT)
+//            toast.show()
+//        } else {
+//            val toast = Toast.makeText(context, "nie ma neta", Toast.LENGTH_SHORT)
+//            toast.show()
+//        }
+//    }
+//}
 }
