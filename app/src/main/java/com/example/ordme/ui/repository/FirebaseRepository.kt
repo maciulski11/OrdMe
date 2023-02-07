@@ -53,24 +53,22 @@ class FirebaseRepository {
             .set(basket)
     }
 
-    //twotzymy fun ktora ma nam zwrocic LiveData<User>
-    fun getUserData(): LiveData<User> {
-        val cloudResult = MutableLiveData<User>()
+    fun updateUserData(success: () -> Unit) {
+        val docRef = db.collection(USERS).document(currentUserId!!)
 
-        //tworzymy zapytacie do kolekcji, podajemy sciezke czyli naszego user
-        db.collection(USERS)
-            .document(currentUserId!!) //potem do jakiego dokumentu o nazwie uid
-            .get()//potem uzyskaj ten dokument
-            .addOnSuccessListener {
-                val user = it.toObject(User::class.java)
-                cloudResult.postValue(user!!)
-                Log.d("REPO_DEBUG", user.toString())
-            }
-            .addOnFailureListener {
-                Log.d("REPO_DEBUG", it.message.toString())
+        docRef.addSnapshotListener { snapshot, e ->
+            if (e != null) {
+                Log.w("TAG", "Listen failed.", e)
+                return@addSnapshotListener
             }
 
-        return cloudResult//zwracamy nasz LiveData
+            if (snapshot != null && snapshot.exists()) {
+                // Update your UI with the new data here
+                success()
+            } else {
+                Log.d("TAG", "Current data: null")
+            }
+        }
     }
 
     fun fetchRestaurantMeals(uid: String, onComplete: (ArrayList<Meal>) -> Unit) {

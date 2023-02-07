@@ -1,11 +1,8 @@
 package com.example.ordme.ui.activity
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
-import android.util.AttributeSet
 import android.view.MenuItem
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.viewModels
@@ -22,6 +19,7 @@ import com.example.ordme.ui.repository.FirebaseRepository
 import com.example.ordme.ui.view_model.MainViewModel
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.dialog_delete.*
 import kotlinx.android.synthetic.main.fragment_checkout.view.*
 
 class MainActivity : AppCompatActivity() {
@@ -36,9 +34,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        viewModel.updateUserData {
+            drawerUserInfo()
+        }
+
         drawer()
         changeDrawerState()
-            drawerUserInfo()
     }
 
     @SuppressLint("SuspiciousIndentation")
@@ -56,7 +57,7 @@ class MainActivity : AppCompatActivity() {
 
             it.isChecked = true
 
-                when (it.itemId) {
+            when (it.itemId) {
 
                 R.id.nav_profile -> {
                     findNavController(R.id.chooseRestaurant)
@@ -107,18 +108,12 @@ class MainActivity : AppCompatActivity() {
             if (destination.id != R.id.chooseRestaurantFragment) {
                 drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
                 supportActionBar?.setDisplayHomeAsUpEnabled(false)
-            }
-            else if (drawer.getDrawerLockMode(GravityCompat.START) != DrawerLayout.LOCK_MODE_UNLOCKED) {
+            } else if (drawer.getDrawerLockMode(GravityCompat.START) != DrawerLayout.LOCK_MODE_UNLOCKED) {
                 drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
                 supportActionBar?.setDisplayHomeAsUpEnabled(true)
             }
         })
     }
-
-//    override fun onSupportNavigateUp(): Boolean {
-//        val navController = findNavController(R.id.fragmentt)
-//        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-//    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
