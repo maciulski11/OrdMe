@@ -18,6 +18,8 @@ class SplashScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
 
+        supportActionBar?.hide()
+
             val img = findViewById<TextView>(R.id.img)
             val animation = AnimationUtils.loadAnimation(applicationContext, R.anim.anim_bounce)
             img.startAnimation(animation)

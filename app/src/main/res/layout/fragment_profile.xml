@@ -3,14 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:map="http://schemas.android.com/apk/res-auto">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/view_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="invisible"
+        android:visibility="visible"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="-16dp">
 
@@ -28,8 +29,8 @@
             android:id="@+id/profileLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="-110dp"
             android:orientation="vertical"
-            android:layout_marginTop="-36dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.305"
@@ -115,8 +116,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:layout_marginStart="4dp"
+                android:layout_marginTop="8dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -221,12 +222,6 @@
                     android:layout_marginTop="16dp"
                     android:text="Edit profile" />
 
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
                 <LinearLayout
                     android:id="@+id/progress_bar_layout"
                     android:layout_width="match_parent"
@@ -234,7 +229,7 @@
                     android:background="@color/white"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:visibility="visible">
+                    android:visibility="invisible">
 
                     <ProgressBar
                         android:id="@+id/progress_bar"
@@ -247,6 +242,25 @@
                         android:layout_height="wrap_content"
                         android:text="Loading..." />
 
+                </LinearLayout>
+
+            </LinearLayout>
+
         </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="38dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/profileLayout">
+
+
+
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

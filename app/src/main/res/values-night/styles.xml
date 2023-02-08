@@ -6,4 +6,6 @@
         <item name="android:windowExitAnimation">@anim/dialog_out</item>
     </style>
 
+
+
 </resources>
