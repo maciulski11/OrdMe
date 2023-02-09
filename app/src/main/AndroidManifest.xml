@@ -15,8 +15,7 @@
         android:theme="@style/Theme.OrdMe">
         <activity
             android:name=".ui.activity.SplashScreenActivity"
-            android:exported="true"
-            android:screenOrientation="fullUser">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -27,5 +26,4 @@
             android:exported="true">
         </activity>
     </application>
-
 </manifest>
