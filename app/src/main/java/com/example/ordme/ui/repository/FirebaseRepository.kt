@@ -1,13 +1,16 @@
 package com.example.ordme.ui.repository
 
-
 import android.annotation.SuppressLint
 import android.content.Context
+import android.location.Geocoder
 import android.net.ConnectivityManager
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.fragment.app.FragmentManager
 import com.example.ordme.data.model.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
@@ -288,6 +291,7 @@ class FirebaseRepository {
             }
     }
 
+    @SuppressLint("MissingPermission")
     fun checkConnectivityAndFirestoreAvailability(context: Context, success: () -> Unit, failure: () -> Unit) {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -350,5 +354,36 @@ class FirebaseRepository {
             }
     }
 
+    fun mapLocation(context: Context, childFragmentManager: FragmentManager, layoutId: Int) {
+        val mapFragment =
+            childFragmentManager.findFragmentById(layoutId) as SupportMapFragment
+        mapFragment.getMapAsync { googleMap ->
+            FirebaseRepository().fetchUser {
+                val geocoder = Geocoder(context)
+                val address = geocoder.getFromLocationName(
+                    "${it?.postCode}, ${it?.city}, ${it?.street}, ${it?.door}", 1
+                )
+
+                if (address!!.size > 0) {
+                    val latitude = address[0].latitude
+                    val longitude = address[0].longitude
+
+                    val latLng = LatLng(latitude, longitude)
+                    googleMap.addMarker(MarkerOptions()
+                        .position(latLng)
+                        .title("${it?.street} ${it?.door}/${it?.flat}")
+                    )
+                        .showInfoWindow()
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16.6f), 1700, null)
+
+                    googleMap.setOnMarkerClickListener {
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16.6f), 1700, null)
+                        true
+                    }
+
+                }
+            }
+        }
+    }
 
 }

@@ -1,11 +1,14 @@
 package com.example.ordme.ui.screen
 
 import android.content.Context
+import android.location.Geocoder
+import android.location.Location
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
@@ -14,14 +17,19 @@ import com.example.ordme.R
 import com.example.ordme.base.BaseFragment
 import com.example.ordme.data.model.User
 import com.example.ordme.ui.repository.FirebaseRepository
+import com.example.ordme.ui.view_model.MainViewModel
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.fragment_meal.returnBT
 import kotlinx.android.synthetic.main.fragment_profile.*
-import kotlinx.android.synthetic.main.fragment_profile.view.progress_bar_layout
-import kotlinx.android.synthetic.main.fragment_profile.view.view_layout
+import kotlinx.android.synthetic.main.fragment_profile.view.*
 
-class ProfileViewModel: ViewModel(){
-
-    var user: MutableLiveData<User?> = MutableLiveData(null)
+class ProfileViewModel : ViewModel() {
 
     fun checkConnectivityAndFirestoreAvailability(context: Context, view: View) {
         FirebaseRepository().checkConnectivityAndFirestoreAvailability(
@@ -56,13 +64,13 @@ class ProfileViewModel: ViewModel(){
             flat.text = it.flat
             floor.text = it.floor
             postCode.text = it.postCode
-            city.text = it.city
+            city.text = it!!.city
 
-                Glide.with(context)
-                    .load(it.photo)
-                    .override(400, 400)
-                    .circleCrop()
-                    .into(userPhoto)
+            Glide.with(context)
+                .load(it.photo)
+                .override(470, 450)
+                .circleCrop()
+                .into(userPhoto)
 
             val progress = v.findViewById<LinearLayout>(R.id.progress_bar_layout)
             val viewLayout = v.findViewById<ConstraintLayout>(R.id.view_layout)
@@ -72,16 +80,15 @@ class ProfileViewModel: ViewModel(){
     }
 }
 
-class ProfileFragment: BaseFragment() {
+class ProfileFragment : BaseFragment(), OnMapReadyCallback {
     override val layout: Int = R.layout.fragment_profile
 
+    private lateinit var mMap: GoogleMap
+
     private val profileViewModel = ProfileViewModel()
+    private val viewModel: MainViewModel by activityViewModels()
 
     override fun subscribeUi() {
-
-        profileViewModel.user.observe(this) {
-            profileViewModel.checkConnectivityAndFirestoreAvailability(requireContext(), requireView())
-        }
 
         editProfileBT.setOnClickListener {
             findNavController().navigate(R.id.action_profileFragment_to_profileEditFragment)
@@ -92,8 +99,14 @@ class ProfileFragment: BaseFragment() {
             findNavController().navigate(R.id.action_profileFragment_to_chooseRestaurantFragment)
         }
 
+        profileViewModel.checkConnectivityAndFirestoreAvailability(requireContext(), requireView())
+        viewModel.mapLocation(requireContext(), childFragmentManager, R.id.mapLocation)
     }
 
+    override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
+        mMap.mapType = GoogleMap.MAP_TYPE_SATELLITE
+    }
 
     override fun unsubscribeUi() {
 
