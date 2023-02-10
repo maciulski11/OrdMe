@@ -11,16 +11,18 @@ import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ordme.R
+import kotlinx.android.synthetic.main.activity_splash_screen.*
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : AppCompatActivity() {
+    @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
 
         supportActionBar?.hide()
 
-            val img = findViewById<TextView>(R.id.img)
+            val img = findViewById<TextView>(R.id.img1)
             val animation = AnimationUtils.loadAnimation(applicationContext, R.anim.anim_bounce)
             img.startAnimation(animation)
 

@@ -1,20 +1,28 @@
 package com.example.ordme.ui.screen
 
 import android.app.Activity
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Bitmap
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
+import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.ordme.R
 import com.example.ordme.base.BaseFragment
 import com.example.ordme.ui.repository.FirebaseRepository
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_profile.returnBT
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 import kotlinx.android.synthetic.main.fragment_profile_edit.*
@@ -36,8 +44,8 @@ class ProfileEditViewModel() : ViewModel() {
             { // failure:
                 val progress = view.findViewById<LinearLayout>(R.id.progress_bar_layout)
                 val viewLayout = view.findViewById<ConstraintLayout>(R.id.view_layout)
-                progress.visibility = View.GONE
-                viewLayout.visibility = View.VISIBLE
+                progress.visibility = View.VISIBLE
+                viewLayout.visibility = View.GONE
             }
         )
     }
@@ -139,6 +147,7 @@ class ProfileEditFragment : BaseFragment() {
             requireView())
 
         setupTakePictureClick()
+
     }
 
     @Deprecated("Deprecated in Java")
@@ -179,87 +188,4 @@ class ProfileEditFragment : BaseFragment() {
 
     }
 
-
-    //    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-//       }
-//
-//    private val networkReceiver = NetworkReceiver()
-//
-//
-//    override fun onResume() {
-//        super.onResume()
-//        val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
-//        context?.registerReceiver(networkReceiver, filter)
-//    }
-//
-//    override fun onPause() {
-//        super.onPause()
-//        context?.unregisterReceiver(networkReceiver)
-//    }
-//
-//    private fun isOnline(): Boolean {
-//        val networkInfo = connectivityManager.activeNetworkInfo
-//        return networkInfo != null && networkInfo.isConnected
-//    }
-//
-//    private fun listenForUpdates() {
-//        val docRef = db.collection("users").document(fbAuth.currentUser!!.uid)
-//        docRef.addSnapshotListener { documentSnapshot, exception ->
-//            if (exception != null) {
-//                // Handle error
-//                progress_bar_layout.visibility = View.VISIBLE
-//
-//                return@addSnapshotListener
-//            }
-//            if (documentSnapshot != null && documentSnapshot.exists()) {
-//                // Handle updated data
-//                val updatedData = documentSnapshot.data
-//                liveData.value = updatedData
-//                view?.let { profileEditViewModel.fetchUser(requireContext(), it) }
-//
-//            }
-//        }
-//    }
-//
-//    private fun registerConnectivityReceiver() {
-//        val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
-//        requireContext().registerReceiver(connectivityReceiver, intentFilter)
-//        progress_bar_layout.visibility = View.VISIBLE
-//    }
-//
-//    private val connectivityReceiver = object : BroadcastReceiver() {
-//        override fun onReceive(context: Context?, intent: Intent?) {
-//
-//            if(isOnline()) {
-//                    listenForUpdates()
-//                    requireContext().unregisterReceiver(this)
-//
-//                } else {
-//                    registerConnectivityReceiver()
-//
-//                }
-//
-//        }
-//    }
-//inner class NetworkReceiver() : BroadcastReceiver() {
-//
-//
-//    override fun onReceive(context: Context?, intent: Intent?) {
-//        val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-//        val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
-//        val isConnected: Boolean = activeNetwork?.isConnectedOrConnecting == true
-//
-//        if (isConnected) {
-//            // Aktualizuj fragment, np. za pomocą metody refreshData()
-//
-//            val toast = Toast.makeText(context, "jest net", Toast.LENGTH_SHORT)
-//            toast.show()
-//        } else {
-//            val toast = Toast.makeText(context, "nie ma neta", Toast.LENGTH_SHORT)
-//            toast.show()
-//        }
-//    }
-//}
 }

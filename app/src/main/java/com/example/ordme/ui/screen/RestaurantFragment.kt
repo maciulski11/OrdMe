@@ -16,6 +16,7 @@ import com.example.ordme.base.BaseFragment
 import com.example.ordme.ui.adapter.RestaurantAdapter
 import com.example.ordme.data.model.Basket
 import com.example.ordme.data.model.Meal
+import com.example.ordme.ui.repository.FirebaseRepository
 import com.example.ordme.ui.view_model.MainViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_restaurant.*
