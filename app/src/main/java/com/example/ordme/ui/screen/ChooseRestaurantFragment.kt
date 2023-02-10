@@ -16,6 +16,7 @@ import com.example.ordme.base.BaseFragment
 import com.example.ordme.data.model.Restaurant
 import com.example.ordme.databinding.FragmentChooseRestaurantBinding
 import com.example.ordme.ui.adapter.ChooseRestaurantAdapter
+import com.example.ordme.ui.repository.FirebaseRepository
 import com.example.ordme.ui.view_model.MainViewModel
 import com.google.firebase.firestore.*
 import kotlinx.android.synthetic.main.fragment_choose_restaurant.*
@@ -88,8 +89,10 @@ class ChooseRestaurantFragment : BaseFragment() {
             adapter.notifyDataSetChanged()
         }
 
-        viewModel.fetchRestaurantsList()
-        viewModel.fetchBasketList()
+        FirebaseRepository().updateRestaurants {
+            viewModel.fetchRestaurantsList()
+            viewModel.fetchBasketList()
+        }
 
         //hiding the shifter
         horizontalScrollView.isHorizontalScrollBarEnabled = false

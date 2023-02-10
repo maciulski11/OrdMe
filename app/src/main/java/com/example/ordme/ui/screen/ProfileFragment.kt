@@ -3,7 +3,10 @@ package com.example.ordme.ui.screen
 import android.content.Context
 import android.location.Geocoder
 import android.location.Location
+import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -35,7 +38,9 @@ class ProfileViewModel : ViewModel() {
         FirebaseRepository().checkConnectivityAndFirestoreAvailability(
             context,
             { // success:
-                fetchUser(context, view)
+                FirebaseRepository().updateUserData {
+                    fetchUser(context, view)
+                }
             },
             { // failure:
                 view.progress_bar_layout.visibility = View.VISIBLE
@@ -99,8 +104,12 @@ class ProfileFragment : BaseFragment(), OnMapReadyCallback {
             findNavController().navigate(R.id.action_profileFragment_to_chooseRestaurantFragment)
         }
 
-        profileViewModel.checkConnectivityAndFirestoreAvailability(requireContext(), requireView())
-        viewModel.mapLocation(requireContext(), childFragmentManager, R.id.mapLocation)
+            profileViewModel.checkConnectivityAndFirestoreAvailability(
+                requireContext(),
+                requireView()
+            )
+            viewModel.mapLocation(requireContext(), childFragmentManager, R.id.mapLocation)
+
     }
 
     override fun onMapReady(googleMap: GoogleMap) {

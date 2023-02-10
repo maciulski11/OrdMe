@@ -74,6 +74,42 @@ class FirebaseRepository {
         }
     }
 
+    fun updateRestaurants(success: () -> Unit) {
+        val docRef = db.collection(RESTAURANTS)
+
+        docRef.addSnapshotListener { snapshot, e ->
+            if (e != null) {
+                Log.w("TAG", "Listen failed.", e)
+                return@addSnapshotListener
+            }
+
+            if (snapshot != null) {
+                // Update your UI with the new data here
+                success()
+            } else {
+                Log.d("TAG", "Current data: null")
+            }
+        }
+    }
+
+    fun updateMealsInRestaurant(uidRestaurant: String, success: () -> Unit) {
+        val docRef = db.collection(RESTAURANTS).document(uidRestaurant)
+
+        docRef.addSnapshotListener { snapshot, e ->
+            if (e != null) {
+                Log.w("TAG", "Listen failed.", e)
+                return@addSnapshotListener
+            }
+
+            if (snapshot != null && snapshot.exists()) {
+                // Update your UI with the new data here
+                success()
+            } else {
+                Log.d("TAG", "Current data: null")
+            }
+        }
+    }
+
     fun fetchRestaurantMeals(uid: String, onComplete: (ArrayList<Meal>) -> Unit) {
         db.collection(RESTAURANTS).document(uid)
             .collection(MEALS)
