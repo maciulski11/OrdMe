@@ -416,7 +416,6 @@ class FirebaseRepository {
                         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16.6f), 1700, null)
                         true
                     }
-
                 }
             }
         }
