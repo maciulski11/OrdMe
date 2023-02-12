@@ -97,7 +97,6 @@ class ProfileEditFragment : BaseFragment() {
 
     override fun subscribeUi() {
 
-
         saveButton.setOnClickListener {
 
             val user = mapOf(

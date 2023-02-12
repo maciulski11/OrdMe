@@ -328,7 +328,11 @@ class FirebaseRepository {
     }
 
     @SuppressLint("MissingPermission")
-    fun checkConnectivityAndFirestoreAvailability(context: Context, success: () -> Unit, failure: () -> Unit) {
+    fun checkConnectivityAndFirestoreAvailability(
+        context: Context,
+        success: () -> Unit,
+        failure: () -> Unit
+    ) {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connectivityManager.activeNetworkInfo
@@ -405,15 +409,25 @@ class FirebaseRepository {
                     val longitude = address[0].longitude
 
                     val latLng = LatLng(latitude, longitude)
-                    googleMap.addMarker(MarkerOptions()
-                        .position(latLng)
-                        .title("${it?.street} ${it?.door}/${it?.flat}")
+
+                    googleMap.addMarker(
+                        MarkerOptions()
+                            .position(latLng)
+                            .title("${it?.street} ${it?.door}")
+                    ).showInfoWindow()
+
+                    googleMap.animateCamera(
+                        CameraUpdateFactory.newLatLngZoom(latLng, 16.6f),
+                        1700,
+                        null
                     )
-                        .showInfoWindow()
-                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16.6f), 1700, null)
 
                     googleMap.setOnMarkerClickListener {
-                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16.6f), 1700, null)
+                        googleMap.animateCamera(
+                            CameraUpdateFactory.newLatLngZoom(latLng, 16.6f),
+                            1700,
+                            null
+                        )
                         true
                     }
                 }

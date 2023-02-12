@@ -103,7 +103,6 @@ class CheckoutFragment: BaseFragment() {
                     uid,
                     basket?.meals,
                     "",
-                    "",
                     checkoutViewModel.totalPrice,
                     "",
                     time,

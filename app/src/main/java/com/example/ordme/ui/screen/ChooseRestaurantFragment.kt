@@ -25,7 +25,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 
-
 class ChooseRestaurantFragment : BaseFragment() {
     override val layout: Int = R.layout.fragment_choose_restaurant
 

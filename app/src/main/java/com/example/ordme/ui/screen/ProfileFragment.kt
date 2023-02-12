@@ -71,6 +71,11 @@ class ProfileViewModel : ViewModel() {
             postCode.text = it.postCode
             city.text = it!!.city
 
+            if (it.flat!!.isEmpty()) {
+                val slash = v.findViewById<TextView>(R.id.slashTV)
+                slash.visibility = View.GONE
+            }
+
             Glide.with(context)
                 .load(it.photo)
                 .override(470, 450)
@@ -104,12 +109,11 @@ class ProfileFragment : BaseFragment(), OnMapReadyCallback {
             findNavController().navigate(R.id.action_profileFragment_to_chooseRestaurantFragment)
         }
 
-            profileViewModel.checkConnectivityAndFirestoreAvailability(
-                requireContext(),
-                requireView()
-            )
-            viewModel.mapLocation(requireContext(), childFragmentManager, R.id.mapLocation)
-
+        profileViewModel.checkConnectivityAndFirestoreAvailability(
+            requireContext(),
+            requireView()
+        )
+        viewModel.mapLocation(requireContext(), childFragmentManager, R.id.mapLocation)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
