@@ -148,80 +148,54 @@ class ChooseRestaurantFragment : BaseFragment(), OnMapReadyCallback {
 
         // Pobierz referencję do kolekcji markerów w bazie Firestore
         val markersRef = FirebaseFirestore.getInstance().collection(FirebaseRepository.RESTAURANTS)
-        val prefs = requireContext().getSharedPreferences("markers", Context.MODE_PRIVATE)
+        
+        // Dodaj nasłuch na zmiany w kolekcji markerów
+        markersRef.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+            if (firebaseFirestoreException != null) {
+                return@addSnapshotListener
+            }
 
+            if (querySnapshot != null) {
 
-            // Dodaj nasłuch na zmiany w kolekcji markerów
-            markersRef.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-                if (firebaseFirestoreException != null) {
-                    return@addSnapshotListener
-                }
+                // Przetwórz dokumenty, aby utworzyć listę obiektów MarkerOptions
+                val markerOptionsList = querySnapshot.documents
+                    .filterNotNull()
+                    .map { document ->
 
-                if (querySnapshot != null) {
+                        val address = document.getString("address") ?: ""
+                        val city = document.getString("city") ?: ""
+                        val title = document.getString("nameRestaurant") ?: ""
 
-                    Toast.makeText(requireContext(), "lipa", Toast.LENGTH_SHORT).show()
+                        val geocoder = Geocoder(requireContext(), Locale.getDefault())
+                        val addressList =
+                            geocoder.getFromLocationName("$city, $address", 1)
+                        if (addressList!!.isNotEmpty()) {
+                            val lat = addressList[0].latitude
+                            val lng = addressList[0].longitude
+                            val latLng = LatLng(lat, lng)
 
-                    // Przetwórz dokumenty, aby utworzyć listę obiektów MarkerOptions
-                    val markerOptionsList = querySnapshot.documents
-                        .filterNotNull()
-                        .map { document ->
+                            MarkerOptions()
+                                .position(latLng)
+                                .title(title)
 
-                            val address = document.getString("address") ?: ""
-                            val city = document.getString("city") ?: ""
-                            val title = document.getString("nameRestaurant") ?: ""
+                        } else {
 
-                            val geocoder = Geocoder(requireContext(), Locale.getDefault())
-                            val addressList =
-                                geocoder.getFromLocationName("$city, $address", 1)
-                            if (addressList!!.isNotEmpty()) {
-                                val lat = addressList[0].latitude
-                                val lng = addressList[0].longitude
-                                val latLng = LatLng(lat, lng)
-
-                                MarkerOptions()
-                                    .position(latLng)
-                                    .title(title)
-
-                            } else {
-
-                                null
-                            }
-                        }
-
-                    // Dodaj markery z listy MarkerOptions do mapy
-                    for (markerOptions in markerOptionsList) {
-                        mMap.addMarker(markerOptions)
-                    }
-
-                    //add markers to file of json in SharedPreferences
-                    val addMarkersJson = Gson().toJson(markerOptionsList)
-                    prefs.edit().putString("markers", addMarkersJson).apply()
-
-                    googleMap.animateCamera(
-                        CameraUpdateFactory.newLatLngZoom(LatLng(51.123294, 16.989469), 12.8f),
-                        800,
-                        null
-                    )
-                }
-
-                    val markersJson = prefs.getString("markers", null)
-                    if (markersJson != null) {
-                        // Wczytaj markery z SharedPreferences
-                        val markerOptionsList =
-                            Gson().fromJson(markersJson, Array<MarkerOptions>::class.java).toList()
-                        Toast.makeText(requireContext(), "udalo sie", Toast.LENGTH_SHORT).show()
-                        // Dodaj markery do mapy
-                        for (markerOptions in markerOptionsList) {
-                            mMap.addMarker(markerOptions)
-                        }
-
-                        googleMap.animateCamera(
-                            CameraUpdateFactory.newLatLngZoom(LatLng(51.123294, 16.989469), 12.8f),
-                            800,
                             null
-                        )
+                        }
                     }
 
+                // Dodaj markery z listy MarkerOptions do mapy
+                for (markerOptions in markerOptionsList) {
+                    mMap.addMarker(markerOptions)
+                }
+
+                googleMap.animateCamera(
+                    CameraUpdateFactory.newLatLngZoom(LatLng(51.123294, 16.989469), 12.8f),
+                    800,
+                    null
+                )
+
+            }
 
         }
     }
