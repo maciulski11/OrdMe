@@ -28,9 +28,12 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.fragment_checkout.*
 import kotlinx.android.synthetic.main.fragment_meal.returnBT
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_profile.view.*
+import java.util.*
 
 class ProfileViewModel : ViewModel() {
 
@@ -114,11 +117,18 @@ class ProfileFragment : BaseFragment(), OnMapReadyCallback {
             requireView()
         )
         viewModel.mapLocation(requireContext(), childFragmentManager, R.id.mapLocation)
+
+        // Uzyskaj referencję do widoku MapFragment
+        val mapFragment =
+            childFragmentManager.findFragmentById(R.id.mapLocation) as SupportMapFragment
+        mapFragment.getMapAsync(this)// Asynchronicznie uzyskaj mapę Google, gdy jest gotowa
+
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        mMap.mapType = GoogleMap.MAP_TYPE_SATELLITE
+        mMap.mapType = GoogleMap.MAP_TYPE_NORMAL
+        
     }
 
     override fun unsubscribeUi() {
