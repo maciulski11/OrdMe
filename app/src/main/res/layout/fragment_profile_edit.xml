@@ -5,6 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+<ScrollView
+        android:id="@+id/find_icon111"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/view_layout"
         android:layout_width="match_parent"
@@ -181,7 +188,6 @@
             android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/enterRepeatPasswordUser111"
                 android:layout_width="wrap_content"
@@ -236,6 +242,8 @@
             tools:ignore="MissingConstraints" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
     <LinearLayout
         android:id="@+id/progress_bar_layout"
