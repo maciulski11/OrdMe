@@ -1,23 +1,26 @@
 package com.example.ordme.ui.screen
 
 import android.annotation.SuppressLint
-import android.content.Context
+import android.app.AlertDialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.location.Geocoder
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.widget.Toast
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.example.ordme.R
-import com.example.ordme.api.pojo.Meal
-import com.example.ordme.api.pojo.MealList
-import com.example.ordme.api.retrofit.RetrofitInstance
 import com.example.ordme.base.BaseFragment
 import com.example.ordme.data.model.Restaurant
-import com.example.ordme.databinding.FragmentChooseRestaurantBinding
 import com.example.ordme.ui.adapter.ChooseRestaurantAdapter
 import com.example.ordme.ui.repository.FirebaseRepository
 import com.example.ordme.ui.view_model.MainViewModel
@@ -25,14 +28,16 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.firestore.*
-import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_choose_restaurant.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.android.synthetic.main.fragment_choose_restaurant.view.*
+import kotlinx.android.synthetic.main.item_choose_restaurants.*
+import kotlinx.android.synthetic.main.item_choose_restaurants.icon
+import kotlinx.android.synthetic.main.item_marker_info.*
 import java.util.*
 
 class ChooseRestaurantFragment : BaseFragment(), OnMapReadyCallback {
@@ -142,13 +147,14 @@ class ChooseRestaurantFragment : BaseFragment(), OnMapReadyCallback {
 
     }
 
+    @SuppressLint("MissingInflatedId")
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         mMap.mapType = GoogleMap.MAP_TYPE_NORMAL
 
         // Pobierz referencję do kolekcji markerów w bazie Firestore
         val markersRef = FirebaseFirestore.getInstance().collection(FirebaseRepository.RESTAURANTS)
-        
+
         // Dodaj nasłuch na zmiany w kolekcji markerów
         markersRef.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
             if (firebaseFirestoreException != null) {
@@ -165,6 +171,7 @@ class ChooseRestaurantFragment : BaseFragment(), OnMapReadyCallback {
                         val address = document.getString("address") ?: ""
                         val city = document.getString("city") ?: ""
                         val title = document.getString("nameRestaurant") ?: ""
+                        val uid = document.getString("uid") ?: ""
 
                         val geocoder = Geocoder(requireContext(), Locale.getDefault())
                         val addressList =
@@ -177,6 +184,7 @@ class ChooseRestaurantFragment : BaseFragment(), OnMapReadyCallback {
                             MarkerOptions()
                                 .position(latLng)
                                 .title(title)
+                                .snippet(uid)
 
                         } else {
 
@@ -195,8 +203,75 @@ class ChooseRestaurantFragment : BaseFragment(), OnMapReadyCallback {
                     null
                 )
 
-            }
+                // Przygotowanie ikon markerów
+                val defaultMarkerIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)
+                val selectedMarkerIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)
 
+                // Przechowanie aktualnie zaznaczonego markera
+                var selectedMarker: Marker? = null
+
+                mMap.setOnMarkerClickListener { marker ->
+
+                    // Resetowanie poprzednio zaznaczonego markera do domyślnej ikony
+                    selectedMarker?.setIcon(defaultMarkerIcon)
+
+                    // Ustawienie nowego zaznaczonego markera na niebieską ikonę
+                    marker.setIcon(selectedMarkerIcon)
+                    selectedMarker = marker
+
+                    FirebaseRepository().fetchRestaurant(marker.snippet) { restaurant ->
+
+                        val dialogView = layoutInflater.inflate(R.layout.item_marker_info, null)
+                        val markerNameTextView =
+                            dialogView.findViewById<TextView>(R.id.markerNameTextView)
+                        val icon = dialogView.findViewById<ImageView>(R.id.iconMarkerDialog)
+                        val button = dialogView.findViewById<Button>(R.id.goButton)
+                        markerNameTextView.text = marker.title
+
+                        Glide.with(requireContext())
+                            .load(restaurant?.icon)
+                            .override(230, 230)
+                            .circleCrop()
+                            .into(icon)
+
+                        // worzenie okna dialogowego
+                        val builder = AlertDialog.Builder(requireContext())
+                            .setView(dialogView)
+                            .setCancelable(true)
+
+                        val dialog = builder.create()
+
+                        // Wyłączenie zaciemnienia ekranu
+                        dialog.window?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+
+                        // Wyświetlanie okna dialogowego na dole ekranu
+                        val layoutParams = dialog.window?.attributes
+                        layoutParams?.gravity = Gravity.BOTTOM
+                        layoutParams?.y = 50
+                        dialog.window?.attributes = layoutParams
+                        dialog.show()
+
+                        button.setOnClickListener {
+
+                            // Ukrywanie okna dialogowego
+                            dialog.dismiss()
+
+                            val bundle = Bundle()
+                            bundle.putString(
+                                "uidRestaurant",
+                                restaurant?.uid
+                            )
+
+                            findNavController().navigate(
+                                R.id.action_chooseRestaurantFragment_to_restaurantFragment,
+                                bundle
+                            )
+                        }
+                    }
+
+                    true
+                }
+            }
         }
     }
 
