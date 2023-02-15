@@ -128,7 +128,7 @@ class ProfileFragment : BaseFragment(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         mMap.mapType = GoogleMap.MAP_TYPE_NORMAL
-        
+
     }
 
     override fun unsubscribeUi() {

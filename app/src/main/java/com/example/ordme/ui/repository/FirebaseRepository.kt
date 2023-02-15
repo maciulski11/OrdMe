@@ -434,5 +434,8 @@ class FirebaseRepository {
             }
         }
     }
+}
+
+fun fetchRestaurantMarkerOnTheMap() {
 
 }
