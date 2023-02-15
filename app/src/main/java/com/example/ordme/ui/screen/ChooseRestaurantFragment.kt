@@ -43,23 +43,12 @@ import java.util.*
 class ChooseRestaurantFragment : BaseFragment(), OnMapReadyCallback {
     override val layout: Int = R.layout.fragment_choose_restaurant
 
-//    private lateinit var binding: FragmentChooseRestaurantBinding
-
     private var restaurantsList = ArrayList<Restaurant>()
     private lateinit var adapter: ChooseRestaurantAdapter
 
     private lateinit var mMap: GoogleMap
 
     private val viewModel: MainViewModel by activityViewModels()
-
-//    override fun onCreateView(
-//        inflater: LayoutInflater,
-//        container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View {
-//        binding = FragmentChooseRestaurantBinding.inflate(inflater, container, false)
-//        return binding.root
-//    }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun subscribeUi() {
@@ -72,33 +61,6 @@ class ChooseRestaurantFragment : BaseFragment(), OnMapReadyCallback {
 
         adapter = ChooseRestaurantAdapter(requireContext(), restaurantsList, requireView())
         recyclerViewChooseRestaurant.adapter = adapter
-
-        //API: uzywamy instancji modernizacji zeby wywolac losowy posilek
-//        RetrofitInstance.api.getRandomMeal()
-//            .enqueue(object : Callback<MealList> { //uzywamy wywolania zwrotnego z callback
-//                override fun onResponse(call: Call<MealList>, response: Response<MealList>) {
-//                    if (response.body() != null) { //spr. czy callback nie jest nullem
-//
-//                        //dajemy meals i index 0 poniewaz bierzemy tylko 1 posilek
-//                        val randomMeal: Meal = response.body()!!.meals[0]
-//
-//                        Glide.with(this@ChooseRestaurantFragment)
-//                            .load(randomMeal.strMealThumb)
-//                            .into(binding.rawndomMeal)
-//
-//
-//                        Log.d("TEST", "meal id ${randomMeal.idMeal} name ${randomMeal.strMeal}")
-//                    } else {
-//                        return
-//                    }
-//                }
-//
-//                override fun onFailure(call: Call<MealList>, t: Throwable) {
-//                    Log.d("ChooseRestaurantFragment", t.message.toString())
-//                }
-//
-//            })
-
 
         viewModel.restaurantList.observe(this) {
             adapter.restaurantList = it
@@ -204,8 +166,10 @@ class ChooseRestaurantFragment : BaseFragment(), OnMapReadyCallback {
                 )
 
                 // Przygotowanie ikon markerów
-                val defaultMarkerIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)
-                val selectedMarkerIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)
+                val defaultMarkerIcon =
+                    BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)
+                val selectedMarkerIcon =
+                    BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)
 
                 // Przechowanie aktualnie zaznaczonego markera
                 var selectedMarker: Marker? = null
