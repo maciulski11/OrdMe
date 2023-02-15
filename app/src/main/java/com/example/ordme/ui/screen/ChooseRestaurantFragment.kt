@@ -2,22 +2,19 @@ package com.example.ordme.ui.screen
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.location.Geocoder
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
 import com.example.ordme.R
 import com.example.ordme.base.BaseFragment
 import com.example.ordme.data.model.Restaurant
@@ -36,7 +33,6 @@ import com.google.firebase.firestore.*
 import kotlinx.android.synthetic.main.fragment_choose_restaurant.*
 import kotlinx.android.synthetic.main.fragment_choose_restaurant.view.*
 import kotlinx.android.synthetic.main.item_choose_restaurants.*
-import kotlinx.android.synthetic.main.item_choose_restaurants.icon
 import kotlinx.android.synthetic.main.item_marker_info.*
 import java.util.*
 
@@ -114,6 +110,41 @@ class ChooseRestaurantFragment : BaseFragment(), OnMapReadyCallback {
         mMap = googleMap
         mMap.mapType = GoogleMap.MAP_TYPE_NORMAL
 
+        // Przygotowanie wektorowego pliku SVG jako Drawable
+        val vectorDrawableBlack = VectorDrawableCompat.create(
+            resources,
+            R.drawable.ic_baseline_location_24,
+            null
+        )
+
+        // Przekonwertowanie wektorowego pliku SVG na bitmapę
+        val bitmapBlack = Bitmap.createBitmap(
+            vectorDrawableBlack!!.intrinsicWidth + 40,
+            vectorDrawableBlack.intrinsicHeight + 40,
+            Bitmap.Config.ARGB_8888
+        )
+
+        val canvasBlack = Canvas(bitmapBlack)
+        vectorDrawableBlack.setBounds(0, 0, canvasBlack.width + 7, canvasBlack.height + 7)
+        vectorDrawableBlack.draw(canvasBlack)
+
+        // Przygotowanie wektorowego pliku SVG jako Drawable
+        val vectorDrawableRed = VectorDrawableCompat.create(
+            resources,
+            R.drawable.ic_baseline_location_red_24,
+            null
+        )
+
+        val bitmapRed = Bitmap.createBitmap(
+            vectorDrawableRed!!.intrinsicWidth + 40,
+            vectorDrawableRed.intrinsicHeight + 40,
+            Bitmap.Config.ARGB_8888
+        )
+
+        val canvasRed = Canvas(bitmapRed)
+        vectorDrawableRed.setBounds(0, 0, canvasRed.width + 7, canvasRed.height + 7)
+        vectorDrawableRed.draw(canvasRed)
+
         // Pobierz referencję do kolekcji markerów w bazie Firestore
         val markersRef = FirebaseFirestore.getInstance().collection(FirebaseRepository.RESTAURANTS)
 
@@ -145,6 +176,7 @@ class ChooseRestaurantFragment : BaseFragment(), OnMapReadyCallback {
 
                             MarkerOptions()
                                 .position(latLng)
+                                .icon(BitmapDescriptorFactory.fromBitmap(bitmapBlack))
                                 .title(title)
                                 .snippet(uid)
 
@@ -165,22 +197,16 @@ class ChooseRestaurantFragment : BaseFragment(), OnMapReadyCallback {
                     null
                 )
 
-                // Przygotowanie ikon markerów
-                val defaultMarkerIcon =
-                    BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)
-                val selectedMarkerIcon =
-                    BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)
-
                 // Przechowanie aktualnie zaznaczonego markera
                 var selectedMarker: Marker? = null
 
                 mMap.setOnMarkerClickListener { marker ->
 
                     // Resetowanie poprzednio zaznaczonego markera do domyślnej ikony
-                    selectedMarker?.setIcon(defaultMarkerIcon)
+                    selectedMarker?.setIcon(BitmapDescriptorFactory.fromBitmap(bitmapBlack))
 
-                    // Ustawienie nowego zaznaczonego markera na niebieską ikonę
-                    marker.setIcon(selectedMarkerIcon)
+                    // Ustawienie nowego zaznaczonego markera na czerwona ikonę
+                    marker.setIcon(BitmapDescriptorFactory.fromBitmap(bitmapRed))
                     selectedMarker = marker
 
                     FirebaseRepository().fetchRestaurant(marker.snippet) { restaurant ->
@@ -234,6 +260,12 @@ class ChooseRestaurantFragment : BaseFragment(), OnMapReadyCallback {
                     }
 
                     true
+                }
+
+                mMap.setOnMapClickListener {
+
+                    selectedMarker?.setIcon(BitmapDescriptorFactory.fromBitmap(bitmapBlack))
+
                 }
             }
         }
