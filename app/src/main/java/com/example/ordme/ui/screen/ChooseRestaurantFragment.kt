@@ -7,6 +7,7 @@ import android.graphics.Canvas
 import android.location.Geocoder
 import android.os.Bundle
 import android.view.*
+import android.view.ViewGroup.MarginLayoutParams
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -35,6 +36,7 @@ import kotlinx.android.synthetic.main.fragment_choose_restaurant.view.*
 import kotlinx.android.synthetic.main.item_choose_restaurants.*
 import kotlinx.android.synthetic.main.item_marker_info.*
 import java.util.*
+
 
 class ChooseRestaurantFragment : BaseFragment(), OnMapReadyCallback {
     override val layout: Int = R.layout.fragment_choose_restaurant
@@ -85,6 +87,10 @@ class ChooseRestaurantFragment : BaseFragment(), OnMapReadyCallback {
             layoutParams?.height = ViewGroup.LayoutParams.MATCH_PARENT
             mapFragment.view?.layoutParams = layoutParams
 
+            val scrollViewMarginTop = nestedScrollView.layoutParams as MarginLayoutParams
+            scrollViewMarginTop.topMargin = 0
+//            nestedScrollView.layoutParams = layoutParams
+
             expandMapButton.visibility = View.GONE
             reducedMapButton.visibility = View.VISIBLE
             recyclerViewChooseRestaurant.visibility = View.GONE
@@ -98,9 +104,13 @@ class ChooseRestaurantFragment : BaseFragment(), OnMapReadyCallback {
             layoutParams?.height = heightPx
             mapFragment.view?.layoutParams = layoutParams
 
+            val scrollViewMarginTop = nestedScrollView.layoutParams as MarginLayoutParams
+            scrollViewMarginTop.topMargin = 110
+
             expandMapButton.visibility = View.VISIBLE
             reducedMapButton.visibility = View.GONE
             recyclerViewChooseRestaurant.visibility = View.VISIBLE
+
         }
 
     }
