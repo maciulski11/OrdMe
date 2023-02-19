@@ -12,7 +12,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ordme.R
 import com.example.ordme.dialogs.DeleteDialogFragment
-import com.example.ordme.data.model.Addition
 import com.example.ordme.data.model.Meal
 import kotlinx.android.synthetic.main.item_basket.view.*
 

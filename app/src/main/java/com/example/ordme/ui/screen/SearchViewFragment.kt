@@ -41,12 +41,9 @@ class SearchViewFragment : BaseFragment() {
         adapter = SearchViewAdapter(restaurantList, requireView())
         recyclerViewSearchView.adapter = adapter
 
-
         viewModel.restaurantList.observe(this) {
             adapter.restaurantList = it
             adapter.notifyDataSetChanged()
-
-
 
             searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
@@ -88,8 +85,7 @@ class SearchViewFragment : BaseFragment() {
             }
         }
     }
-
-
+    
     override fun unsubscribeUi() {
         viewModel.restaurantList.removeObservers(this)
     }
