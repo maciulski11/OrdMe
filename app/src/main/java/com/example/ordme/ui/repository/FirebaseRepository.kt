@@ -37,6 +37,7 @@ class FirebaseRepository {
         const val BASKET = "basket"
         const val ORDER = "orders"
         const val PHOTO = "photo"
+        const val MESSAGE = "message"
     }
 
     @SuppressLint("RestrictedApi")
@@ -76,6 +77,24 @@ class FirebaseRepository {
 
     fun updateRestaurants(success: () -> Unit) {
         val docRef = db.collection(RESTAURANTS)
+
+        docRef.addSnapshotListener { snapshot, e ->
+            if (e != null) {
+                Log.w("TAG", "Listen failed.", e)
+                return@addSnapshotListener
+            }
+
+            if (snapshot != null) {
+                // Update your UI with the new data here
+                success()
+            } else {
+                Log.d("TAG", "Current data: null")
+            }
+        }
+    }
+
+    fun updateMessage(success: () -> Unit) {
+        val docRef = db.collection(MESSAGE)
 
         docRef.addSnapshotListener { snapshot, e ->
             if (e != null) {
@@ -169,6 +188,37 @@ class FirebaseRepository {
                         if (dc.type == DocumentChange.Type.ADDED) {
 
                             list.add(dc.document.toObject(Restaurant::class.java))
+                        }
+                    }
+
+                    onComplete.invoke(list)
+                }
+            })
+    }
+
+    fun fetchMessage(onComplete: (ArrayList<Message>) -> Unit) {
+        db.collection(MESSAGE)
+            .limit(12)
+            .addSnapshotListener(object : EventListener<QuerySnapshot> {
+
+                @SuppressLint("NotifyDataSetChanged")
+                override fun onEvent(
+                    value: QuerySnapshot?,
+                    error: FirebaseFirestoreException?
+                ) {
+
+                    if (error != null) {
+                        Log.e("Jest blad", error.message.toString())
+                        onComplete.invoke(arrayListOf())
+                        return
+                    }
+
+                    val list = arrayListOf<Message>()
+                    for (dc: DocumentChange in value!!.documentChanges) {
+                        //sprawdxzamy czy dokument zostal poprawnie dodany:
+                        if (dc.type == DocumentChange.Type.ADDED) {
+
+                            list.add(dc.document.toObject(Message::class.java))
                         }
                     }
 
