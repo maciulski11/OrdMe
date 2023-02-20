@@ -15,7 +15,6 @@ import kotlinx.android.synthetic.main.fragment_register.*
 import kotlinx.android.synthetic.main.fragment_register.enterNumberUser
 import kotlinx.android.synthetic.main.fragment_register.enterPasswordUser
 import kotlinx.android.synthetic.main.fragment_register.enterRepeatPasswordUser
-import kotlinx.android.synthetic.main.fragment_register.enterSurnameUser
 import kotlinx.android.synthetic.main.fragment_register.registerButton
 
 class RegisterFragment : BaseFragment() {

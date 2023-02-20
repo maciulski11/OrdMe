@@ -1,23 +1,15 @@
 package com.example.ordme.ui.screen
 
 import android.annotation.SuppressLint
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.isEmpty
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.ordme.R
 import com.example.ordme.base.BaseFragment
-import com.example.ordme.data.model.Meal
 import com.example.ordme.data.model.Restaurant
 import com.example.ordme.ui.adapter.SearchViewAdapter
-import com.example.ordme.ui.repository.FirebaseRepository
 import com.example.ordme.ui.view_model.MainViewModel
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_search_view.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -85,7 +77,7 @@ class SearchViewFragment : BaseFragment() {
             }
         }
     }
-    
+
     override fun unsubscribeUi() {
         viewModel.restaurantList.removeObservers(this)
     }

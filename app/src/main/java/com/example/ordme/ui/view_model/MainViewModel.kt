@@ -12,10 +12,7 @@ import androidx.lifecycle.ViewModel
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.ordme.R
-import com.example.ordme.data.model.Basket
-import com.example.ordme.data.model.Meal
-import com.example.ordme.data.model.Restaurant
-import com.example.ordme.data.model.User
+import com.example.ordme.data.model.*
 import com.example.ordme.ui.repository.FirebaseRepository
 
 class MainViewModel: ViewModel() {
@@ -24,6 +21,7 @@ class MainViewModel: ViewModel() {
 
     var meal: MutableLiveData<Meal?> = MutableLiveData()
     var restaurantList = MutableLiveData<ArrayList<Restaurant>>()
+    var messageList = MutableLiveData<ArrayList<Message>>()
     var mealsList = MutableLiveData<ArrayList<Meal>>()
     var basketList = MutableLiveData<ArrayList<Basket>>()
 
@@ -42,6 +40,13 @@ class MainViewModel: ViewModel() {
             restaurantList.postValue(it)
         }
     }
+
+    fun fetchMessage() {
+        repository.fetchMessage {
+            messageList.postValue(it)
+        }
+    }
+
     fun fetchRestaurantMeals(uid: String){
         repository.fetchRestaurantMeals(uid){
             mealsList.postValue(it)
