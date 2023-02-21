@@ -6,6 +6,6 @@
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_baseline_shopping_basket_24"
         android:id="@+id/basket"
-        android:title="Basket" />
+        android:title="Basket"/>
 
 </menu>

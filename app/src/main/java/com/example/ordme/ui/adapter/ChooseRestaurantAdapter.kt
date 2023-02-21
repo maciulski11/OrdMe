@@ -59,7 +59,7 @@ class ChooseRestaurantAdapter(
             val bundle = Bundle()
             bundle.putString(
                 "uidRestaurant",
-                restaurantList[position].uid
+                restaurant.uid
             )
             v.findNavController()
                 .navigate(R.id.action_mainUserFragment_to_restaurantFragment, bundle)
