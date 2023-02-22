@@ -47,15 +47,20 @@ class MainViewModel: ViewModel() {
         }
     }
 
-    fun fetchRestaurantMeals(uid: String){
-        repository.fetchRestaurantMeals(uid){
-            mealsList.postValue(it)
+    fun fetchReadMessage(uid: String, v: View) {
+        repository.fetchReadMessage(uid) {
+
+            val title = v.findViewById<TextView>(R.id.titleMessage)
+            val message = v.findViewById<TextView>(R.id.message)
+
+            title.text = it!!.title
+            message.text = it.message
         }
     }
 
-        fun fetchBasketList() {
-        repository.fetchBasketListForCurrentUser {
-            basketList.postValue(it)
+    fun fetchRestaurantMeals(uid: String){
+        repository.fetchRestaurantMeals(uid){
+            mealsList.postValue(it)
         }
     }
 
@@ -83,6 +88,12 @@ class MainViewModel: ViewModel() {
                 .load(it.image_photo)
                 .apply(RequestOptions().override(screenWidth, 550))
                 .into(image)
+        }
+    }
+
+    fun fetchBasketList() {
+        repository.fetchBasketListForCurrentUser {
+            basketList.postValue(it)
         }
     }
 

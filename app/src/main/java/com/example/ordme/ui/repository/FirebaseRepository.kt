@@ -1,6 +1,7 @@
 package com.example.ordme.ui.repository
 
 import android.annotation.SuppressLint
+import android.content.ContentValues
 import android.content.Context
 import android.location.Geocoder
 import android.net.ConnectivityManager
@@ -109,6 +110,18 @@ class FirebaseRepository {
                 Log.d("TAG", "Current data: null")
             }
         }
+    }
+
+    fun updateItemMessage(itemId: String) {
+        // aktualizacja pola 'isRead' dla danego dokumentu w Firestore
+        val documentRef = db.collection(MESSAGE).document(itemId)
+        documentRef.update("read", true)
+            .addOnSuccessListener {
+                Log.d(ContentValues.TAG, "Document $itemId updated successfully")
+            }
+            .addOnFailureListener {
+                Log.e(ContentValues.TAG, "Error updating document $itemId", it)
+            }
     }
 
     fun updateMealsInRestaurant(uidRestaurant: String, success: () -> Unit) {
@@ -225,6 +238,23 @@ class FirebaseRepository {
                     onComplete.invoke(list)
                 }
             })
+    }
+
+    fun fetchReadMessage(uid: String, onComplete: (Message?) -> Unit) {
+        db.collection(MESSAGE).document(uid)
+            .get().addOnSuccessListener { snapshot ->
+
+                Log.d("RestarantFragment", "${snapshot.data} ")
+
+                //przerabiam dane snaphot nadane restauracji jest w formie JSON
+                //let -> jezeli optional != null to sie wykona
+                snapshot.toObject(Message::class.java)?.let {
+                    onComplete.invoke(it)
+                    //run -> dziala jak else
+                } ?: run {
+                    onComplete.invoke(null)
+                }
+            }
     }
 
     fun fetchRestaurant(uid: String, onComplete: (Restaurant?) -> Unit) {

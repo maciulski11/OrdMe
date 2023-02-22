@@ -1,6 +1,7 @@
 package com.example.ordme.ui.screen
 
 import android.annotation.SuppressLint
+import android.widget.ImageView
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,7 +30,7 @@ class MessageFragment: BaseFragment() {
 
         messageList = arrayListOf()
 
-        adapter = MessageAdapter(messageList)
+        adapter = MessageAdapter(messageList, requireView())
         recyclerViewMessage.adapter = adapter
 
         viewModel.messageList.observe(this) {
