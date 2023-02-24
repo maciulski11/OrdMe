@@ -1,20 +1,21 @@
 package com.example.ordme.ui.activity
 
 import android.annotation.SuppressLint
-import android.content.Intent
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.icu.text.SimpleDateFormat
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
+import android.util.Log
 import android.view.MenuItem
-import android.view.WindowInsets
-import android.view.WindowManager
-import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -25,9 +26,13 @@ import com.example.ordme.R
 import com.example.ordme.ui.repository.FirebaseRepository
 import com.example.ordme.ui.view_model.MainViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentChange
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_delete.*
 import kotlinx.android.synthetic.main.fragment_checkout.view.*
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,12 +46,34 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val sharedPrefs = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val lastNotificationDate = sharedPrefs.getString("lastNotificationDate", "")
+
+        val now = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+
+        if (lastNotificationDate != now) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                // Utworzenie kanału powiadomień
+                val name = getString(R.string.open)
+                val descriptionText = getString(R.string.close)
+                val importance = NotificationManager.IMPORTANCE_DEFAULT
+                val channel = NotificationChannel("default", name, importance).apply {
+                    description = descriptionText
+                }
+                // Dodanie kanału powiadomień do menedżera powiadomień
+                val notificationManager: NotificationManager =
+                    getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                notificationManager.createNotificationChannel(channel)
+            }
+        }
+
         viewModel.updateUserData {
             drawerUserInfo()
         }
 
         drawer()
         changeDrawerState()
+        f()
     }
 
     @SuppressLint("SuspiciousIndentation")
@@ -120,6 +147,35 @@ class MainActivity : AppCompatActivity() {
                 supportActionBar?.setDisplayHomeAsUpEnabled(true)
             }
         })
+    }
+
+    @SuppressLint("MissingPermission")
+    fun f() {
+
+        val db = FirebaseFirestore.getInstance()
+        val collectionRef = db.collection(FirebaseRepository.MESSAGE)
+
+        collectionRef.addSnapshotListener { snapshot, e ->
+            if (e != null) {
+                Log.w("TAG", "Listen failed.", e)
+                return@addSnapshotListener
+            }
+
+            for (doc in snapshot!!.documentChanges) {
+                if (doc.type == DocumentChange.Type.ADDED) {
+                    // Wyświetlenie powiadomienia
+                    val notificationBuilder = NotificationCompat.Builder(this, "default")
+                        .setSmallIcon(R.drawable.ic_baseline_fastfood_black)
+                        .setContentTitle("Dodano nowe dane do Firestore")
+                        .setContentText(doc.document.data.toString())
+                        .setPriority(NotificationCompat.PRIORITY_HIGH)
+                        .setAutoCancel(true)
+                    with(NotificationManagerCompat.from(this)) {
+                        notify(1, notificationBuilder.build())
+                    }
+                }
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

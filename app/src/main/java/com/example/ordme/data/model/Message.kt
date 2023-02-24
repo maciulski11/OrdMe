@@ -8,5 +8,5 @@ data class Message(
     val message: String? = null,
     val read: Boolean? = null,
     val uid: String? = null,
-    val date: Timestamp? = null
+    val time: Timestamp? = null
 )
