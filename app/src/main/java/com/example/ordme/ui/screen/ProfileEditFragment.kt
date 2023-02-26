@@ -14,7 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.ordme.R
 import com.example.ordme.base.BaseFragment
-import com.example.ordme.ui.repository.FirebaseRepository
+import com.example.ordme.services.FirebaseRepository
 import kotlinx.android.synthetic.main.fragment_profile.returnBT
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 import kotlinx.android.synthetic.main.fragment_profile_edit.*

@@ -1,4 +1,4 @@
-package com.example.ordme.ui.repository
+package com.example.ordme.services
 
 import android.annotation.SuppressLint
 import android.content.ContentValues

@@ -10,7 +10,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ordme.R
 import com.example.ordme.data.model.Message
-import com.example.ordme.ui.repository.FirebaseRepository
+import com.example.ordme.services.FirebaseRepository
 import kotlinx.android.synthetic.main.item_message.view.*
 
 class MessageAdapter(var messageList: ArrayList<Message>, private val v: View) :

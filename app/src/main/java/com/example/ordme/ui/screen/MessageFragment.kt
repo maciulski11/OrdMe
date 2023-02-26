@@ -9,7 +9,7 @@ import com.example.ordme.R
 import com.example.ordme.base.BaseFragment
 import com.example.ordme.data.model.Message
 import com.example.ordme.ui.adapter.MessageAdapter
-import com.example.ordme.ui.repository.FirebaseRepository
+import com.example.ordme.services.FirebaseRepository
 import com.example.ordme.ui.view_model.MainViewModel
 import kotlinx.android.synthetic.main.fragment_message.*
 

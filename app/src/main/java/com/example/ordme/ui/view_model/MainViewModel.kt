@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.ordme.R
 import com.example.ordme.data.model.*
-import com.example.ordme.ui.repository.FirebaseRepository
+import com.example.ordme.services.FirebaseRepository
 
 class MainViewModel: ViewModel() {
 

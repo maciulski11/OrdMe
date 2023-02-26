@@ -15,7 +15,7 @@ import com.example.ordme.ui.adapter.MealAdapter
 import com.example.ordme.data.model.Addition
 import com.example.ordme.data.model.Basket
 import com.example.ordme.data.model.Meal
-import com.example.ordme.ui.repository.FirebaseRepository
+import com.example.ordme.services.FirebaseRepository
 import com.example.ordme.ui.view_model.MainViewModel
 import kotlinx.android.synthetic.main.fragment_meal.*
 import java.util.*
