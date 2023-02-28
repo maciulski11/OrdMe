@@ -54,7 +54,7 @@ class ChooseRestaurantFragment : BaseFragment(), OnMapReadyCallback {
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         recyclerViewChooseRestaurant.setHasFixedSize(true)
 
-        //inicjujemy nasza liste:
+        // We initialize our user list:
         restaurantsList = arrayListOf()
 
         adapter = ChooseRestaurantAdapter(requireContext(), restaurantsList, requireView())
