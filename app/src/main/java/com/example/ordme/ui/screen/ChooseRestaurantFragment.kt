@@ -11,6 +11,7 @@ import android.view.ViewGroup.MarginLayoutParams
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -70,6 +71,7 @@ class ChooseRestaurantFragment : BaseFragment(), OnMapReadyCallback {
             viewModel.fetchBasketList()
         }
 
+
         //hiding the shifter
         horizontalScrollView.isHorizontalScrollBarEnabled = false
 
@@ -113,7 +115,60 @@ class ChooseRestaurantFragment : BaseFragment(), OnMapReadyCallback {
 
         }
 
+        all.setOnClickListener {
+            viewModel.fetchRestaurantsList()
+        }
+
+        italy.setOnClickListener {
+            val db = FirebaseFirestore.getInstance()
+            val collectionRef = db.collection(FirebaseRepository.RESTAURANTS)
+            val category = "italy" // kategoria wybrana przez użytkownika
+            val query = collectionRef.whereEqualTo("category", category)
+            query.get().addOnSuccessListener { documents ->
+                if (!documents.isEmpty) {
+                    restaurantsList.clear()
+                    for (document in documents) {
+                        val restaurant = document.toObject(Restaurant::class.java)
+                        if (restaurant.category == category) {
+                            restaurantsList.add(restaurant)
+                        }
+                    }
+                    adapter = ChooseRestaurantAdapter(requireContext(), restaurantsList, requireView())
+                    recyclerViewChooseRestaurant.adapter = adapter
+                    adapter.notifyDataSetChanged()
+                    Toast.makeText(requireContext(), "Wybrana kategoria: $category", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(requireContext(), "Nie znaleziono restauracji w kategorii $category", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+        american.setOnClickListener {
+            val db = FirebaseFirestore.getInstance()
+            val collectionRef = db.collection(FirebaseRepository.RESTAURANTS)
+            val category = "american" // kategoria wybrana przez użytkownika
+            val query = collectionRef.whereEqualTo("category", category)
+            query.get().addOnSuccessListener { documents ->
+                if (!documents.isEmpty) {
+                    restaurantsList.clear()
+                    for (document in documents) {
+                        val restaurant = document.toObject(Restaurant::class.java)
+                        if (restaurant.category == category) {
+                            restaurantsList.add(restaurant)
+                        }
+                    }
+                    adapter = ChooseRestaurantAdapter(requireContext(), restaurantsList, requireView())
+                    recyclerViewChooseRestaurant.adapter = adapter
+                    adapter.notifyDataSetChanged()
+                    Toast.makeText(requireContext(), "Wybrana kategoria: $category", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(requireContext(), "Nie znaleziono restauracji w kategorii $category", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
     }
+
 
     @SuppressLint("MissingInflatedId")
     override fun onMapReady(googleMap: GoogleMap) {

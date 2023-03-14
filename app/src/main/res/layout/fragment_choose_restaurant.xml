@@ -68,43 +68,11 @@
                     android:orientation="horizontal">
 
                     <Button
-                        android:id="@+id/pizza"
+                        android:id="@+id/all"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:text="pizza"
-                        android:textColor="@color/white" />
-
-                    <Button
-                        android:id="@+id/burger"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="4dp"
-                        android:text="american"
-                        android:textColor="@color/white" />
-
-                    <Button
-                        android:id="@+id/sushi"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="4dp"
-                        android:text="sushi"
-                        android:textColor="@color/white" />
-
-                    <Button
-                        android:id="@+id/wurst"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="4dp"
-                        android:text="wurst"
-                        android:textColor="@color/white" />
-
-                    <Button
-                        android:id="@+id/american"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="4dp"
-                        android:text="italy"
+                        android:text="all"
                         android:textColor="@color/white" />
 
                     <Button
@@ -112,7 +80,39 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
+                        android:text="italy"
+                        android:textColor="@color/white" />
+
+                    <Button
+                        android:id="@+id/american"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:text="american"
+                        android:textColor="@color/white" />
+
+                    <Button
+                        android:id="@+id/chinese"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:text="chinese"
+                        android:textColor="@color/white" />
+
+                    <Button
+                        android:id="@+id/indian"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
                         android:text="indian"
+                        android:textColor="@color/white" />
+
+                    <Button
+                        android:id="@+id/poland"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:text="poland"
                         android:textColor="@color/white" />
 
                 </LinearLayout>
