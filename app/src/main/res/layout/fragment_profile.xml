@@ -7,10 +7,10 @@
     xmlns:map="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/view_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="invisible"
+        android:id="@+id/view_layout"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="-16dp">
 
@@ -244,7 +244,7 @@
                 android:layout_height="match_parent"
                 map:uiZoomControls="false"
                 map:uiRotateGestures="true"
-                map:uiCompass="false" />
+                map:uiCompass="true" />
 
         </FrameLayout>
 

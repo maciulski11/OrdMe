@@ -32,14 +32,13 @@ class ProfileEditViewModel() : ViewModel() {
             context,
             { // success:
                 fetchUser(context, view)
-            },
-            { // failure:
-                val progress = view.findViewById<LinearLayout>(R.id.progress_bar_layout)
-                val viewLayout = view.findViewById<ConstraintLayout>(R.id.view_layout)
-                progress.visibility = View.VISIBLE
-                viewLayout.visibility = View.GONE
             }
-        )
+        ) { // failure:
+            val progress = view.findViewById<LinearLayout>(R.id.progress_bar_layout)
+            val viewLayout = view.findViewById<ConstraintLayout>(R.id.view_layout)
+            progress.visibility = View.VISIBLE
+            viewLayout.visibility = View.GONE
+        }
     }
 
     private fun fetchUser(context: Context, v: View) {

@@ -23,17 +23,22 @@ import kotlinx.android.synthetic.main.fragment_profile.view.*
 
 class ProfileViewModel : ViewModel() {
 
+
     fun checkConnectivityAndFirestoreAvailability(context: Context, view: View) {
+
         FirebaseRepository().checkConnectivityAndFirestoreAvailability(
             context,
             { // success:
                 FirebaseRepository().updateUserData {
                     fetchUser(context, view)
                 }
+//                view.progress_bar_layout.visibility = View.GONE // Ukryj progress_bar
+//                view.view_layout.visibility = View.VISIBLE // Ukryj dane z Firestore
             },
             { // failure:
-                view.progress_bar_layout.visibility = View.VISIBLE
-                view.view_layout.visibility = View.GONE
+
+                view.progress_bar_layout.visibility = View.VISIBLE // Ukryj progress_bar
+                view.view_layout.visibility = View.GONE // Ukryj dane z Firestore
             }
         )
     }
@@ -98,10 +103,8 @@ class ProfileFragment : BaseFragment(), OnMapReadyCallback {
             findNavController().navigate(R.id.action_profileFragment_to_chooseRestaurantFragment)
         }
 
-        profileViewModel.checkConnectivityAndFirestoreAvailability(
-            requireContext(),
-            requireView()
-        )
+        profileViewModel.checkConnectivityAndFirestoreAvailability(requireContext(), requireView())
+
         viewModel.mapLocation(requireContext(), childFragmentManager, R.id.mapLocation)
 
         // Uzyskaj referencję do widoku MapFragment

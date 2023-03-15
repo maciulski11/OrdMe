@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="parent"
         app:navGraph="@navigation/navigation_main"
-        tools:layout="@layout/fragment_restaurant" />
+        tools:layout="@layout/fragment_choose_restaurant" />
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navView"
