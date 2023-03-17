@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.ordme.R
 import com.example.ordme.base.BaseFragment
+import com.example.ordme.data.model.User
 import com.example.ordme.services.FirebaseRepository
 import com.example.ordme.ui.view_model.MainViewModel
 import com.google.android.gms.maps.GoogleMap
@@ -20,9 +21,16 @@ import com.google.android.gms.maps.SupportMapFragment
 import kotlinx.android.synthetic.main.fragment_meal.returnBT
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_profile.view.*
+import kotlinx.coroutines.delay
 
 class ProfileViewModel : ViewModel() {
 
+
+    fun fetchUser(callback: ((User?) -> Unit)) {
+        FirebaseRepository().fetchUser {
+            callback(it)
+        }
+    }
 
     fun checkConnectivityAndFirestoreAvailability(context: Context, view: View) {
 
@@ -37,11 +45,13 @@ class ProfileViewModel : ViewModel() {
             },
             { // failure:
 
-                view.progress_bar_layout.visibility = View.VISIBLE // Ukryj progress_bar
+//                view.progress_bar_layout.visibility = View.VISIBLE // Ukryj progress_bar
                 view.view_layout.visibility = View.GONE // Ukryj dane z Firestore
             }
         )
     }
+
+
 
     private fun fetchUser(context: Context, v: View) {
         FirebaseRepository().fetchUser {
@@ -78,7 +88,7 @@ class ProfileViewModel : ViewModel() {
 
             val progress = v.findViewById<LinearLayout>(R.id.progress_bar_layout)
             val viewLayout = v.findViewById<ConstraintLayout>(R.id.view_layout)
-            progress.visibility = View.GONE
+
             viewLayout.visibility = View.VISIBLE
         }
     }
@@ -103,7 +113,7 @@ class ProfileFragment : BaseFragment(), OnMapReadyCallback {
             findNavController().navigate(R.id.action_profileFragment_to_chooseRestaurantFragment)
         }
 
-        profileViewModel.checkConnectivityAndFirestoreAvailability(requireContext(), requireView())
+//        profileViewModel.checkConnectivityAndFirestoreAvailability(requireContext(), requireView())
 
         viewModel.mapLocation(requireContext(), childFragmentManager, R.id.mapLocation)
 
@@ -112,6 +122,54 @@ class ProfileFragment : BaseFragment(), OnMapReadyCallback {
             childFragmentManager.findFragmentById(R.id.mapLocation) as SupportMapFragment
         mapFragment.getMapAsync(this)// Asynchronicznie uzyskaj mapę Google, gdy jest gotowa
 
+
+        loadingData(true)
+
+        profileViewModel.fetchUser {
+            it?.let {
+                setUserUI(it)
+            }
+
+            loadingData(false)
+        }
+    }
+
+    private fun setUserUI(user: User) {
+        val fullName = view?.findViewById<TextView>(R.id.fullNameTV)
+        val number = view?.findViewById<TextView>(R.id.numberET)
+        val street = view?.findViewById<TextView>(R.id.streetTV)
+        val door = view?.findViewById<TextView>(R.id.doorTV)
+        val flat = view?.findViewById<TextView>(R.id.flatTV)
+        val floor = view?.findViewById<TextView>(R.id.floorTV)
+        val postCode = view?.findViewById<TextView>(R.id.postCodeTV)
+        val city = view?.findViewById<TextView>(R.id.cityTV)
+        val userPhoto = view?.findViewById<ImageView>(R.id.userPhoto)
+
+        fullName?.text = user.full_name
+        number?.text = user.number!!.toString()
+        street?.text = user.street
+        door?.text = user.door
+        flat?.text = user.flat
+        floor?.text = user.floor
+        postCode?.text = user.postCode
+        city?.text = user.city
+
+        if (user.flat!!.isEmpty()) {
+            val slash = view?.findViewById<TextView>(R.id.slashTV)
+            slash?.visibility = View.GONE
+        }
+
+        userPhoto?.let {
+            Glide.with(requireContext())
+                .load(user.photo)
+                .override(470, 450)
+                .circleCrop()
+                .into(it)
+        }
+
+        val viewLayout = view?.findViewById<ConstraintLayout>(R.id.view_layout)
+
+        viewLayout?.visibility = View.VISIBLE
     }
 
     override fun onMapReady(googleMap: GoogleMap) {

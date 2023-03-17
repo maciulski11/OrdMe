@@ -7,7 +7,6 @@ import android.content.Context
 import android.icu.text.SimpleDateFormat
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -23,7 +22,6 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.bumptech.glide.Glide
-import com.example.ordme.FirestoreDataListener
 import com.example.ordme.R
 import com.example.ordme.services.FirebaseRepository
 import com.example.ordme.ui.view_model.MainViewModel
@@ -35,7 +33,7 @@ import kotlinx.android.synthetic.main.dialog_delete.*
 import kotlinx.android.synthetic.main.fragment_checkout.view.*
 import java.util.*
 
-class MainActivity : AppCompatActivity(), FirestoreDataListener{
+class MainActivity : AppCompatActivity() {
 
     private lateinit var toggle: ActionBarDrawerToggle
     lateinit var drawerLayout: DrawerLayout
@@ -77,8 +75,8 @@ class MainActivity : AppCompatActivity(), FirestoreDataListener{
         drawer()
         changeDrawerState()
         f()
-    }
 
+    }
 
     @SuppressLint("SuspiciousIndentation")
     private fun drawer() {
@@ -189,10 +187,6 @@ class MainActivity : AppCompatActivity(), FirestoreDataListener{
             return true
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onDataLoaded() {
-        progressdsdvBar.visibility = View.GONE
     }
 
 }
