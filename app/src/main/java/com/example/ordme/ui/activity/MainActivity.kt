@@ -23,6 +23,7 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.bumptech.glide.Glide
+import com.example.ordme.FirestoreDataListener
 import com.example.ordme.R
 import com.example.ordme.services.FirebaseRepository
 import com.example.ordme.ui.view_model.MainViewModel
@@ -34,15 +35,13 @@ import kotlinx.android.synthetic.main.dialog_delete.*
 import kotlinx.android.synthetic.main.fragment_checkout.view.*
 import java.util.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), FirestoreDataListener{
 
     private lateinit var toggle: ActionBarDrawerToggle
     lateinit var drawerLayout: DrawerLayout
     private val fbAuth = FirebaseAuth.getInstance()
     private lateinit var navController: NavController
     private val viewModel: MainViewModel by viewModels()
-
-    val repository = FirebaseRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,10 +72,6 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.updateUserData {
             drawerUserInfo()
-        }
-
-        repository.updateRestaurants {
-            progressdsdvBar.visibility = View.GONE
         }
 
         drawer()
@@ -194,6 +189,10 @@ class MainActivity : AppCompatActivity() {
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onDataLoaded() {
+        progressdsdvBar.visibility = View.GONE
     }
 
 }
