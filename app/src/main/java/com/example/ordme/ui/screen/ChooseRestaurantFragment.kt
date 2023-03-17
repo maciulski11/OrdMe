@@ -8,10 +8,7 @@ import android.location.Geocoder
 import android.os.Bundle
 import android.view.*
 import android.view.ViewGroup.MarginLayoutParams
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,6 +19,7 @@ import com.example.ordme.base.BaseFragment
 import com.example.ordme.data.model.Restaurant
 import com.example.ordme.ui.adapter.ChooseRestaurantAdapter
 import com.example.ordme.services.FirebaseRepository
+import com.example.ordme.ui.activity.MainActivity
 import com.example.ordme.ui.view_model.MainViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -32,6 +30,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.firestore.*
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_choose_restaurant.*
 import kotlinx.android.synthetic.main.fragment_choose_restaurant.view.*
 import kotlinx.android.synthetic.main.item_choose_restaurants.*
@@ -48,6 +47,7 @@ class ChooseRestaurantFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
 
     private val viewModel: MainViewModel by activityViewModels()
+
 
     @SuppressLint("NotifyDataSetChanged")
     override fun subscribeUi() {
@@ -66,11 +66,17 @@ class ChooseRestaurantFragment : BaseFragment(), OnMapReadyCallback {
             adapter.notifyDataSetChanged()
         }
 
+
         FirebaseRepository().updateRestaurants {
             viewModel.fetchRestaurantsList()
             viewModel.fetchBasketList()
-        }
 
+            find11_icon.visibility = View.VISIBLE
+//            progressdsdvBar.visibility = View.INVISIBLE
+
+//            progress_bar_layout.visibility = View.GONE
+//            view_layout.visibility = View.VISIBLE
+        }
 
         //hiding the shifter
         horizontalScrollView.isHorizontalScrollBarEnabled = false
