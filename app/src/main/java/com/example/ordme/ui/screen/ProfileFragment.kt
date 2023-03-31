@@ -21,7 +21,6 @@ import com.google.android.gms.maps.SupportMapFragment
 import kotlinx.android.synthetic.main.fragment_meal.returnBT
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_profile.view.*
-import kotlinx.coroutines.delay
 
 class ProfileViewModel : ViewModel() {
 
