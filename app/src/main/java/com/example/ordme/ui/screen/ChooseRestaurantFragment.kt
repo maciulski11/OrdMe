@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.location.Geocoder
 import android.os.Bundle
+import android.os.Handler
 import android.view.*
 import android.view.ViewGroup.MarginLayoutParams
 import android.widget.*
@@ -68,16 +69,16 @@ class ChooseRestaurantFragment : BaseFragment(), OnMapReadyCallback {
         }
 
 
-//        FirebaseRepository().updateRestaurants {
-//            viewModel.fetchRestaurantsList()
-//            viewModel.fetchBasketList()
-//
-//            find11_icon.visibility = View.VISIBLE
-////            progressdsdvBar.visibility = View.INVISIBLE
-//
-////            progress_bar_layout.visibility = View.GONE
-////            view_layout.visibility = View.VISIBLE
-//        }
+        FirebaseRepository().updateRestaurants {
+            viewModel.fetchRestaurantsList()
+            viewModel.fetchBasketList()
+
+            find11_icon.visibility = View.VISIBLE
+//            progressdsdvBar.visibility = View.INVISIBLE
+
+//            progress_bar_layout.visibility = View.GONE
+//            view_layout.visibility = View.VISIBLE
+        }
 
         //hiding the shifter
         horizontalScrollView.isHorizontalScrollBarEnabled = false
@@ -173,25 +174,6 @@ class ChooseRestaurantFragment : BaseFragment(), OnMapReadyCallback {
                 }
             }
         }
-
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        FirebaseRepository().updateRestaurants {
-            viewModel.fetchRestaurantsList()
-            viewModel.fetchBasketList()
-
-            find11_icon.visibility = View.VISIBLE
-//            progressdsdvBar.visibility = View.INVISIBLE
-
-//            progress_bar_layout.visibility = View.GONE
-//            view_layout.visibility = View.VISIBLE
-        }
-
-            // Ustawienie widoczności progress baru na INVISIBLE
-//            progressdsdvBar.visibility = View.INVISIBLE
 
     }
 
