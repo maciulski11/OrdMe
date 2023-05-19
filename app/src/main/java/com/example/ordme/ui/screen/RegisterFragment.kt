@@ -58,7 +58,7 @@ class RegisterFragment : BaseFragment() {
                                     if (task.isSuccessful) {
                                         Toast.makeText(
                                             context,
-                                            "Register successfully. Please check your email for verification.",
+                                            "Registered successfully. Please check your email for verification.",
                                             Toast.LENGTH_SHORT
                                         ).show()
                                     } else {
